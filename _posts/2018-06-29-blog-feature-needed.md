@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "博客需要的功能"
+categories: 目标
+tags: 测试
 data: 2018-06-29
 ---
 
