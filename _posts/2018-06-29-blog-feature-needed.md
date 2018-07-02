@@ -3,7 +3,7 @@ layout: post
 title: "博客需要的功能"
 categories: 目标
 tags: 测试
-data: 2018-06-29
+author: metseq
 ---
 
 我希望博客可以实现以下的功能
