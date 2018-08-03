@@ -33,7 +33,7 @@ author: metseq
 
 2. 选择一个Jekyll主题，然后参考主题的帮助设置你的博客。我用的是[Gaohaoyang的主题](https://github.com/Gaohaoyang/gaohaoyang.github.io)，你可以在[Jekyll Theme](http://jekyllthemes.org/)网站选择心怡的主题。
 
-3. 如果你想用git把博客推动到GitHub，就需要学习git，[廖雪峰的博客](https://www.liaoxuefeng.com/)有Git的教程，写的简单明了，通读之后基本的git操作、原理就理解了。
+3. 如果你想用git把博客推到GitHub，就需要学习git，[廖雪峰的博客](https://www.liaoxuefeng.com/)有Git的教程，写的简单明了，通读之后基本的git操作、原理就理解了。
 
 ## 学习体会
 之前不了解Jekyll的原理，直接用主题，怎么也搞不好。了解了Jekyll的基本原理，选择一个适合的主题，博客就搞定了。如果会git，写博客就得心应手。
