@@ -7,7 +7,6 @@ author: metseq
 ---
 
 * content
-
 {:toc}
 
 最近三个月，断断续续在学习微积分，看的教材是
