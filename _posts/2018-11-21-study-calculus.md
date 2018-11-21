@@ -6,9 +6,6 @@ tags: 学习 微积分
 author: metseq
 ---
 
-* content
-{:toc}
-
 最近三个月，断断续续在学习微积分，看的教材是
 
 Thomas G B, Weir M D, Hass J, et al. Thomas' Calculus Early Transcendentals[M]. Pearson, 2016.
