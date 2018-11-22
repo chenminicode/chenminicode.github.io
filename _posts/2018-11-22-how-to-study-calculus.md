@@ -32,4 +32,5 @@ Thomas G B, Weir M D, Hass J, et al. Thomas’ Calculus Early Transcendentals[M]
  
 ## 参考文献
 [1] http://www.maths.sci.ku.ac.th/suchai/417167/thomas.pdf
+
 [2] https://www.desmos.com/calculator
