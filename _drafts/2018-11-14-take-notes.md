@@ -7,7 +7,6 @@ author: metseq
 ---
 
 * content
-
 {:toc}
 
 # 问题的产生：学习有没有必要做笔记？

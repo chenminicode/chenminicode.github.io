@@ -9,7 +9,7 @@ author: metseq
 * content
 {:toc}
 
-I read 'How to Learn English Fast' [1], here is my plan, according to the advices.
+I read [How to Learn English Fast](https://www.fluentin3months.com/how-to-learn-english-fast) , here is my plan, according to the advices.
 
 # GREAT Reason to Learn English
 I want to be with my wife. 
@@ -46,4 +46,4 @@ Here is list of English Resources I think fit for me, need try and edit.
 # Have Fun and Don't Give Up
 
 # References
-[1]: https://www.fluentin3months.com/how-to-learn-english-fast
+[1] https://www.fluentin3months.com/how-to-learn-english-fast
