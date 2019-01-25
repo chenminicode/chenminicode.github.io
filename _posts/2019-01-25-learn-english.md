@@ -7,7 +7,6 @@ author: metseq
 ---
 
 * content
-
 {:toc}
 
 I read 'How to Learn English Fast' [1], here is my plan, according to the advices.
