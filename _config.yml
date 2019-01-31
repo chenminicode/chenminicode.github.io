@@ -7,7 +7,7 @@
 
 # Site settings
 title: metseq
-brief-intro: 一知半解是危险的
+brief-intro: 学而不思则罔，思而不学则殆
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://chenminicode.github.io/" # the base hostname & protocol for your site
 
