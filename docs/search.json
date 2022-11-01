@@ -11,7 +11,7 @@
     "href": "index.html",
     "title": "blog",
     "section": "",
-    "text": "Quarto Basics\n\n\n\n\n\n\n\npython\n\n\n\n\n\n\n\n\n\n\n\nDec 31, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\n  \n\n\n\n\nPost With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 1, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 29, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "python\n\n\n\n\n\n\n\n\n\n\n\nDec 31, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nDec 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 1, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 29, 2022\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -33,5 +33,26 @@
     "title": "Quarto Basics",
     "section": "",
     "text": "import numpy as np\nimport matplotlib.pyplot as plt\n\nr = np.arange(0, 2, 0.01)\ntheta = 2 * np.pi * r\nfig, ax = plt.subplots(\n  subplot_kw = {'projection': 'polar'} \n)\nax.plot(theta, r)\nax.set_rticks([0.5, 1, 1.5, 2])\nax.grid(True)\nplt.show()\n\n\n\n\nFigure 1: A line plot on a polar axis"
+  },
+  {
+    "objectID": "posts/python_magic_method/index.html",
+    "href": "posts/python_magic_method/index.html",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': <function __main__.Point.__init__(self, x, y)>,\n              '__dict__': <attribute '__dict__' of 'Point' objects>,\n              '__weakref__': <attribute '__weakref__' of 'Point' objects>})\n\n\n可以看到，Point类的__dict__属性包括了： - 类的文档__doc__ - 类中定义变量，比如这里的my_name - 类的方法 - 其他一些不知道什么的东西😓"
+  },
+  {
+    "objectID": "posts/python_magic_method/index.html#repr__方法",
+    "href": "posts/python_magic_method/index.html#repr__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "__repr__方法",
+    "text": "__repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x7f839ac39270>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __setattr__(self, name, value):\n        print(f'set attr {name} to float({value})')\n        self.__dict__[name] = float(value)\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)"
+  },
+  {
+    "objectID": "posts/python_magic_method/index.html#str__方法",
+    "href": "posts/python_magic_method/index.html#str__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "__str__方法",
+    "text": "__str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说： - __repr__显示的信息需要避免歧义 - __str__显示的信息注重可读性，方便理解 - __str__使用了__repr\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
   }
 ]
