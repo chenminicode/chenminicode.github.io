@@ -202,17 +202,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#类和对象的__dict__属性" id="toc-类和对象的__dict__属性" class="nav-link active" data-scroll-target="#类和对象的__dict__属性">类和对象的<code>__dict__</code>属性</a>
+  <li><a href="#类和对象的__dict__属性" id="toc-类和对象的__dict__属性" class="nav-link active" data-scroll-target="#类和对象的__dict__属性"><span class="toc-section-number">1</span>  类和对象的<code>__dict__</code>属性</a>
   <ul class="collapse">
-  <li><a href="#对象的__dict__属性" id="toc-对象的__dict__属性" class="nav-link" data-scroll-target="#对象的__dict__属性">对象的<code>__dict__</code>属性</a></li>
-  <li><a href="#类的__dict__属性" id="toc-类的__dict__属性" class="nav-link" data-scroll-target="#类的__dict__属性">类的<code>__dict__</code>属性</a></li>
+  <li><a href="#对象的__dict__属性" id="toc-对象的__dict__属性" class="nav-link" data-scroll-target="#对象的__dict__属性"><span class="toc-section-number">1.1</span>  对象的<code>__dict__</code>属性</a></li>
+  <li><a href="#类的__dict__属性" id="toc-类的__dict__属性" class="nav-link" data-scroll-target="#类的__dict__属性"><span class="toc-section-number">1.2</span>  类的<code>__dict__</code>属性</a></li>
   </ul></li>
-  <li><a href="#类的__repr__和__str__方法" id="toc-类的__repr__和__str__方法" class="nav-link" data-scroll-target="#类的__repr__和__str__方法">类的<code>__repr__</code>和<code>__str__</code>方法</a>
+  <li><a href="#类的__repr__和__str__方法" id="toc-类的__repr__和__str__方法" class="nav-link" data-scroll-target="#类的__repr__和__str__方法"><span class="toc-section-number">2</span>  类的<code>__repr__</code>和<code>__str__</code>方法</a>
   <ul class="collapse">
-  <li><a href="#repr__方法" id="toc-repr__方法" class="nav-link" data-scroll-target="#repr__方法"><code>__repr__</code>方法</a></li>
-  <li><a href="#str__方法" id="toc-str__方法" class="nav-link" data-scroll-target="#str__方法"><code>__str__</code>方法</a></li>
+  <li><a href="#repr__方法" id="toc-repr__方法" class="nav-link" data-scroll-target="#repr__方法"><span class="toc-section-number">2.1</span>  <code>__repr__</code>方法</a></li>
+  <li><a href="#str__方法" id="toc-str__方法" class="nav-link" data-scroll-target="#str__方法"><span class="toc-section-number">2.2</span>  <code>__str__</code>方法</a></li>
   </ul></li>
-  <li><a href="#类的__setattr__方法" id="toc-类的__setattr__方法" class="nav-link" data-scroll-target="#类的__setattr__方法">类的<code>__setattr__</code>方法</a></li>
+  <li><a href="#类的__setattr__方法" id="toc-类的__setattr__方法" class="nav-link" data-scroll-target="#类的__setattr__方法"><span class="toc-section-number">3</span>  类的<code>__setattr__</code>方法</a></li>
   </ul>
 </nav>
     </div>
@@ -222,10 +222,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="类和对象的__dict__属性" class="level1">
-<h1>类和对象的<code>__dict__</code>属性</h1>
-<section id="对象的__dict__属性" class="level2">
-<h2 class="anchored" data-anchor-id="对象的__dict__属性">对象的<code>__dict__</code>属性</h2>
+<section id="类和对象的__dict__属性" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 类和对象的<code>__dict__</code>属性</h1>
+<section id="对象的__dict__属性" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="对象的__dict__属性"><span class="header-section-number">1.1</span> 对象的<code>__dict__</code>属性</h2>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Point():</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''Create a Point'''</span></span>
@@ -244,8 +244,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>对象的<code>__dict__</code>属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。</p>
 <p>当给对象属性复制的时候，就是修改<code>__dict__</code>字典。</p>
 </section>
-<section id="类的__dict__属性" class="level2">
-<h2 class="anchored" data-anchor-id="类的__dict__属性">类的<code>__dict__</code>属性</h2>
+<section id="类的__dict__属性" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="类的__dict__属性"><span class="header-section-number">1.2</span> 类的<code>__dict__</code>属性</h2>
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Point.__dict__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -260,15 +260,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>可以看到，<code>Point</code>类的<code>__dict__</code>属性包括了： - 类的文档<code>__doc__</code> - 类中定义变量，比如这里的<code>my_name</code> - 类的方法 - 其他一些不知道什么的东西😓</p>
 </section>
 </section>
-<section id="类的__repr__和__str__方法" class="level1">
-<h1>类的<code>__repr__</code>和<code>__str__</code>方法</h1>
-<section id="repr__方法" class="level2">
-<h2 class="anchored" data-anchor-id="repr__方法"><code>__repr__</code>方法</h2>
+<section id="类的__repr__和__str__方法" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> 类的<code>__repr__</code>和<code>__str__</code>方法</h1>
+<section id="repr__方法" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="repr__方法"><span class="header-section-number">2.1</span> <code>__repr__</code>方法</h2>
 <p>直接输出<code>p</code>时，会显示一堆没用的东西</p>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;__main__.Point at 0x1efc408dae0&gt;</code></pre>
+<pre><code>&lt;__main__.Point at 0x1b97777e6b0&gt;</code></pre>
 </div>
 </div>
 <p>我们想显示关于<code>Point</code>的有用信息，这时<code>__repr__</code>方法就派上用场了</p>
@@ -302,10 +302,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Point(x=</span><span class="sc">%r</span><span class="st">, y=</span><span class="sc">%r</span><span class="st">)"</span> <span class="op">%</span> (<span class="va">self</span>.x, <span class="va">self</span>.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="str__方法" class="level2">
-<h2 class="anchored" data-anchor-id="str__方法"><code>__str__</code>方法</h2>
+<section id="str__方法" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="str__方法"><span class="header-section-number">2.2</span> <code>__str__</code>方法</h2>
 <p><code>__str__</code>方法和<code>__repr__</code>方法好像都是用字符表示对象的，有什么区别呢？</p>
-<p><a href="https://stackoverflow.com/questions/1436703/what-is-the-difference-between-str-and-repr">stackoverflow</a>有一个回答说： - <code>__repr__</code>显示的信息需要避免歧义 - <code>__str__</code>显示的信息注重可读性，方便理解 - <code>__str__</code>使用了<code>__repr</code></p>
+<p><a href="https://stackoverflow.com/questions/1436703/what-is-the-difference-between-str-and-repr">stackoverflow</a>有一个回答说：</p>
+<ul>
+<li><code>__repr__</code>显示的信息需要避免歧义</li>
+<li><code>__str__</code>显示的信息注重可读性，方便理解</li>
+<li><code>__str__</code>使用了<code>__repr</code></li>
+</ul>
 <div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">str</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -355,8 +360,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section>
 </section>
-<section id="类的__setattr__方法" class="level1">
-<h1>类的<code>__setattr__</code>方法</h1>
+<section id="类的__setattr__方法" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> 类的<code>__setattr__</code>方法</h1>
 <div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Point(<span class="st">'3'</span>, <span class="st">'4'</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

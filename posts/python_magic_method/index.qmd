@@ -3,8 +3,9 @@ title: Python中的几个魔法方法
 jupyter: python3
 author: metseq
 date: "2022-11-31"
-toc: true
 categories: [Python]
+toc: true
+number-sections: true
 ---
 
 # 类和对象的`__dict__`属性
@@ -87,6 +88,7 @@ class Point():
 `__str__`方法和`__repr__`方法好像都是用字符表示对象的，有什么区别呢？
 
 [stackoverflow](https://stackoverflow.com/questions/1436703/what-is-the-difference-between-str-and-repr)有一个回答说：
+
 - `__repr__`显示的信息需要避免歧义
 - `__str__`显示的信息注重可读性，方便理解
 - `__str__`使用了`__repr`

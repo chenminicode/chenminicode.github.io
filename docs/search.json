@@ -45,14 +45,14 @@
     "objectID": "posts/python_magic_method/index.html#repr__方法",
     "href": "posts/python_magic_method/index.html#repr__方法",
     "title": "Python中的几个魔法方法",
-    "section": "__repr__方法",
-    "text": "__repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x1efc408dae0>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __setattr__(self, name, value):\n        print(f'set attr {name} to float({value})')\n        self.__dict__[name] = float(value)\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)"
+    "section": "2.1 __repr__方法",
+    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x1b97777e6b0>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __setattr__(self, name, value):\n        print(f'set attr {name} to float({value})')\n        self.__dict__[name] = float(value)\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)"
   },
   {
     "objectID": "posts/python_magic_method/index.html#str__方法",
     "href": "posts/python_magic_method/index.html#str__方法",
     "title": "Python中的几个魔法方法",
-    "section": "__str__方法",
-    "text": "__str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说： - __repr__显示的信息需要避免歧义 - __str__显示的信息注重可读性，方便理解 - __str__使用了__repr\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
+    "section": "2.2 __str__方法",
+    "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说：\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
   }
 ]
