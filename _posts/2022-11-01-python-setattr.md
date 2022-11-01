@@ -1,20 +1,16 @@
 ---
 layout: post
-title: "Python中的几个魔法方法"
+title: Python中的几个魔法方法
+author: metseq
 categories: Python
 tags: Python
-author: metseq
 ---
-
-* content
-{:toc}
 
 # 类和对象的`__dict__`属性
 
 ## 对象的`__dict__`属性
 
-
-```
+```python
 class Point():
     '''Create a Point'''
     my_name = 'A Point'
@@ -23,8 +19,7 @@ class Point():
         self.y = y
 ```
 
-
-```
+```python
 p = Point(3, 4)
 p.__dict__
 ```
@@ -42,8 +37,7 @@ p.__dict__
 
 ## 类的`__dict__`属性
 
-
-```
+```python
 Point.__dict__
 ```
 
@@ -71,8 +65,7 @@ Point.__dict__
 
 直接输出`p`时，会显示一堆没用的东西
 
-
-```
+```python
 p
 ```
 
@@ -85,8 +78,7 @@ p
 
 我们想显示关于`Point`的有用信息，这时`__repr__`方法就派上用场了
 
-
-```
+```python
 class Point():
     def __init__(self, x, y):
         self.x = x
@@ -96,8 +88,7 @@ class Point():
         return "Point(x=%r, y=%r)" % (self.x, self.y)
 ```
 
-
-```
+```python
 p = Point(3, 4)
 p
 ```
@@ -109,8 +100,7 @@ p
 
 
 
-
-```
+```python
 class Point():
     def __init__(self, x, y):
         self.x = x
@@ -133,8 +123,7 @@ class Point():
 - `__str__`显示的信息注重可读性，方便理解
 - `__str__`使用了`__repr`
 
-
-```
+```python
 str(p)
 ```
 
@@ -149,8 +138,7 @@ str(p)
 
 如果在`Point`中重写了`__str__`方法，就会输出`__str__`调用的结果。
 
-
-```
+```python
 class Point():
     def __init__(self, x, y):
         self.x = x
@@ -163,13 +151,11 @@ class Point():
         return f'Just a normal 2d point({self.x}, {self.y})'
 ```
 
-
-```
+```python
 p = Point(3, 4)
 ```
 
-
-```
+```python
 p
 ```
 
@@ -180,8 +166,7 @@ p
 
 
 
-
-```
+```python
 repr(p)
 ```
 
@@ -192,16 +177,13 @@ repr(p)
 
 
 
-
-```
+```python
 print(p)
 ```
 
     Just a normal 2d point(3, 4)
 
-
-
-```
+```python
 str(p)
 ```
 
@@ -214,8 +196,7 @@ str(p)
 
 # 类的`__setattr__`方法
 
-
-```
+```python
 p = Point('3', '4')
 p
 ```
@@ -229,8 +210,7 @@ p
 
 想在初始化Point的时候，把x，y属性转变成float类型，`__setattr__`方法就能用上了
 
-
-```
+```python
 class Point():
     def __init__(self, x, y):
         self.x = x
@@ -243,8 +223,7 @@ class Point():
         return "Point(x=%r, y=%r)" % (self.x, self.y)
 ```
 
-
-```
+```python
 p = Point('3', '4')
 p
 ```
@@ -256,8 +235,7 @@ p
 
 
 
-
-```
+```python
 p.__dict__
 ```
 
@@ -280,8 +258,7 @@ p的x和y属性都已经是float类型了，这是怎么做到的呢？
 
 `__setattr__`函数里面可以做你想做的任何事情，不仅仅是改变默认的属性赋值操作
 
-
-```
+```python
 class Point():
     def __init__(self, x, y):
         self._modules = {}
@@ -299,8 +276,7 @@ class Point():
         return "Point(x=%r, y=%r)" % (self.x, self.y)
 ```
 
-
-```
+```python
 p = Point(3, 4)
 ```
 
@@ -310,9 +286,7 @@ p = Point(3, 4)
     add y:4 to _module
     set y to 4
 
-
-
-```
+```python
 p._modules
 ```
 
@@ -323,3 +297,6 @@ p._modules
 
 
 
+```python
+
+```
