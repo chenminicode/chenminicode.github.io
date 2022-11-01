@@ -21,4 +21,5 @@ Hello, I am metseq, a bioinformatics engineer🧬.
 
 I love Python🐍, ML🤖 and Freedom🚀.
 
-Hope you can find something interesting here😀.
+Hope you can find somethingle
+ interesting here😀.
