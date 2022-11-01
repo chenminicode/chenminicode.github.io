@@ -4,16 +4,21 @@ image: profile.jpg
 about:
   template: jolla
   links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com
-    - icon: linkedin
-      text: LinkedIn
-      href: https://linkedin.com
+    # - icon: twitter
+    #   text: Twitter
+    #   href: https://twitter.com
+    # - icon: linkedin
+    #   text: LinkedIn
+    #   href: https://linkedin.com
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/chenminicode
 
 ---
 
-About this blog
+# About this blog
+Hello, I am metseq, a bioinformatics engineer🧬.
+
+I love Python🐍, ML🤖 and Freedom🚀.
+
+Hope you can find something interesting here😀.
