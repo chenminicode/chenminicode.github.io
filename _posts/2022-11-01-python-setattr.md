@@ -6,6 +6,4 @@ categories: Python
 tags: Python
 ---
 
-{::nomarkdown}
-{% jupyter_notebook "2022-11-01-python-setattr.ipynb" %}
-{:/nomarkdown}
+{% jupyter_notebook 2022-11-01-python-setattr.ipynb %}
