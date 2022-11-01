@@ -128,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -197,7 +197,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#类和对象的__dict__属性" id="toc-类和对象的__dict__属性" class="nav-link active" data-scroll-target="#类和对象的__dict__属性">类和对象的<code>__dict__</code>属性</a>
+  <ul class="collapse">
+  <li><a href="#对象的__dict__属性" id="toc-对象的__dict__属性" class="nav-link" data-scroll-target="#对象的__dict__属性">对象的<code>__dict__</code>属性</a></li>
+  <li><a href="#类的__dict__属性" id="toc-类的__dict__属性" class="nav-link" data-scroll-target="#类的__dict__属性">类的<code>__dict__</code>属性</a></li>
+  </ul></li>
+  <li><a href="#类的__repr__和__str__方法" id="toc-类的__repr__和__str__方法" class="nav-link" data-scroll-target="#类的__repr__和__str__方法">类的<code>__repr__</code>和<code>__str__</code>方法</a>
+  <ul class="collapse">
+  <li><a href="#repr__方法" id="toc-repr__方法" class="nav-link" data-scroll-target="#repr__方法"><code>__repr__</code>方法</a></li>
+  <li><a href="#str__方法" id="toc-str__方法" class="nav-link" data-scroll-target="#str__方法"><code>__str__</code>方法</a></li>
+  </ul></li>
+  <li><a href="#类的__setattr__方法" id="toc-类的__setattr__方法" class="nav-link" data-scroll-target="#类的__setattr__方法">类的<code>__setattr__</code>方法</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -250,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;__main__.Point at 0x7f839ac39270&gt;</code></pre>
+<pre><code>&lt;__main__.Point at 0x1efc408dae0&gt;</code></pre>
 </div>
 </div>
 <p>我们想显示关于<code>Point</code>的有用信息，这时<code>__repr__</code>方法就派上用场了</p>

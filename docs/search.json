@@ -46,7 +46,7 @@
     "href": "posts/python_magic_method/index.html#repr__方法",
     "title": "Python中的几个魔法方法",
     "section": "__repr__方法",
-    "text": "__repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x7f839ac39270>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __setattr__(self, name, value):\n        print(f'set attr {name} to float({value})')\n        self.__dict__[name] = float(value)\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)"
+    "text": "__repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x1efc408dae0>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __setattr__(self, name, value):\n        print(f'set attr {name} to float({value})')\n        self.__dict__[name] = float(value)\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)"
   },
   {
     "objectID": "posts/python_magic_method/index.html#str__方法",

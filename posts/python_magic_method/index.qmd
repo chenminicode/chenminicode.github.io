@@ -3,6 +3,7 @@ title: Python中的几个魔法方法
 jupyter: python3
 author: metseq
 date: "2022-11-31"
+toc: true
 categories: [Python]
 ---
 
