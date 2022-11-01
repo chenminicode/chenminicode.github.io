@@ -2,10 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/qmd_sample/index.html",
-      "/posts/python_magic_method/index.html",
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/posts/python_magic_method/index.html"
     ]
   }
 ]
