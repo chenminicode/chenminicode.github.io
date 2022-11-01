@@ -55,10 +55,7 @@ tag_dir: tag/
 # excerpt
 excerpt_separator: "\n\n\n\n"
 
-plugins:
-  - jekyll-jupyter-notebook
-  - jekyll-paginate
 
 # paginate
-# gems: [jekyll-paginate]
+gems: [jekyll-paginate, jekyll-jupyter-notebook]
 paginate: 6
