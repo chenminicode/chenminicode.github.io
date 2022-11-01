@@ -2,7 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/python_magic_method/index.html"
+      "/posts/python_magic_method/index.html",
+      "/posts/blog_reason/index.html"
     ]
   }
 ]
