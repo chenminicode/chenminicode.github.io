@@ -70,20 +70,6 @@ p = Point(3, 4)
 p
 ```
 
-```{python}
-class Point():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-    
-    def __setattr__(self, name, value):
-        print(f'set attr {name} to float({value})')
-        self.__dict__[name] = float(value)
-    
-    def __repr__(self):
-        return "Point(x=%r, y=%r)" % (self.x, self.y)
-```
-
 ## `__str__`方法
 
 `__str__`方法和`__repr__`方法好像都是用字符表示对象的，有什么区别呢？
