@@ -4,11 +4,15 @@ project:
 
 website:
   title: "Blog"
+  site-url: https://chenminicode.github.io/
+  description: "metseq's blog"
   navbar:
     right:
       - about.qmd
       - icon: github
         href: https://github.com/chenminicode
+      - icon: rss
+        href: index.xml
       # - icon: twitter
       #   href: https://twitter.com
 format:
