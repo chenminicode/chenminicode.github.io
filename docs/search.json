@@ -11,28 +11,35 @@
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "Python\n\n\n\n\n\n\n\n\n\n\n\nDec 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+    "text": "Python\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "posts/2022-11-31-python_magic_method/index.html",
-    "href": "posts/2022-11-31-python_magic_method/index.html",
+    "objectID": "posts/2022-10-31-python_magic_method/index.html",
+    "href": "posts/2022-10-31-python_magic_method/index.html",
     "title": "Python中的几个魔法方法",
     "section": "",
     "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': <function __main__.Point.__init__(self, x, y)>,\n              '__dict__': <attribute '__dict__' of 'Point' objects>,\n              '__weakref__': <attribute '__weakref__' of 'Point' objects>})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
   },
   {
-    "objectID": "posts/2022-11-31-python_magic_method/index.html#repr__方法",
-    "href": "posts/2022-11-31-python_magic_method/index.html#repr__方法",
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
     "title": "Python中的几个魔法方法",
     "section": "2.1 __repr__方法",
-    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x7f9c78f37cd0>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
+    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n<__main__.Point at 0x7fee391d2110>\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
   },
   {
-    "objectID": "posts/2022-11-31-python_magic_method/index.html#str__方法",
-    "href": "posts/2022-11-31-python_magic_method/index.html#str__方法",
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#str__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#str__方法",
     "title": "Python中的几个魔法方法",
     "section": "2.2 __str__方法",
     "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说:\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
+  },
+  {
+    "objectID": "posts/2022-11-01-python_enter_exit/index.html",
+    "href": "posts/2022-11-01-python_enter_exit/index.html",
+    "title": "Python中的__enter__和__exit__",
+    "section": "",
+    "text": "2 自已写一个处理文件的类\n\nclass MyOpen():\n    def __init__(self, file, mode):\n        self.file = file\n        self.mode = mode\n    \n    def __enter__(self):\n        self.f = open(self.file, self.mode)\n        return self.f\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.f.close()\n\n\nwith MyOpen('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\nf.closed\n\nTrue\n\n\n\n\n\n\n\n\nTip\n\n\n\n注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？\n\n\n\n\n3 __exit__的参数\n\nclass SafeDivide():\n    def __init__(self, a, b):\n        self.a = a\n        self.b = b\n    \n    def __enter__(self):\n        print('exec __enter__')\n        print(f'{self.a} / {self.b} = ', end='')\n        return self\n    \n    def divide(self):\n        return self.a / self.b\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print()\n        print('exec __exit__')\n        print(f\"exec_type: {exc_type}\")\n        print(f\"exc_val: {exc_val}\")\n        print(f\"exc_tb: {exc_tb}\")\n\n\nwith SafeDivide(1, 2) as d:\n    print(d.divide())\n    print('啦啦啦')\n\nexec __enter__\n1 / 2 = 0.5\n啦啦啦\n\nexec __exit__\nexec_type: None\nexc_val: None\nexc_tb: None\n\n\n如果执行没有问题，exc_type, exc_val, exc_tb都是None\n\nwith SafeDivide(1, 0) as d:\n    print(d.divide())\n\nexec __enter__\n1 / 0 = \nexec __exit__\nexec_type: <class 'ZeroDivisionError'>\nexc_val: division by zero\nexc_tb: <traceback object>\n\n\nZeroDivisionError: division by zero\n\n\n如果执行对象的方法出现问题，就会直接执行__exit__方法，exc_type, exc_val, exc_tb包含的就是错误类型，错误值，错误的回溯信息。\n\n\n\n\n\n\nNote\n\n\n\n出错后不会执行后面的语句，比如这里的print('啦啦啦')，而是直接执行__exit__了"
   },
   {
     "objectID": "posts/2018-07-19-blog_reason/index.html",

@@ -10,11 +10,195 @@
 <atom:link href="https://chenminicode.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>metseq's blog</description>
 <generator>quarto-1.1.251</generator>
-<lastBuildDate>Fri, 30 Dec 2022 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 07 Nov 2022 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Python中的__enter__和__exit__</title>
+  <dc:creator>metseq</dc:creator>
+  <link>https://chenminicode.github.io/posts/2022-11-01-python_enter_exit/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="enter__和__exit__是什么" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> <code>__enter__</code>和<code>__exit__</code>是什么</h1>
+<p>当在类中实现<code>__enter__</code>和<code>__exit__</code>方法的使用，这个类就可以用<code>with</code>调用了，调用<code>with</code>的时候，返回<code>__enter__</code>的结果，退出<code>with</code>的时候，执行<code>__exit__</code>的代码。</p>
+<p>平时用<code>with</code>最多的可能是打开一个文件，<code>with</code>返回文件的句柄（file handle），退出<code>with</code>的时候关闭文件。</p>
+<p>如下代码：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># 建一个测试文件</span></span>
+<span id="cb1-2"><span class="op" style="color: #5E5E5E;">!</span> echo <span class="op" style="color: #5E5E5E;">-</span>e <span class="st" style="color: #20794D;">'line1</span><span class="ch" style="color: #20794D;">\n</span><span class="st" style="color: #20794D;">line2</span><span class="ch" style="color: #20794D;">\n</span><span class="st" style="color: #20794D;">line3'</span> <span class="op" style="color: #5E5E5E;">&gt;</span> sample.txt</span>
+<span id="cb1-3"><span class="op" style="color: #5E5E5E;">!</span> cat sample.txt</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>line1
+line2
+line3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># 使用python读取文件</span></span>
+<span id="cb3-2"><span class="cf" style="color: #003B4F;">with</span> <span class="bu" style="color: null;">open</span>(<span class="st" style="color: #20794D;">'sample.txt'</span>, <span class="st" style="color: #20794D;">'r'</span>) <span class="im" style="color: #00769E;">as</span> f:</span>
+<span id="cb3-3">    <span class="cf" style="color: #003B4F;">for</span> line <span class="kw" style="color: #003B4F;">in</span> f:</span>
+<span id="cb3-4">        <span class="bu" style="color: null;">print</span>(line, end<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">''</span>)        </span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>line1
+line2
+line3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;"># 查看f是否关闭了，返回True，表示f关闭了</span></span>
+<span id="cb5-2">f.closed</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>如果不用<code>with</code>，需要手动关闭文件。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">f <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">open</span>(<span class="st" style="color: #20794D;">'sample.txt'</span>, <span class="st" style="color: #20794D;">'r'</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="co" style="color: #5E5E5E;"># f还没有关闭</span></span>
+<span id="cb8-2">f.closed</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>False</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="co" style="color: #5E5E5E;"># 使用close()方法关闭文件后，文件就关闭了</span></span>
+<span id="cb10-2">f.close()</span>
+<span id="cb10-3">f.closed</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+<section id="自已写一个处理文件的类" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> 自已写一个处理文件的类</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;">class</span> MyOpen():</span>
+<span id="cb12-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, <span class="bu" style="color: null;">file</span>, mode):</span>
+<span id="cb12-3">        <span class="va" style="color: #111111;">self</span>.<span class="bu" style="color: null;">file</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">file</span></span>
+<span id="cb12-4">        <span class="va" style="color: #111111;">self</span>.mode <span class="op" style="color: #5E5E5E;">=</span> mode</span>
+<span id="cb12-5">    </span>
+<span id="cb12-6">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__enter__</span>(<span class="va" style="color: #111111;">self</span>):</span>
+<span id="cb12-7">        <span class="va" style="color: #111111;">self</span>.f <span class="op" style="color: #5E5E5E;">=</span> <span class="bu" style="color: null;">open</span>(<span class="va" style="color: #111111;">self</span>.<span class="bu" style="color: null;">file</span>, <span class="va" style="color: #111111;">self</span>.mode)</span>
+<span id="cb12-8">        <span class="cf" style="color: #003B4F;">return</span> <span class="va" style="color: #111111;">self</span>.f</span>
+<span id="cb12-9">    </span>
+<span id="cb12-10">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__exit__</span>(<span class="va" style="color: #111111;">self</span>, exc_type, exc_val, exc_tb):</span>
+<span id="cb12-11">        <span class="va" style="color: #111111;">self</span>.f.close()</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="cf" style="color: #003B4F;">with</span> MyOpen(<span class="st" style="color: #20794D;">'sample.txt'</span>, <span class="st" style="color: #20794D;">'r'</span>) <span class="im" style="color: #00769E;">as</span> f:</span>
+<span id="cb13-2">    <span class="cf" style="color: #003B4F;">for</span> line <span class="kw" style="color: #003B4F;">in</span> f:</span>
+<span id="cb13-3">        <span class="bu" style="color: null;">print</span>(line, end<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">''</span>)        </span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>line1
+line2
+line3</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">f.closed</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？</p>
+</div>
+</div>
+</section>
+<section id="exit__的参数" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> <code>__exit__</code>的参数</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="kw" style="color: #003B4F;">class</span> SafeDivide():</span>
+<span id="cb17-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, a, b):</span>
+<span id="cb17-3">        <span class="va" style="color: #111111;">self</span>.a <span class="op" style="color: #5E5E5E;">=</span> a</span>
+<span id="cb17-4">        <span class="va" style="color: #111111;">self</span>.b <span class="op" style="color: #5E5E5E;">=</span> b</span>
+<span id="cb17-5">    </span>
+<span id="cb17-6">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__enter__</span>(<span class="va" style="color: #111111;">self</span>):</span>
+<span id="cb17-7">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'exec __enter__'</span>)</span>
+<span id="cb17-8">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f'</span><span class="sc" style="color: #5E5E5E;">{</span><span class="va" style="color: #111111;">self</span><span class="sc" style="color: #5E5E5E;">.</span>a<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> / </span><span class="sc" style="color: #5E5E5E;">{</span><span class="va" style="color: #111111;">self</span><span class="sc" style="color: #5E5E5E;">.</span>b<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;"> = '</span>, end<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">''</span>)</span>
+<span id="cb17-9">        <span class="cf" style="color: #003B4F;">return</span> <span class="va" style="color: #111111;">self</span></span>
+<span id="cb17-10">    </span>
+<span id="cb17-11">    <span class="kw" style="color: #003B4F;">def</span> divide(<span class="va" style="color: #111111;">self</span>):</span>
+<span id="cb17-12">        <span class="cf" style="color: #003B4F;">return</span> <span class="va" style="color: #111111;">self</span>.a <span class="op" style="color: #5E5E5E;">/</span> <span class="va" style="color: #111111;">self</span>.b</span>
+<span id="cb17-13">    </span>
+<span id="cb17-14">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__exit__</span>(<span class="va" style="color: #111111;">self</span>, exc_type, exc_val, exc_tb):</span>
+<span id="cb17-15">        <span class="bu" style="color: null;">print</span>()</span>
+<span id="cb17-16">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'exec __exit__'</span>)</span>
+<span id="cb17-17">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"exec_type: </span><span class="sc" style="color: #5E5E5E;">{</span>exc_type<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb17-18">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"exc_val: </span><span class="sc" style="color: #5E5E5E;">{</span>exc_val<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
+<span id="cb17-19">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"exc_tb: </span><span class="sc" style="color: #5E5E5E;">{</span>exc_tb<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="cf" style="color: #003B4F;">with</span> SafeDivide(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>) <span class="im" style="color: #00769E;">as</span> d:</span>
+<span id="cb18-2">    <span class="bu" style="color: null;">print</span>(d.divide())</span>
+<span id="cb18-3">    <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'啦啦啦'</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exec __enter__
+1 / 2 = 0.5
+啦啦啦
+
+exec __exit__
+exec_type: None
+exc_val: None
+exc_tb: None</code></pre>
+</div>
+</div>
+<p>如果执行没有问题，<code>exc_type</code>, <code>exc_val</code>, <code>exc_tb</code>都是<code>None</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="cf" style="color: #003B4F;">with</span> SafeDivide(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">0</span>) <span class="im" style="color: #00769E;">as</span> d:</span>
+<span id="cb20-2">    <span class="bu" style="color: null;">print</span>(d.divide())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exec __enter__
+1 / 0 = 
+exec __exit__
+exec_type: &lt;class 'ZeroDivisionError'&gt;
+exc_val: division by zero
+exc_tb: &lt;traceback object&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>ZeroDivisionError: division by zero</code></pre>
+</div>
+</div>
+<p>如果执行对象的方法出现问题，就会直接执行<code>__exit__</code>方法，<code>exc_type</code>, <code>exc_val</code>, <code>exc_tb</code>包含的就是错误类型，错误值，错误的回溯信息。</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>出错后不会执行后面的语句，比如这里的<code>print('啦啦啦')</code>，而是直接执行<code>__exit__</code>了</p>
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Python</category>
+  <guid>https://chenminicode.github.io/posts/2022-11-01-python_enter_exit/index.html</guid>
+  <pubDate>Mon, 07 Nov 2022 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Python中的几个魔法方法</title>
   <dc:creator>metseq</dc:creator>
-  <link>https://chenminicode.github.io/posts/2022-11-31-python_magic_method/index.html</link>
+  <link>https://chenminicode.github.io/posts/2022-10-31-python_magic_method/index.html</link>
   <description><![CDATA[ 
 
 
@@ -72,7 +256,7 @@
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">p</span></code></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;__main__.Point at 0x7f9c78f37cd0&gt;</code></pre>
+<pre><code>&lt;__main__.Point at 0x7fee391d2110&gt;</code></pre>
 </div>
 </div>
 <p>我们想显示关于<code>Point</code>的有用信息，这时<code>__repr__</code>方法就派上用场了</p>
@@ -226,8 +410,8 @@ set y to 4</code></pre>
 
  ]]></description>
   <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2022-11-31-python_magic_method/index.html</guid>
-  <pubDate>Fri, 30 Dec 2022 16:00:00 GMT</pubDate>
+  <guid>https://chenminicode.github.io/posts/2022-10-31-python_magic_method/index.html</guid>
+  <pubDate>Sun, 30 Oct 2022 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>博客原因</title>
