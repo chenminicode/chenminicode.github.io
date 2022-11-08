@@ -329,7 +329,7 @@ Tip
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.a <span class="op">/</span> <span class="va">self</span>.b</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__exit__</span>(<span class="va">self</span>, exc_type, exc_val, exc_tb):</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'-----------'</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">------------'</span>)</span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'exec __exit__'</span>)</span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"exec_type: </span><span class="sc">{</span>exc_type<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"exc_val: </span><span class="sc">{</span>exc_val<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -344,6 +344,7 @@ Tip
 1 / 2 = 0.5
 啦啦啦
 
+------------
 exec __exit__
 exec_type: None
 exc_val: None
@@ -357,6 +358,7 @@ exc_tb: None</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>exec __enter__
 1 / 0 = 
+------------
 exec __exit__
 exec_type: &lt;class 'ZeroDivisionError'&gt;
 exc_val: division by zero
