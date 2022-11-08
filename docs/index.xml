@@ -14,7 +14,7 @@
 <item>
   <title>Python中的__enter__和__exit__</title>
   <dc:creator>metseq</dc:creator>
-  <link>https://chenminicode.github.io/posts/2022-11-01-python_enter_exit/index.html</link>
+  <link>https://chenminicode.github.io/posts/2022-11-08-python_enter_exit/index.html</link>
   <description><![CDATA[ 
 
 
@@ -135,7 +135,7 @@ Tip
 <span id="cb17-12">        <span class="cf" style="color: #003B4F;">return</span> <span class="va" style="color: #111111;">self</span>.a <span class="op" style="color: #5E5E5E;">/</span> <span class="va" style="color: #111111;">self</span>.b</span>
 <span id="cb17-13">    </span>
 <span id="cb17-14">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__exit__</span>(<span class="va" style="color: #111111;">self</span>, exc_type, exc_val, exc_tb):</span>
-<span id="cb17-15">        <span class="bu" style="color: null;">print</span>()</span>
+<span id="cb17-15">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'-----------'</span>)</span>
 <span id="cb17-16">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'exec __exit__'</span>)</span>
 <span id="cb17-17">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"exec_type: </span><span class="sc" style="color: #5E5E5E;">{</span>exc_type<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
 <span id="cb17-18">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f"exc_val: </span><span class="sc" style="color: #5E5E5E;">{</span>exc_val<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">"</span>)</span>
@@ -192,7 +192,7 @@ Note
 
  ]]></description>
   <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2022-11-01-python_enter_exit/index.html</guid>
+  <guid>https://chenminicode.github.io/posts/2022-11-08-python_enter_exit/index.html</guid>
   <pubDate>Mon, 07 Nov 2022 16:00:00 GMT</pubDate>
 </item>
 <item>
