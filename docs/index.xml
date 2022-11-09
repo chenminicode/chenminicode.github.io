@@ -22,7 +22,7 @@
 
 <section id="getattr__" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> <code>__getattr__</code></h1>
-<p>如果再类中实现了<code>_getattr__</code>方法，那么当使用<code>对象.属性</code>的时候，如果<code>属性</code>不在对象里，则会调用<code>__getattr__</code>方法。</p>
+<p>如果在类中实现了<code>_getattr__</code>方法，那么当使用<code>对象.属性</code>的时候，如果<code>属性</code>不在对象里，则会调用<code>__getattr__</code>方法。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;">class</span> Point():</span>
 <span id="cb1-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, x, y):</span>
@@ -74,13 +74,13 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>__getattr__</code>方法接受两个参数，self不用说，name就是<code>属性</code>名称，在上面的例子就是<code>z</code></p>
+<p><code>__getattr__</code>方法接受两个参数，<code>self</code>不用说，<code>name</code>就是<code>属性</code>名称，在上面的例子就是<code>z</code></p>
 </div>
 </div>
 </section>
 <section id="getattribute__" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> <code>__getattribute__</code></h1>
-<p>如果再类中实现了<code>__getattribute__</code>方法，那么当使用<code>对象.属性</code>的时候，都会调用<code>__getattr__</code>方法。</p>
+<p>如果在类中实现了<code>__getattribute__</code>方法，那么当使用<code>对象.属性</code>的时候，都会调用<code>__getattr__</code>方法。</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -91,7 +91,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>注意<code>_getattr__</code>只在属性不在对象里的时候在调用</p>
+<p>注意<code>_getattr__</code>是当属性不在对象里的时候在调用</p>
 </div>
 </div>
 <div class="cell">
