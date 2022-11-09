@@ -10,7 +10,126 @@
 <atom:link href="https://chenminicode.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>metseq's blog</description>
 <generator>quarto-1.1.251</generator>
-<lastBuildDate>Mon, 07 Nov 2022 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 08 Nov 2022 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Python中的__getattr__和__getattribute__</title>
+  <dc:creator>metseq</dc:creator>
+  <link>https://chenminicode.github.io/posts/2022-11-09-python_getattr_getattribute/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="getattr__" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> <code>__getattr__</code></h1>
+<p>如果再类中实现了<code>_getattr__</code>方法，那么当使用<code>对象.属性</code>的时候，如果<code>属性</code>不在对象里，则会调用<code>__getattr__</code>方法。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;">class</span> Point():</span>
+<span id="cb1-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, x, y):</span>
+<span id="cb1-3">        <span class="va" style="color: #111111;">self</span>.x <span class="op" style="color: #5E5E5E;">=</span> x</span>
+<span id="cb1-4">        <span class="va" style="color: #111111;">self</span>.y <span class="op" style="color: #5E5E5E;">=</span> y</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">p <span class="op" style="color: #5E5E5E;">=</span> Point(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">4</span>)</span>
+<span id="cb2-2"><span class="bu" style="color: null;">print</span>(p.x, p.y)</span>
+<span id="cb2-3"><span class="bu" style="color: null;">print</span>(p.z)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3 4</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>AttributeError: 'Point' object has no attribute 'z'</code></pre>
+</div>
+</div>
+<p>因为<code>Point</code>没有<code>z</code>这个属性，所以报错了。</p>
+<p>下面这个类实现了<code>__getattr__</code>方法，看看会怎么样</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;">class</span> Point():</span>
+<span id="cb5-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, x, y):</span>
+<span id="cb5-3">        <span class="va" style="color: #111111;">self</span>.x <span class="op" style="color: #5E5E5E;">=</span> x</span>
+<span id="cb5-4">        <span class="va" style="color: #111111;">self</span>.y <span class="op" style="color: #5E5E5E;">=</span> y</span>
+<span id="cb5-5">    </span>
+<span id="cb5-6">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__getattr__</span>(<span class="va" style="color: #111111;">self</span>, name):</span>
+<span id="cb5-7">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'exec __getattr__ 😀'</span>)</span>
+<span id="cb5-8">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f'name: </span><span class="sc" style="color: #5E5E5E;">{</span>name<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">'</span>)</span>
+<span id="cb5-9">        <span class="cf" style="color: #003B4F;">return</span> <span class="dv" style="color: #AD0000;">42</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">p <span class="op" style="color: #5E5E5E;">=</span> Point(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">4</span>)</span>
+<span id="cb6-2">p.z</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exec __getattr__ 😀
+name: z</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>42</code></pre>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>__getattr__</code>方法接受两个参数，self不用说，name就是<code>属性</code>名称，在上面的例子就是<code>z</code></p>
+</div>
+</div>
+</section>
+<section id="getattribute__" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> <code>__getattribute__</code></h1>
+<p>如果再类中实现了<code>__getattribute__</code>方法，那么当使用<code>对象.属性</code>的时候，都会调用<code>__getattr__</code>方法。</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>注意<code>_getattr__</code>只在属性不在对象里的时候在调用</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="kw" style="color: #003B4F;">class</span> Point():</span>
+<span id="cb9-2">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__init__</span>(<span class="va" style="color: #111111;">self</span>, x, y):</span>
+<span id="cb9-3">        <span class="va" style="color: #111111;">self</span>.x <span class="op" style="color: #5E5E5E;">=</span> x</span>
+<span id="cb9-4">        <span class="va" style="color: #111111;">self</span>.y <span class="op" style="color: #5E5E5E;">=</span> y</span>
+<span id="cb9-5">    </span>
+<span id="cb9-6">    <span class="kw" style="color: #003B4F;">def</span> <span class="fu" style="color: #4758AB;">__getattribute__</span>(<span class="va" style="color: #111111;">self</span>, name):</span>
+<span id="cb9-7">        <span class="bu" style="color: null;">print</span>(<span class="st" style="color: #20794D;">'exec __getattr__ 😀'</span>)</span>
+<span id="cb9-8">        <span class="bu" style="color: null;">print</span>(<span class="ss" style="color: #20794D;">f'name: </span><span class="sc" style="color: #5E5E5E;">{</span>name<span class="sc" style="color: #5E5E5E;">}</span><span class="ss" style="color: #20794D;">'</span>)</span>
+<span id="cb9-9">        <span class="cf" style="color: #003B4F;">return</span> <span class="dv" style="color: #AD0000;">42</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">p <span class="op" style="color: #5E5E5E;">=</span> Point(<span class="dv" style="color: #AD0000;">3</span>, <span class="dv" style="color: #AD0000;">4</span>)</span>
+<span id="cb10-2">p.x, p.y, p.z</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exec __getattr__ 😀
+name: x
+exec __getattr__ 😀
+name: y
+exec __getattr__ 😀
+name: z</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>(42, 42, 42)</code></pre>
+</div>
+</div>
+<p><code>p.x</code>, <code>p.y</code>和<code>p.z</code>都调用了<code>__getattribute__</code>方法</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Python</category>
+  <guid>https://chenminicode.github.io/posts/2022-11-09-python_getattr_getattribute/index.html</guid>
+  <pubDate>Tue, 08 Nov 2022 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Python中的__enter__和__exit__</title>
   <dc:creator>metseq</dc:creator>

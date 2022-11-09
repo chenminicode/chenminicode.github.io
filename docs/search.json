@@ -11,7 +11,14 @@
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "Python\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+    "text": "Python\n\n\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "title": "Python中的__getattr__和__getattribute__",
+    "section": "",
+    "text": "2 __getattribute__\n如果再类中实现了__getattribute__方法，那么当使用对象.属性的时候，都会调用__getattr__方法。\n\n\n\n\n\n\nTip\n\n\n\n注意_getattr__只在属性不在对象里的时候在调用\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattribute__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.x, p.y, p.z\n\nexec __getattr__ 😀\nname: x\nexec __getattr__ 😀\nname: y\nexec __getattr__ 😀\nname: z\n\n\n(42, 42, 42)\n\n\np.x, p.y和p.z都调用了__getattribute__方法"
   },
   {
     "objectID": "posts/2022-10-31-python_magic_method/index.html",
