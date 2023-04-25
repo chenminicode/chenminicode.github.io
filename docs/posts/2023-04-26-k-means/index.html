@@ -1,57 +1,214 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
-      xmlns:media="http://search.yahoo.com/mrss/" 
-      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
-      xmlns:dc="http://purl.org/dc/elements/1.1/" 
-      version="2.0">
-<channel>
-<title>Blog</title>
-<link>https://chenminicode.github.io/index.html</link>
-<atom:link href="https://chenminicode.github.io/index.xml" rel="self" type="application/rss+xml"/>
-<description>metseq&#39;s blog</description>
-<generator>quarto-1.3.290</generator>
-<lastBuildDate>Tue, 25 Apr 2023 04:00:00 GMT</lastBuildDate>
-<item>
-  <title>K-means from scratch</title>
-  <dc:creator>metseq </dc:creator>
-  <link>https://chenminicode.github.io/posts/2023-04-26-k-means/index.html</link>
-  <description><![CDATA[ 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.290">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="metseq">
+<meta name="dcterms.date" content="2023-04-25">
+
+<title>Blog - K-means from scratch</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/chenminicode" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">K-means from scratch</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Python</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>metseq </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 25, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#k-means" id="toc-k-means" class="nav-link active" data-scroll-target="#k-means"><span class="header-section-number">1</span> K-means</a></li>
+  <li><a href="#create-data" id="toc-create-data" class="nav-link" data-scroll-target="#create-data"><span class="header-section-number">2</span> Create Data</a></li>
+  <li><a href="#k-means-1" id="toc-k-means-1" class="nav-link" data-scroll-target="#k-means-1"><span class="header-section-number">3</span> k-means</a>
+  <ul class="collapse">
+  <li><a href="#init-mean" id="toc-init-mean" class="nav-link" data-scroll-target="#init-mean"><span class="header-section-number">3.1</span> Init mean</a></li>
+  <li><a href="#calculate-distance" id="toc-calculate-distance" class="nav-link" data-scroll-target="#calculate-distance"><span class="header-section-number">3.2</span> Calculate distance</a></li>
+  <li><a href="#select-nearest-group" id="toc-select-nearest-group" class="nav-link" data-scroll-target="#select-nearest-group"><span class="header-section-number">3.3</span> Select nearest group</a></li>
+  <li><a href="#update-mean" id="toc-update-mean" class="nav-link" data-scroll-target="#update-mean"><span class="header-section-number">3.4</span> Update mean</a></li>
+  <li><a href="#write-update-loop" id="toc-write-update-loop" class="nav-link" data-scroll-target="#write-update-loop"><span class="header-section-number">3.5</span> Write update loop</a></li>
+  <li><a href="#write-k-means-function" id="toc-write-k-means-function" class="nav-link" data-scroll-target="#write-k-means-function"><span class="header-section-number">3.6</span> Write k-means function</a></li>
+  </ul></li>
+  <li><a href="#animation" id="toc-animation" class="nav-link" data-scroll-target="#animation"><span class="header-section-number">4</span> Animation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 <div class="cell" data-tags="[]" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> torch</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> math</span>
-<span id="cb1-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> plt</span>
-<span id="cb1-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> functools <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> partial</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> partial</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">torch.set_printoptions(precision<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, linewidth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">140</span>, sci_mode<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>torch.set_printoptions(precision<span class="op">=</span><span class="dv">3</span>, linewidth<span class="op">=</span><span class="dv">140</span>, sci_mode<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="k-means" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> K-means</h1>
@@ -60,34 +217,14 @@ font-style: inherit;">False</span>)</span></code></pre></div>
 <section id="create-data" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Create Data</h1>
 <div class="cell" data-tags="[]" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">n_clusters <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span></span>
-<span id="cb3-2">n_samples <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n_clusters <span class="op">=</span> <span class="dv">6</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">250</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">centroids <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.rand(n_clusters, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">70</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">35</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>centroids <span class="op">=</span> torch.rand(n_clusters, <span class="dv">2</span>)<span class="op">*</span><span class="dv">70</span><span class="op">-</span><span class="dv">35</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">centroids</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>centroids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>tensor([[ -3.628,  18.403],
         [ -7.049,  -8.394],
@@ -98,167 +235,53 @@ font-style: inherit;">35</span></span></code></pre></div>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> torch.distributions.multivariate_normal <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> MultivariateNormal</span>
-<span id="cb7-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> torch <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> tensor</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.distributions.multivariate_normal <span class="im">import</span> MultivariateNormal</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> tensor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> sample(m): <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> MultivariateNormal(m, torch.diag(tensor([<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">30.</span>,<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">30.</span>]))).sample((n_samples,))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample(m): <span class="cf">return</span> MultivariateNormal(m, torch.diag(tensor([<span class="fl">30.</span>,<span class="fl">30.</span>]))).sample((n_samples,))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">slices <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [sample(c) <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> c <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> centroids]</span>
-<span id="cb9-2">data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.cat(slices)</span>
-<span id="cb9-3">data.shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>slices <span class="op">=</span> [sample(c) <span class="cf">for</span> c <span class="kw">in</span> centroids]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> torch.cat(slices)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>torch.Size([1500, 2])</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> plot_data(centroids, data, n_samples, ax<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>):</span>
-<span id="cb11-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> ax <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">is</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>: _,ax <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> plt.subplots()</span>
-<span id="cb11-3">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i, centroid <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(centroids):</span>
-<span id="cb11-4">        samples <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data[i<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>n_samples:(i<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>n_samples]</span>
-<span id="cb11-5">        ax.scatter(samples[:,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>], samples[:,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>], s<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb11-6">        ax.plot(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>centroid, markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, marker<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x"</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'k'</span>, mew<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>)</span>
-<span id="cb11-7">        ax.plot(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>centroid, markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>, marker<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x"</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'m'</span>, mew<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data(centroids, data, n_samples, ax<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>: _,ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, centroid <span class="kw">in</span> <span class="bu">enumerate</span>(centroids):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        samples <span class="op">=</span> data[i<span class="op">*</span>n_samples:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n_samples]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        ax.scatter(samples[:,<span class="dv">0</span>], samples[:,<span class="dv">1</span>], s<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="op">*</span>centroid, markersize<span class="op">=</span><span class="dv">10</span>, marker<span class="op">=</span><span class="st">"x"</span>, color<span class="op">=</span><span class="st">'k'</span>, mew<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="op">*</span>centroid, markersize<span class="op">=</span><span class="dv">5</span>, marker<span class="op">=</span><span class="st">"x"</span>, color<span class="op">=</span><span class="st">'m'</span>, mew<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">plot_data(centroids, data, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_data(centroids, data, <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="https://chenminicode.github.io/posts/2023-04-26-k-means/index_files/figure-html/cell-11-output-1.png" class="quarto-discovered-preview-image img-fluid"></p>
+<p><img src="index_files/figure-html/cell-11-output-1.png" class="quarto-discovered-preview-image img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="k-means-1" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> k-means</h1>
 <div class="cell" data-tags="[]" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">X <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data.clone()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.clone()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="init-mean" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="init-mean"><span class="header-section-number">3.1</span> Init mean</h2>
 <div class="cell" data-tags="[]" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">k <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">perm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.randperm(X.size(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> torch.randperm(X.size(<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">idx <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> perm[:k]</span>
-<span id="cb16-2">means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> X[idx].clone()</span>
-<span id="cb16-3">means</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> perm[:k]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> X[idx].clone()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>tensor([[ 13.227,  -8.303],
         [ 11.784,  11.362],
@@ -269,64 +292,40 @@ font-style: inherit;">=</span> X[idx].clone()</span>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">plot_data(means, X, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plot_data(means, X, <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="https://chenminicode.github.io/posts/2023-04-26-k-means/index_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="calculate-distance" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="calculate-distance"><span class="header-section-number">3.2</span> Calculate distance</h2>
 <div class="cell" data-tags="[]" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">means.shape, X.shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>means.shape, X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>(torch.Size([6, 2]), torch.Size([1500, 2]))</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1">means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>].shape, X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>].shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>means[:, <span class="va">None</span>].shape, X[<span class="va">None</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>(torch.Size([6, 1, 2]), torch.Size([1, 1500, 2]))</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">(means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>]).shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(means[:, <span class="va">None</span>] <span class="op">-</span> X[<span class="va">None</span>]).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>torch.Size([6, 1500, 2])</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>]</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mm <span class="op">=</span> means[:, <span class="va">None</span>] <span class="op">-</span> X[<span class="va">None</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">l2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.einsum(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ijk, ijk-&gt;ij'</span>, mm, mm)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>l2 <span class="op">=</span> torch.einsum(<span class="st">'ijk, ijk-&gt;ij'</span>, mm, mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1">l2</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>l2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>tensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],
         [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],
@@ -337,19 +336,13 @@ font-style: inherit;">'ijk, ijk-&gt;ij'</span>, mm, mm)</span></code></pre></div
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1">l2.shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>l2.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>torch.Size([6, 1500])</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1">(mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> mm).<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>(mm <span class="op">*</span> mm).<span class="bu">sum</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>tensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],
         [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],
@@ -360,13 +353,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1">(mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> mm).<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>).shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>(mm <span class="op">*</span> mm).<span class="bu">sum</span>(<span class="dv">2</span>).shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>torch.Size([6, 1500])</code></pre>
 </div>
@@ -375,16 +362,10 @@ font-style: inherit;">2</span>).shape</span></code></pre></div>
 <section id="select-nearest-group" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="select-nearest-group"><span class="header-section-number">3.3</span> Select nearest group</h2>
 <div class="cell" data-tags="[]" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1">group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.argmin(l2, dim<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>group <span class="op">=</span> torch.argmin(l2, dim<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1">group.shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>group.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>torch.Size([1500])</code></pre>
 </div>
@@ -393,41 +374,23 @@ font-style: inherit;">0</span>)</span></code></pre></div>
 <section id="update-mean" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="update-mean"><span class="header-section-number">3.4</span> Update mean</h2>
 <div class="cell" data-tags="[]" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1">X[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>].shape</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>X[group <span class="op">==</span> <span class="dv">0</span>].shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>torch.Size([47, 2])</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1">torch.mean(X, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>torch.mean(X, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>tensor([2.815, 6.901])</code></pre>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(k):</span>
-<span id="cb42-2">    means[i] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.mean(X[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i], <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    means[i] <span class="op">=</span> torch.mean(X[group <span class="op">==</span> i], <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1">means</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>tensor([[ 15.741, -10.534],
         [  0.595,  16.672],
@@ -438,160 +401,58 @@ font-style: inherit;">0</span>)</span></code></pre></div>
 </div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb45" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1">plot_data(means, data, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>plot_data(means, data, <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="https://chenminicode.github.io/posts/2023-04-26-k-means/index_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="write-update-loop" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="write-update-loop"><span class="header-section-number">3.5</span> Write update loop</h2>
 <div class="cell" data-tags="[]" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> update(means, X, n):</span>
-<span id="cb46-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(n):</span>
-<span id="cb46-3">        mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>]</span>
-<span id="cb46-4">        l2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.einsum(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
-<span id="cb46-5">        group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.argmin(l2, dim<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb46-6">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(k):</span>
-<span id="cb46-7">            means[i] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.mean(X[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i], <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update(means, X, n):</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>        mm <span class="op">=</span> means[:, <span class="va">None</span>] <span class="op">-</span> X[<span class="va">None</span>]</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>        l2 <span class="op">=</span> torch.einsum(<span class="st">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> torch.argmin(l2, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>            means[i] <span class="op">=</span> torch.mean(X[group <span class="op">==</span> i], <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1">update(means, X, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>update(means, X, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1">plot_data(means, data, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>plot_data(means, data, <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="https://chenminicode.github.io/posts/2023-04-26-k-means/index_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="write-k-means-function" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="write-k-means-function"><span class="header-section-number">3.6</span> Write k-means function</h2>
 <div class="cell" data-tags="[]" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb49" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> kmeans(X, k, n):</span>
-<span id="cb49-2">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># init means</span></span>
-<span id="cb49-3">    perm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.randperm(X.size(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>))</span>
-<span id="cb49-4">    idx <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> perm[:k]</span>
-<span id="cb49-5">    means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> X[idx].clone()</span>
-<span id="cb49-6"></span>
-<span id="cb49-7">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> t <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(n):</span>
-<span id="cb49-8">        mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>]</span>
-<span id="cb49-9">        l2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.einsum(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
-<span id="cb49-10">        group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.argmin(l2, dim<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb49-11">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(k):</span>
-<span id="cb49-12">            means[i] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.mean(X[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i], <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb49-13">    </span>
-<span id="cb49-14">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> means</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kmeans(X, k, n):</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># init means</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    perm <span class="op">=</span> torch.randperm(X.size(<span class="dv">0</span>))</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> perm[:k]</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    means <span class="op">=</span> X[idx].clone()</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        mm <span class="op">=</span> means[:, <span class="va">None</span>] <span class="op">-</span> X[<span class="va">None</span>]</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>        l2 <span class="op">=</span> torch.einsum(<span class="st">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> torch.argmin(l2, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>            means[i] <span class="op">=</span> torch.mean(X[group <span class="op">==</span> i], <span class="dv">0</span>)</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb50" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1">means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> kmeans(X, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> kmeans(X, <span class="dv">6</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb51" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1">plot_data(means, data, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">250</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>plot_data(means, data, <span class="dv">250</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="https://chenminicode.github.io/posts/2023-04-26-k-means/index_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -599,210 +460,50 @@ font-style: inherit;">250</span>)</span></code></pre></div>
 <section id="animation" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Animation</h1>
 <div class="cell" data-tags="[]" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb52" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> matplotlib.animation <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> FuncAnimation</span>
-<span id="cb52-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> IPython.display <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> HTML</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.animation <span class="im">import</span> FuncAnimation</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="39">
-<div class="sourceCode cell-code" id="cb53" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> init_means(X, k):</span>
-<span id="cb53-2">    perm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.randperm(X.size(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>))</span>
-<span id="cb53-3">    idx <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> perm[:k]</span>
-<span id="cb53-4">    means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> X[idx].clone()</span>
-<span id="cb53-5">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> means</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init_means(X, k):</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    perm <span class="op">=</span> torch.randperm(X.size(<span class="dv">0</span>))</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    idx <span class="op">=</span> perm[:k]</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    means <span class="op">=</span> X[idx].clone()</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="40">
-<div class="sourceCode cell-code" id="cb54" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> one_update(X, means, k):</span>
-<span id="cb54-2">    mm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> means[:, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> X[<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>]</span>
-<span id="cb54-3">    l2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.einsum(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
-<span id="cb54-4">    group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.argmin(l2, dim<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb54-5">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(k):</span>
-<span id="cb54-6">        means[i] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.mean(X[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i], <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb54-7">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> group</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> one_update(X, means, k):</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    mm <span class="op">=</span> means[:, <span class="va">None</span>] <span class="op">-</span> X[<span class="va">None</span>]</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    l2 <span class="op">=</span> torch.einsum(<span class="st">'ijk, ijk-&gt;ij'</span>, mm, mm)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    group <span class="op">=</span> torch.argmin(l2, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(k):</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>        means[i] <span class="op">=</span> torch.mean(X[group <span class="op">==</span> i], <span class="dv">0</span>)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> group</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb55" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> plot_data_group(centroids, group, data, ax<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>):</span>
-<span id="cb55-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> ax <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">is</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span>: _,ax <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> plt.subplots()</span>
-<span id="cb55-3">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i, centroid <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">enumerate</span>(centroids):</span>
-<span id="cb55-4">        samples <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data[group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i]</span>
-<span id="cb55-5">        ax.scatter(samples[:,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>], samples[:,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>], s<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb55-6">        ax.plot(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>centroid, markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, marker<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x"</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'k'</span>, mew<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>)</span>
-<span id="cb55-7">        ax.plot(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>centroid, markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>, marker<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x"</span>, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'m'</span>, mew<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data_group(centroids, group, data, ax<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span>: _,ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, centroid <span class="kw">in</span> <span class="bu">enumerate</span>(centroids):</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>        samples <span class="op">=</span> data[group <span class="op">==</span> i]</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>        ax.scatter(samples[:,<span class="dv">0</span>], samples[:,<span class="dv">1</span>], s<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="op">*</span>centroid, markersize<span class="op">=</span><span class="dv">10</span>, marker<span class="op">=</span><span class="st">"x"</span>, color<span class="op">=</span><span class="st">'k'</span>, mew<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="op">*</span>centroid, markersize<span class="op">=</span><span class="dv">5</span>, marker<span class="op">=</span><span class="st">"x"</span>, color<span class="op">=</span><span class="st">'m'</span>, mew<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb56" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> do_one(d, means, k):</span>
-<span id="cb56-2">    pre_means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> means.clone()</span>
-<span id="cb56-3">    group <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> one_update(X, means, k)</span>
-<span id="cb56-4">    ax.clear()</span>
-<span id="cb56-5">    plot_data_group(pre_means, group, X, ax<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>ax)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> do_one(d, means, k):</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    pre_means <span class="op">=</span> means.clone()</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    group <span class="op">=</span> one_update(X, means, k)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    ax.clear()</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    plot_data_group(pre_means, group, X, ax<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb57" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1">X <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> data.clone()</span>
-<span id="cb57-2">k <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span></span>
-<span id="cb57-3">fig,ax <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> plt.subplots()</span>
-<span id="cb57-4">means <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> init_means(X, k)</span>
-<span id="cb57-5">f1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> partial(do_one, means<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>means, k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>k)</span>
-<span id="cb57-6">ani <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> FuncAnimation(fig, f1, frames<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, interval<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span>, repeat<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>)</span>
-<span id="cb57-7">plt.close()</span>
-<span id="cb57-8">HTML(ani.to_jshtml())</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.clone()</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>fig,ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> init_means(X, k)</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>f1 <span class="op">=</span> partial(do_one, means<span class="op">=</span>means, k<span class="op">=</span>k)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>ani <span class="op">=</span> FuncAnimation(fig, f1, frames<span class="op">=</span><span class="dv">10</span>, interval<span class="op">=</span><span class="dv">500</span>, repeat<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>plt.close()</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>HTML(ani.to_jshtml())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -5878,1266 +5579,242 @@ GAASERERxQwDQCIiIqKY+f8BC6EL5VBGX5UAAAAASUVORK5CYII=\
 
 </section>
 
- ]]></description>
-  <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2023-04-26-k-means/index.html</guid>
-  <pubDate>Tue, 25 Apr 2023 04:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Python中的__getattr__和__getattribute__</title>
-  <dc:creator>metseq </dc:creator>
-  <link>https://chenminicode.github.io/posts/2022-11-09-python_getattr_getattribute/index.html</link>
-  <description><![CDATA[ 
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
 
 
 
-
-<section id="getattr__" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> <code>__getattr__</code></h1>
-<p>如果在类中实现了<code>_getattr__</code>方法，那么当使用<code>对象.属性</code>的时候，如果<code>属性</code>不在对象里，则会调用<code>__getattr__</code>方法。</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb1-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb1-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb1-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span>
-<span id="cb2-2"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(p.x, p.y)</span>
-<span id="cb2-3"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(p.z)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>3 4</code></pre>
-</div>
-<div class="cell-output cell-output-error">
-<pre><code>AttributeError: 'Point' object has no attribute 'z'</code></pre>
-</div>
-</div>
-<p>因为<code>Point</code>没有<code>z</code>这个属性，所以报错了。</p>
-<p>下面这个类实现了<code>__getattr__</code>方法，看看会怎么样</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb5-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb5-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb5-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb5-5">    </span>
-<span id="cb5-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__getattr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, name):</span>
-<span id="cb5-7">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'exec __getattr__ 😀'</span>)</span>
-<span id="cb5-8">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'name: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>name<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'</span>)</span>
-<span id="cb5-9">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span></span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span>
-<span id="cb6-2">p.z</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>exec __getattr__ 😀
-name: z</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<pre><code>42</code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>__getattr__</code>方法接受两个参数，<code>self</code>不用说，<code>name</code>就是<code>属性</code>名称，在上面的例子就是<code>z</code></p>
-</div>
-</div>
-</section>
-<section id="getattribute__" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> <code>__getattribute__</code></h1>
-<p>如果在类中实现了<code>__getattribute__</code>方法，那么当使用<code>对象.属性</code>的时候，都会调用<code>__getattr__</code>方法。</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>注意<code>_getattr__</code>是当属性不在对象里的时候在调用</p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb9-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb9-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb9-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb9-5">    </span>
-<span id="cb9-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__getattribute__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, name):</span>
-<span id="cb9-7">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'exec __getattr__ 😀'</span>)</span>
-<span id="cb9-8">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'name: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>name<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'</span>)</span>
-<span id="cb9-9">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">42</span></span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span>
-<span id="cb10-2">p.x, p.y, p.z</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>exec __getattr__ 😀
-name: x
-exec __getattr__ 😀
-name: y
-exec __getattr__ 😀
-name: z</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<pre><code>(42, 42, 42)</code></pre>
-</div>
-</div>
-<p><code>p.x</code>, <code>p.y</code>和<code>p.z</code>都调用了<code>__getattribute__</code>方法</p>
-
-
-</section>
-
- ]]></description>
-  <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2022-11-09-python_getattr_getattribute/index.html</guid>
-  <pubDate>Wed, 09 Nov 2022 05:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Python中的__enter__和__exit__</title>
-  <dc:creator>metseq </dc:creator>
-  <link>https://chenminicode.github.io/posts/2022-11-08-python_enter_exit/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="enter__和__exit__是什么" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> <code>__enter__</code>和<code>__exit__</code>是什么</h1>
-<p>当在类中实现<code>__enter__</code>和<code>__exit__</code>方法的使用，这个类就可以用<code>with</code>调用了，调用<code>with</code>的时候，返回<code>__enter__</code>的结果，退出<code>with</code>的时候，执行<code>__exit__</code>的代码。</p>
-<p>平时用<code>with</code>最多的可能是打开一个文件，<code>with</code>返回文件的句柄（file handle），退出<code>with</code>的时候关闭文件。</p>
-<p>如下代码：</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 建一个测试文件</span></span>
-<span id="cb1-2"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span> echo <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>e <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'line1</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">line2</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">line3'</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> sample.txt</span>
-<span id="cb1-3"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span> cat sample.txt</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>line1
-line2
-line3</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 使用python读取文件</span></span>
-<span id="cb3-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'sample.txt'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> f:</span>
-<span id="cb3-3">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> f:</span>
-<span id="cb3-4">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(line, end<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">''</span>)        </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>line1
-line2
-line3</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 查看f是否关闭了，返回True，表示f关闭了</span></span>
-<span id="cb5-2">f.closed</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre><code>True</code></pre>
-</div>
-</div>
-<p>如果不用<code>with</code>，需要手动关闭文件。</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">f <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'sample.txt'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'r'</span>)</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># f还没有关闭</span></span>
-<span id="cb8-2">f.closed</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre><code>False</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 使用close()方法关闭文件后，文件就关闭了</span></span>
-<span id="cb10-2">f.close()</span>
-<span id="cb10-3">f.closed</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre><code>True</code></pre>
-</div>
-</div>
-</section>
-<section id="自已写一个处理文件的类" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> 自已写一个处理文件的类</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> MyOpen():</span>
-<span id="cb12-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>, mode):</span>
-<span id="cb12-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span></span>
-<span id="cb12-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.mode <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> mode</span>
-<span id="cb12-5">    </span>
-<span id="cb12-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__enter__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb12-7">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.f <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">open</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">file</span>, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.mode)</span>
-<span id="cb12-8">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.f</span>
-<span id="cb12-9">    </span>
-<span id="cb12-10">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__exit__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, exc_type, exc_val, exc_tb):</span>
-<span id="cb12-11">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.f.close()</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> MyOpen(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'sample.txt'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> f:</span>
-<span id="cb13-2">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> f:</span>
-<span id="cb13-3">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(line, end<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">''</span>)        </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>line1
-line2
-line3</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">f.closed</span></code></pre></div>
-<div class="cell-output cell-output-display">
-<pre><code>True</code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？</p>
-</div>
-</div>
-</section>
-<section id="exit__的参数" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> <code>__exit__</code>的参数</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> SafeDivide():</span>
-<span id="cb17-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, a, b):</span>
-<span id="cb17-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> a</span>
-<span id="cb17-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.b <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> b</span>
-<span id="cb17-5">    </span>
-<span id="cb17-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__enter__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb17-7">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'exec __enter__'</span>)</span>
-<span id="cb17-8">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>a<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> / </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>b<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> = '</span>, end<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">''</span>)</span>
-<span id="cb17-9">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span></span>
-<span id="cb17-10">    </span>
-<span id="cb17-11">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> divide(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb17-12">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.b</span>
-<span id="cb17-13">    </span>
-<span id="cb17-14">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__exit__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, exc_type, exc_val, exc_tb):</span>
-<span id="cb17-15">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'</span><span class="ch" style="color: #20794D;
-background-color: null;
-font-style: inherit;">\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">------------'</span>)</span>
-<span id="cb17-16">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'exec __exit__'</span>)</span>
-<span id="cb17-17">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"exec_type: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>exc_type<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb17-18">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"exc_val: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>exc_val<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb17-19">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"exc_tb: </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>exc_tb<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> SafeDivide(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> d:</span>
-<span id="cb18-2">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(d.divide())</span>
-<span id="cb18-3">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'啦啦啦'</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>exec __enter__
-1 / 2 = 0.5
-啦啦啦
-
-------------
-exec __exit__
-exec_type: None
-exc_val: None
-exc_tb: None</code></pre>
-</div>
-</div>
-<p>如果执行没有问题，<code>exc_type</code>, <code>exc_val</code>, <code>exc_tb</code>都是<code>None</code></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> SafeDivide(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> d:</span>
-<span id="cb20-2">    <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(d.divide())</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>exec __enter__
-1 / 0 = 
-------------
-exec __exit__
-exec_type: &lt;class 'ZeroDivisionError'&gt;
-exc_val: division by zero
-exc_tb: &lt;traceback object&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-error">
-<pre><code>ZeroDivisionError: division by zero</code></pre>
-</div>
-</div>
-<p>如果执行对象的方法出现问题，就会直接执行<code>__exit__</code>方法，<code>exc_type</code>, <code>exc_val</code>, <code>exc_tb</code>包含的就是错误类型，错误值，错误的回溯信息。</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>出错后不会执行后面的语句，比如这里的<code>print('啦啦啦')</code>，而是直接执行<code>__exit__</code>了</p>
-</div>
-</div>
-
-
-</section>
-
- ]]></description>
-  <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2022-11-08-python_enter_exit/index.html</guid>
-  <pubDate>Tue, 08 Nov 2022 05:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Python中的几个魔法方法</title>
-  <dc:creator>metseq </dc:creator>
-  <link>https://chenminicode.github.io/posts/2022-10-31-python_magic_method/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="类和对象的__dict__属性" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> 类和对象的<code>__dict__</code>属性</h1>
-<section id="对象的__dict__属性" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="对象的__dict__属性"><span class="header-section-number">1.1</span> 对象的<code>__dict__</code>属性</h2>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb1-2">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">'''Create a Point'''</span></span>
-<span id="cb1-3">    my_name <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'A Point'</span></span>
-<span id="cb1-4">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb1-5">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb1-6">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span>
-<span id="cb2-2">p.__dict__</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>{'x': 3, 'y': 4}</code></pre>
-</div>
-</div>
-<p>对象的<code>__dict__</code>属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。</p>
-<p>当给对象属性复制的时候，就是修改<code>__dict__</code>字典。</p>
-</section>
-<section id="类的__dict__属性" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="类的__dict__属性"><span class="header-section-number">1.2</span> 类的<code>__dict__</code>属性</h2>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">Point.__dict__</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>mappingproxy({'__module__': '__main__',
-              '__doc__': 'Create a Point',
-              'my_name': 'A Point',
-              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,
-              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,
-              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})</code></pre>
-</div>
-</div>
-<p>可以看到，<code>Point</code>类的<code>__dict__</code>属性包括了:</p>
-<ul>
-<li>类的文档<code>__doc__</code></li>
-<li>类中定义变量，比如这里的<code>my_name</code></li>
-<li>类的方法</li>
-<li>其他一些不知道什么的东西😓</li>
-</ul>
-</section>
-</section>
-<section id="类的__repr__和__str__方法" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> 类的<code>__repr__</code>和<code>__str__</code>方法</h1>
-<section id="repr__方法" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="repr__方法"><span class="header-section-number">2.1</span> <code>__repr__</code>方法</h2>
-<p>直接输出<code>p</code>时，会显示一堆没用的东西</p>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">p</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;__main__.Point at 0x7fee391d2110&gt;</code></pre>
-</div>
-</div>
-<p>我们想显示关于<code>Point</code>的有用信息，这时<code>__repr__</code>方法就派上用场了</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb8-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb8-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb8-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb8-5">    </span>
-<span id="cb8-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__repr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb8-7">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Point(x=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, y=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%</span> (<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span>
-<span id="cb9-2">p</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>Point(x=3, y=4)</code></pre>
-</div>
-</div>
-</section>
-<section id="str__方法" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="str__方法"><span class="header-section-number">2.2</span> <code>__str__</code>方法</h2>
-<p><code>__str__</code>方法和<code>__repr__</code>方法好像都是用字符表示对象的，有什么区别呢？</p>
-<p><a href="https://stackoverflow.com/questions/1436703/what-is-the-difference-between-str-and-repr">stackoverflow</a>有一个回答说:</p>
-<ul>
-<li><code>__repr__</code>显示的信息需要避免歧义</li>
-<li><code>__str__</code>显示的信息注重可读性，方便理解</li>
-<li><code>__str__</code>使用了<code>__repr</code></li>
-</ul>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>(p)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>'Point(x=3, y=4)'</code></pre>
-</div>
-</div>
-<p>在<code>Point</code>中如果没有重写<code>__str__</code>方法，会调用<code>__repr__</code>输出的结果</p>
-<p>如果在<code>Point</code>中重写了<code>__str__</code>方法，就会输出<code>__str__</code>调用的结果。</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb13-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb13-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb13-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb13-5">    </span>
-<span id="cb13-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__repr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb13-7">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Point(x=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, y=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%</span> (<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y)</span>
-<span id="cb13-8">    </span>
-<span id="cb13-9">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__str__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb13-10">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'Just a normal 2d point(</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>y<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)'</span></span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">p</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
-<pre><code>Point(x=3, y=4)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">repr</span>(p)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>'Point(x=3, y=4)'</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(p)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Just a normal 2d point(3, 4)</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>(p)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code>'Just a normal 2d point(3, 4)'</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="类的__setattr__方法" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> 类的<code>__setattr__</code>方法</h1>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'3'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'4'</span>)</span>
-<span id="cb23-2">p</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>Point(x='3', y='4')</code></pre>
-</div>
-</div>
-<p>想在初始化Point的时候，把x，y属性转变成float类型，<code>__setattr__</code>方法就能用上了</p>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb25-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb25-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb25-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb25-5">    </span>
-<span id="cb25-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__setattr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, name, value):</span>
-<span id="cb25-7">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.__dict__[name] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">float</span>(value)</span>
-<span id="cb25-8">    </span>
-<span id="cb25-9">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__repr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb25-10">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Point(x=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, y=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%</span> (<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'3'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'4'</span>)</span>
-<span id="cb26-2">p</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>Point(x=3.0, y=4.0)</code></pre>
-</div>
-</div>
-<div class="sourceCode" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1">p.__dict__</span></code></pre></div>
-<p>p的x和y属性都已经是float类型了，这是怎么做到的呢？</p>
-<p>在类的<code>__init__</code>函数中，<code>self.x =</code>x这一句，<code>self.x</code>的值设为<code>x</code>，</p>
-<p>当遇到这种<code>对象.属性 = 值</code>的时候，如果重写了<code>__setattr__</code>方法，就会调用<code>__setattr__</code>方法，</p>
-<p>也就是说当遇到<code>对象.属性 = 值</code>，相当于调用了<code>__setattr__(对象, 属性, 值)</code></p>
-<p>在这里相当于<code>__setattr__(self, 'x', x)</code>，在<code>__setattr__</code>函数里修改了<code>self.__dict__['x'] = float(value)</code></p>
-<p><code>__setattr__</code>函数里面可以做你想做的任何事情，不仅仅是改变默认的属性赋值操作</p>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">class</span> Point():</span>
-<span id="cb29-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, x, y):</span>
-<span id="cb29-3">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>._modules <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> {}</span>
-<span id="cb29-4">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> x</span>
-<span id="cb29-5">        <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> y</span>
-<span id="cb29-6">    </span>
-<span id="cb29-7">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__setattr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>, name, value):</span>
-<span id="cb29-8">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">not</span> name.startswith(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'_'</span>):</span>
-<span id="cb29-9">            <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>._modules[name] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> value</span>
-<span id="cb29-10">            <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'add </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>name<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">:</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>value<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> to _module'</span>)</span>
-<span id="cb29-11">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f'set </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>name<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;"> to </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>value<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'</span>)</span>
-<span id="cb29-12">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">super</span>().<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__setattr__</span>(name, value)</span>
-<span id="cb29-13">        </span>
-<span id="cb29-14">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">__repr__</span>(<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>):</span>
-<span id="cb29-15">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Point(x=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">, y=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%r</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">)"</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%</span> (<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.x, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">self</span>.y)</span></code></pre></div>
-</div>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">p <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> Point(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>set _modules to {}
-add x:3 to _module
-set x to 3
-add y:4 to _module
-set y to 4</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1">p._modules</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>{'x': 3, 'y': 4}</code></pre>
-</div>
-</div>
-
-
-</section>
-
- ]]></description>
-  <category>Python</category>
-  <guid>https://chenminicode.github.io/posts/2022-10-31-python_magic_method/index.html</guid>
-  <pubDate>Mon, 31 Oct 2022 04:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>博客原因</title>
-  <dc:creator>metseq </dc:creator>
-  <link>https://chenminicode.github.io/posts/2018-07-19-blog_reason/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>最开始建这个博客，纯粹想了解怎样在github上，用Jekll搭建博客。搭好后，发现这里可以记录自己的学习过程。因为我很健忘，今天想到学习什么有趣的东西，明天可能就忘了。</p>
-<p>很多人都在说自己是一个终生学习的人，学校也在提倡终生学习。这里有3个问题： 1. 是否真的一直在学习？ 2. 学习什么？ 3. 在“一生”的时间尺度下，学习的规划是否有效？</p>
-<p>第一个问题只有盖棺定论时，才能回答。把我的学习过程记录下来，督促自己保持学习的习惯，不找借口中止了学习。</p>
-<p>第二个问题，当然是学习自己感兴趣的和有用的东西。现在的教育，导致学生没有兴趣，不知道自己喜欢什么。在高考后，不知道报什么专业，应为根本就不知道自己喜欢什么，想从事什么样的职业，过怎样的生活。而且自己喜欢的东西，未必真的了解。我报的专业，高中以为是喜欢的，了解之后发现是另一回事。也许你会说在没有学习那个专业之前，是不会真正了解的。这是惯用的理由，但是在真正学习之前，可以了解这个专业的一些背景，这些知识足够你做一个合理的选择。</p>
-<p>慢慢的，把之前得到的观念重新做了审视，像笛卡尔怀疑一切一样，去怀疑我曾经学到的东西；渐渐我发现自己的兴趣倾向： - 喜欢了解背后的原理、算法，而不仅仅是外表 - 喜欢计算机，应为想到的东西可以马上操作实验</p>
-<p>第三个问题，我也不知道，怎样的学习规划适合长尺度下的学习。 Peter Norvig写了一篇文章《Teach Yourself Programmin in Ten Years》（10年自学编程），讲了现在很多人学习急功近利，如24小时自学Java。文中给有志于自学编程的人一些很好的建议。建议只有在真正被采用，而起到好作用时才是建议。章太炎在《今日青年之弱点》一文中，写到“现在青年第一弱点，就是把事情太看容易，其结果不是侥幸，便是退却。”，“现在青年只有将这个弱点痛改，遇事宜慎重，决机宜敏速，抱志既极坚确，观察又极明了，则无所谓侥幸退却，只有百折千回以达吾人最终之目的而已。”。学习不是一件容易的事，能很容易学会的事也不足以成为你自己。我想在这里记录我的学习过程，实验我的学习计划。至于是否有效，等过后看就知道了。</p>
-
-
-
- ]]></description>
-  <category>essay</category>
-  <guid>https://chenminicode.github.io/posts/2018-07-19-blog_reason/index.html</guid>
-  <pubDate>Thu, 19 Jul 2018 04:00:00 GMT</pubDate>
-</item>
-</channel>
-</rss>
+</body></html>
