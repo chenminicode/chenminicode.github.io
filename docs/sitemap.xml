@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://chenminicode.github.io/posts/2023-05-01-learner-python/index.html</loc>
+    <lastmod>2023-05-03T18:48:52.087Z</lastmod>
+  </url>
+  <url>
     <loc>https://chenminicode.github.io/posts/2022-11-09-python_getattr_getattribute/index.html</loc>
-    <lastmod>2023-04-26T18:30:14.574Z</lastmod>
+    <lastmod>2023-05-03T18:48:52.483Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/posts/2023-04-26-k-means/index.html</loc>
-    <lastmod>2023-04-26T18:30:15.193Z</lastmod>
+    <lastmod>2023-05-03T18:48:53.076Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/posts/2022-10-31-python_magic_method/index.html</loc>
-    <lastmod>2023-04-26T18:30:15.914Z</lastmod>
+    <lastmod>2023-05-03T18:48:53.628Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/posts/2022-11-08-python_enter_exit/index.html</loc>
-    <lastmod>2023-04-26T18:30:16.292Z</lastmod>
+    <lastmod>2023-05-03T18:48:53.975Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/posts/2018-07-19-blog_reason/index.html</loc>
-    <lastmod>2023-04-26T18:30:16.600Z</lastmod>
+    <lastmod>2023-05-03T18:48:54.270Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/index.html</loc>
-    <lastmod>2023-04-26T18:30:17.187Z</lastmod>
+    <lastmod>2023-05-03T18:48:54.930Z</lastmod>
   </url>
   <url>
     <loc>https://chenminicode.github.io/about.html</loc>
-    <lastmod>2023-04-26T18:30:17.457Z</lastmod>
+    <lastmod>2023-05-03T18:48:55.208Z</lastmod>
   </url>
 </urlset>

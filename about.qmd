@@ -1,6 +1,6 @@
 ---
 title: "About"
-# image: profile.jpg
+image: profile.jpg
 about:
   template: jolla
   links:
@@ -16,8 +16,7 @@ about:
 
 ---
 
-# About this blog
-Hello, I am metseq, a bioinformatics engineer🧬.
+Hello, I am Min, a bioinformatics engineer🧬.
 
 I love Python🐍, ML🤖 and Freedom🚀.
 

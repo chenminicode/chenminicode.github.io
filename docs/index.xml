@@ -12,6 +12,741 @@
 <generator>quarto-1.3.290</generator>
 <lastBuildDate>Tue, 25 Apr 2023 04:00:00 GMT</lastBuildDate>
 <item>
+  <title>Python basis related to fastai learner</title>
+  <dc:creator>metseq </dc:creator>
+  <link>https://chenminicode.github.io/posts/2023-05-01-learner-python/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I have been studying <a href="https://course.fast.ai/Lessons/part2.html">fastai course part2</a>.</p>
+<p>In lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.</p>
+<p>Jeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features.</p>
+<section id="attrgetter" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> attrgetter</h1>
+<div class="cell" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> operator <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> attrgetter</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">attrgetter?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Init signature:</span> attrgetter<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">/</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>     
+attrgetter(attr, ...) --&gt; attrgetter object
+Return a callable object that fetches the given attribute(s) from its operand.
+After f = attrgetter('name'), the call f(r) returns r.name.
+After g = attrgetter('name', 'date'), the call g(r) returns (r.name, r.date).
+After h = attrgetter('name.first', 'name.last'), the call h(r) returns
+(r.name.first, r.name.last).
+<span class="ansi-red-fg">File:</span>           ~/conda/envs/ml/lib/python3.10/operator.py
+<span class="ansi-red-fg">Type:</span>           type
+<span class="ansi-red-fg">Subclasses:</span>     </pre>
+</div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">f <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> attrgetter(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'name'</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> person:</span>
+<span id="cb4-2">    name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Joe'</span></span>
+<span id="cb4-3">    date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'05-01-2023'</span></span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">p <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> person()</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">f(p)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>'Joe'</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">f2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> attrgetter(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'name'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'date'</span>)</span>
+<span id="cb8-2">f2(p)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>('Joe', '05-01-2023')</code></pre>
+</div>
+</div>
+<p>The source of the course use attrgetter is:</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> run_cbs(cbs, method_nm, learn<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb10-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> cb <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>(cbs, key<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>attrgetter(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'order'</span>)):</span>
+<span id="cb10-3">        method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(cb, method_nm, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>)</span>
+<span id="cb10-4">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> method <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>: method(learn)</span></code></pre></div>
+<div class="cell" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Signature:</span> sorted<span class="ansi-blue-fg">(</span>iterable<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">/</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span><span class="ansi-blue-fg">,</span> key<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> reverse<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+Return a new list containing all items from the iterable in ascending order.
+A custom key function can be supplied to customize the sort order, and the
+reverse flag can be set to request the result in descending order.
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method</pre>
+</div>
+</div>
+</div>
+<p>the <code>key</code> argument of sorted function can be a custom function, in the source, the function is <code>attrgetter('order')</code>, that is get the <em>order</em> attribute of cb object.</p>
+<p>Let’s create another example of sorted:</p>
+<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">l <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Joe'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'P1'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Min'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'P3'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Reba'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'P2'</span>}</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>(l, key <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">lambda</span> x: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(l[x][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]))</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>['Joe', 'Reba', 'Min']</code></pre>
+</div>
+</div>
+</section>
+<section id="getattr" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> getattr</h1>
+<p>The source of the course use attrgetter is:</p>
+<div class="sourceCode" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> run_cbs(cbs, method_nm, learn<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb15-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> cb <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sorted</span>(cbs, key<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>attrgetter(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'order'</span>)):</span>
+<span id="cb15-3">        method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(cb, method_nm, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>)</span>
+<span id="cb15-4">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> method <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>: method(learn)</span></code></pre></div>
+<div class="cell" data-tags="[]" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Docstring:</span>
+getattr(object, name[, default]) -&gt; value
+Get a named attribute from an object; getattr(x, 'y') is equivalent to x.y.
+When a default argument is given, it is returned when the attribute doesn't
+exist; without it, an exception is raised in that case.
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method</pre>
+</div>
+</div>
+</div>
+<p>Ha, This one method is easy.</p>
+<div class="cell" data-tags="[]" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(p, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'name'</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>'Joe'</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(p, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'age'</span>)</span></code></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>AttributeError: 'person' object has no attribute 'age'</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">getattr</span>(p, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'age'</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="exception" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Exception</h1>
+<p>The source code use Exception are:</p>
+<div class="sourceCode" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> CancelFitException(<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span>): <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">pass</span></span>
+<span id="cb22-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> CancelBatchException(<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span>): <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">pass</span></span>
+<span id="cb22-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> CancelEpochException(<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span>): <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">pass</span></span></code></pre></div>
+<p>By create a new class inherit <code>Exception</code> class, can create a custom <code>Exception</code> class</p>
+<div class="cell" data-tags="[]" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'alpha'</span></span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>(a).<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">__name__</span></span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'str'</code></pre>
+</div>
+</div>
+</section>
+<section id="contextmanager" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> <span class="citation" data-cites="contextmanager">@contextmanager</span></h1>
+<div class="cell" data-tags="[]" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> contextlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> contextmanager</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1">contextmanager?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Signature:</span> contextmanager<span class="ansi-blue-fg">(</span>func<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+@contextmanager decorator.
+Typical usage:
+    @contextmanager
+    def some_generator(&lt;arguments&gt;):
+        &lt;setup&gt;
+        try:
+            yield &lt;value&gt;
+        finally:
+            &lt;cleanup&gt;
+This makes this:
+    with some_generator(&lt;arguments&gt;) as &lt;variable&gt;:
+        &lt;body&gt;
+equivalent to this:
+    &lt;setup&gt;
+    try:
+        &lt;variable&gt; = &lt;value&gt;
+        &lt;body&gt;
+    finally:
+        &lt;cleanup&gt;
+<span class="ansi-red-fg">File:</span>      ~/conda/envs/ml/lib/python3.10/contextlib.py
+<span class="ansi-red-fg">Type:</span>      function</pre>
+</div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@contextmanager</span></span>
+<span id="cb28-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> test_func(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>args, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kargs):</span>
+<span id="cb28-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Before try"</span>)</span>
+<span id="cb28-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb28-5">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, before yield"</span>)</span>
+<span id="cb28-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">yield</span></span>
+<span id="cb28-7">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, after yield"</span>)</span>
+<span id="cb28-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ZeroDivisionError</span>:</span>
+<span id="cb28-9">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"except: Divided by zero"</span>)</span>
+<span id="cb28-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">finally</span>:</span>
+<span id="cb28-11">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec finally"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> test_func():</span>
+<span id="cb29-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 1"</span>)</span>
+<span id="cb29-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 2"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before try
+Exec try, before yield
+In with 1
+In with 2
+Exec try, after yield
+Exec finally</code></pre>
+</div>
+</div>
+<section id="raise-error-in-with-statement" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="raise-error-in-with-statement"><span class="header-section-number">4.1</span> Raise error in with statement?</h2>
+<div class="cell" data-tags="[]" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> test_func():</span>
+<span id="cb31-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with"</span>)</span>
+<span id="cb31-3">    a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb31-4">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 2"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before try
+Exec try, before yield
+In with
+except: Divided by zero
+Exec finally</code></pre>
+</div>
+</div>
+</section>
+<section id="raise-error-before-yield" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="raise-error-before-yield"><span class="header-section-number">4.2</span> Raise error before yield?</h2>
+<div class="cell" data-tags="[]" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@contextmanager</span></span>
+<span id="cb33-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> test_func(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>args, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kargs):</span>
+<span id="cb33-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Before try"</span>)</span>
+<span id="cb33-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb33-5">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, before yield"</span>)</span>
+<span id="cb33-6">        a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb33-7">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">yield</span></span>
+<span id="cb33-8">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, after yield"</span>)</span>
+<span id="cb33-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ZeroDivisionError</span>:</span>
+<span id="cb33-10">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"except: Divided by zero"</span>)</span>
+<span id="cb33-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">finally</span>:</span>
+<span id="cb33-12">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec finally"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> test_func():</span>
+<span id="cb34-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 1"</span>)</span>
+<span id="cb34-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 2"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before try
+Exec try, before yield
+except: Divided by zero
+Exec finally</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>RuntimeError: generator didn't yield</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>So <code>contextmanager</code> can’t handle error before yield, as Jeremy have tested in the class.</p>
+</div>
+</div>
+</section>
+<section id="raise-error-after-yield" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="raise-error-after-yield"><span class="header-section-number">4.3</span> Raise error after yield</h2>
+<div class="cell" data-tags="[]" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@contextmanager</span></span>
+<span id="cb37-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> test_func(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>args, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kargs):</span>
+<span id="cb37-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Before try"</span>)</span>
+<span id="cb37-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb37-5">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, before yield"</span>)</span>
+<span id="cb37-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">yield</span></span>
+<span id="cb37-7">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, after yield"</span>)</span>
+<span id="cb37-8">        a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb37-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ZeroDivisionError</span>:</span>
+<span id="cb37-10">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"except: Divided by zero"</span>)</span>
+<span id="cb37-11">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">finally</span>:</span>
+<span id="cb37-12">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec finally"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> test_func():</span>
+<span id="cb38-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 1"</span>)</span>
+<span id="cb38-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 2"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before try
+Exec try, before yield
+In with 1
+In with 2
+Exec try, after yield
+except: Divided by zero
+Exec finally</code></pre>
+</div>
+</div>
+</section>
+<section id="yield-value" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="yield-value"><span class="header-section-number">4.4</span> yield value</h2>
+<div class="cell" data-tags="[]" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@contextmanager</span></span>
+<span id="cb40-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> test_func(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>args, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kargs):</span>
+<span id="cb40-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Before try"</span>)</span>
+<span id="cb40-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb40-5">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, before yield"</span>)</span>
+<span id="cb40-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">yield</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb40-7">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec try, after yield"</span>)</span>
+<span id="cb40-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ZeroDivisionError</span>:</span>
+<span id="cb40-9">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"except: Divided by zero"</span>)</span>
+<span id="cb40-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">finally</span>:</span>
+<span id="cb40-11">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Exec finally"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> test_func() <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> f:</span>
+<span id="cb41-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 1"</span>)</span>
+<span id="cb41-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> f:</span>
+<span id="cb41-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(i)</span>
+<span id="cb41-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"In with 2"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before try
+Exec try, before yield
+In with 1
+0
+1
+2
+In with 2
+Exec try, after yield
+Exec finally</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Python</category>
+  <category>ML</category>
+  <guid>https://chenminicode.github.io/posts/2023-05-01-learner-python/index.html</guid>
+  <pubDate>Tue, 25 Apr 2023 04:00:00 GMT</pubDate>
+</item>
+<item>
   <title>K-means from scratch</title>
   <dc:creator>metseq </dc:creator>
   <link>https://chenminicode.github.io/posts/2023-04-26-k-means/index.html</link>
@@ -5880,6 +6615,7 @@ GAASERERxQwDQCIiIqKY+f8BC6EL5VBGX5UAAAAASUVORK5CYII=\
 
  ]]></description>
   <category>Python</category>
+  <category>ML</category>
   <guid>https://chenminicode.github.io/posts/2023-04-26-k-means/index.html</guid>
   <pubDate>Tue, 25 Apr 2023 04:00:00 GMT</pubDate>
 </item>

@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-05-01-learner-python/index.html",
       "/posts/2023-04-26-k-means/index.html",
       "/posts/2022-11-09-python_getattr_getattribute/index.html",
       "/posts/2022-11-08-python_enter_exit/index.html",

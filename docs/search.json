@@ -1,5 +1,40 @@
 [
   {
+    "objectID": "posts/2023-05-01-learner-python/index.html",
+    "href": "posts/2023-05-01-learner-python/index.html",
+    "title": "Python basis related to fastai learner",
+    "section": "",
+    "text": "I have been studying fastai course part2.\nIn lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.\nJeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "title": "Python basis related to fastai learner",
+    "section": "4.1 Raise error in with statement?",
+    "text": "4.1 Raise error in with statement?\n\nwith test_func():\n    print(\"In with\")\n    a = 1 / 0\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.2 Raise error before yield?",
+    "text": "4.2 Raise error before yield?\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        a = 1 / 0\n        yield\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nexcept: Divided by zero\nExec finally\n\n\nRuntimeError: generator didn't yield\n\n\n\n\n\n\n\n\nTip\n\n\n\nSo contextmanager can’t handle error before yield, as Jeremy have tested in the class."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.3 Raise error after yield",
+    "text": "4.3 Raise error after yield\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield\n        print(\"Exec try, after yield\")\n        a = 1 / 0\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\nIn with 2\nExec try, after yield\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "href": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "title": "Python basis related to fastai learner",
+    "section": "4.4 yield value",
+    "text": "4.4 yield value\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield range(3)\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func() as f:\n    print(\"In with 1\")\n    for i in f:\n        print(i)\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\n0\n1\n2\nIn with 2\nExec try, after yield\nExec finally"
+  },
+  {
     "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
     "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
     "title": "Python中的__getattr__和__getattribute__",
@@ -109,13 +144,13 @@
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "K-means from scratch\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\n博客原因\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+    "text": "Python basis related to fastai learner\n\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nK-means from scratch\n\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\n博客原因\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this blog\nHello, I am metseq, a bioinformatics engineer🧬.\nI love Python🐍, ML🤖 and Freedom🚀.\nHope you can find something interesting here😀."
+    "text": "Hello, I am Min, a bioinformatics engineer🧬.\nI love Python🐍, ML🤖 and Freedom🚀.\nHope you can find something interesting here😀."
   }
 ]
