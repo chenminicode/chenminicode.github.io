@@ -10,7 +10,7 @@
 <atom:link href="https://chenminicode.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>metseq&#39;s blog</description>
 <generator>quarto-1.3.290</generator>
-<lastBuildDate>Tue, 25 Apr 2023 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 01 May 2023 04:00:00 GMT</lastBuildDate>
 <item>
   <title>Python basis related to fastai learner</title>
   <dc:creator>metseq </dc:creator>
@@ -727,7 +727,7 @@ Exec finally</code></pre>
   <category>Python</category>
   <category>ML</category>
   <guid>https://chenminicode.github.io/posts/2023-05-01-learner-python/index.html</guid>
-  <pubDate>Tue, 25 Apr 2023 04:00:00 GMT</pubDate>
+  <pubDate>Mon, 01 May 2023 04:00:00 GMT</pubDate>
 </item>
 <item>
   <title>K-means from scratch</title>
