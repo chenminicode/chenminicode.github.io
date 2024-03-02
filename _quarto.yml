@@ -19,3 +19,7 @@ format:
   html:
     theme: flatly
     css: styles.css
+
+comments:
+  giscus:
+    repo: chenminicode/chenminicode.github.io
