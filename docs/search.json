@@ -1,45 +1,52 @@
 [
   {
-    "objectID": "posts/2023-05-01-learner-python/index.html",
-    "href": "posts/2023-05-01-learner-python/index.html",
-    "title": "Python basis related to fastai learner",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "I have been studying fastai course part2.\nIn lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.\nJeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features."
+    "text": "Hello, I am Min, a bioinformatics engineer🧬.\nI love Python🐍, ML🤖 and Freedom🚀.\nHope you can find something interesting here😀."
   },
   {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
-    "title": "Python basis related to fastai learner",
-    "section": "4.1 Raise error in with statement?",
-    "text": "4.1 Raise error in with statement?\n\nwith test_func():\n    print(\"In with\")\n    a = 1 / 0\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with\nexcept: Divided by zero\nExec finally"
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
-    "title": "Python basis related to fastai learner",
-    "section": "4.2 Raise error before yield?",
-    "text": "4.2 Raise error before yield?\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        a = 1 / 0\n        yield\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nexcept: Divided by zero\nExec finally\n\n\nRuntimeError: generator didn't yield\n\n\n\n\n\n\n\n\nTip\n\n\n\nSo contextmanager can’t handle error before yield, as Jeremy have tested in the class."
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
-    "title": "Python basis related to fastai learner",
-    "section": "4.3 Raise error after yield",
-    "text": "4.3 Raise error after yield\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield\n        print(\"Exec try, after yield\")\n        a = 1 / 0\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\nIn with 2\nExec try, after yield\nexcept: Divided by zero\nExec finally"
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#yield-value",
-    "href": "posts/2023-05-01-learner-python/index.html#yield-value",
-    "title": "Python basis related to fastai learner",
-    "section": "4.4 yield value",
-    "text": "4.4 yield value\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield range(3)\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func() as f:\n    print(\"In with 1\")\n    for i in f:\n        print(i)\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\n0\n1\n2\nIn with 2\nExec try, after yield\nExec finally"
-  },
-  {
-    "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
-    "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
-    "title": "Python中的__getattr__和__getattribute__",
+    "objectID": "posts/2018-07-19-blog_reason/index.html",
+    "href": "posts/2018-07-19-blog_reason/index.html",
+    "title": "博客原因",
     "section": "",
-    "text": "1 __getattr__\n如果在类中实现了_getattr__方法，那么当使用对象.属性的时候，如果属性不在对象里，则会调用__getattr__方法。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\nprint(p.x, p.y)\nprint(p.z)\n\n3 4\n\n\nAttributeError: 'Point' object has no attribute 'z'\n\n\n因为Point没有z这个属性，所以报错了。\n下面这个类实现了__getattr__方法，看看会怎么样\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattr__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.z\n\nexec __getattr__ 😀\nname: z\n\n\n42\n\n\n\n\n\n\n\n\nTip\n\n\n\n__getattr__方法接受两个参数，self不用说，name就是属性名称，在上面的例子就是z\n\n\n\n\n2 __getattribute__\n如果在类中实现了__getattribute__方法，那么当使用对象.属性的时候，都会调用__getattr__方法。\n\n\n\n\n\n\nTip\n\n\n\n注意_getattr__是当属性不在对象里的时候在调用\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattribute__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.x, p.y, p.z\n\nexec __getattr__ 😀\nname: x\nexec __getattr__ 😀\nname: y\nexec __getattr__ 😀\nname: z\n\n\n(42, 42, 42)\n\n\np.x, p.y和p.z都调用了__getattribute__方法"
+    "text": "最开始建这个博客，纯粹想了解怎样在github上，用Jekll搭建博客。搭好后，发现这里可以记录自己的学习过程。因为我很健忘，今天想到学习什么有趣的东西，明天可能就忘了。\n很多人都在说自己是一个终生学习的人，学校也在提倡终生学习。这里有3个问题： 1. 是否真的一直在学习？ 2. 学习什么？ 3. 在“一生”的时间尺度下，学习的规划是否有效？\n第一个问题只有盖棺定论时，才能回答。把我的学习过程记录下来，督促自己保持学习的习惯，不找借口中止了学习。\n第二个问题，当然是学习自己感兴趣的和有用的东西。现在的教育，导致学生没有兴趣，不知道自己喜欢什么。在高考后，不知道报什么专业，应为根本就不知道自己喜欢什么，想从事什么样的职业，过怎样的生活。而且自己喜欢的东西，未必真的了解。我报的专业，高中以为是喜欢的，了解之后发现是另一回事。也许你会说在没有学习那个专业之前，是不会真正了解的。这是惯用的理由，但是在真正学习之前，可以了解这个专业的一些背景，这些知识足够你做一个合理的选择。\n慢慢的，把之前得到的观念重新做了审视，像笛卡尔怀疑一切一样，去怀疑我曾经学到的东西；渐渐我发现自己的兴趣倾向： - 喜欢了解背后的原理、算法，而不仅仅是外表 - 喜欢计算机，应为想到的东西可以马上操作实验\n第三个问题，我也不知道，怎样的学习规划适合长尺度下的学习。 Peter Norvig写了一篇文章《Teach Yourself Programmin in Ten Years》（10年自学编程），讲了现在很多人学习急功近利，如24小时自学Java。文中给有志于自学编程的人一些很好的建议。建议只有在真正被采用，而起到好作用时才是建议。章太炎在《今日青年之弱点》一文中，写到“现在青年第一弱点，就是把事情太看容易，其结果不是侥幸，便是退却。”，“现在青年只有将这个弱点痛改，遇事宜慎重，决机宜敏速，抱志既极坚确，观察又极明了，则无所谓侥幸退却，只有百折千回以达吾人最终之目的而已。”。学习不是一件容易的事，能很容易学会的事也不足以成为你自己。我想在这里记录我的学习过程，实验我的学习计划。至于是否有效，等过后看就知道了。"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html",
+    "href": "posts/2022-10-31-python_magic_method/index.html",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
+    "href": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
+    "href": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "Point.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "2.1 __repr__方法",
+    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n&lt;__main__.Point at 0x10d4f4eb0&gt;\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#str__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#str__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "2.2 __str__方法",
+    "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说:\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
   },
   {
     "objectID": "posts/2023-04-26-k-means/index.html",
@@ -91,46 +98,53 @@
     "text": "3.6 Write k-means function\n\ndef kmeans(X, k, n):\n    # init means\n    perm = torch.randperm(X.size(0))\n    idx = perm[:k]\n    means = X[idx].clone()\n\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n    \n    return means\n\n\nmeans = kmeans(X, 6, 10)\n\n\nplot_data(means, data, 250)"
   },
   {
+    "objectID": "posts/2023-05-01-learner-python/index.html",
+    "href": "posts/2023-05-01-learner-python/index.html",
+    "title": "Python basis related to fastai learner",
+    "section": "",
+    "text": "I have been studying fastai course part2.\nIn lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.\nJeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "title": "Python basis related to fastai learner",
+    "section": "4.1 Raise error in with statement?",
+    "text": "4.1 Raise error in with statement?\n\nwith test_func():\n    print(\"In with\")\n    a = 1 / 0\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.2 Raise error before yield?",
+    "text": "4.2 Raise error before yield?\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        a = 1 / 0\n        yield\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nexcept: Divided by zero\nExec finally\n\n\nRuntimeError: generator didn't yield\n\n\n\n\n\n\n\n\nTip\n\n\n\nSo contextmanager can’t handle error before yield, as Jeremy have tested in the class."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.3 Raise error after yield",
+    "text": "4.3 Raise error after yield\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield\n        print(\"Exec try, after yield\")\n        a = 1 / 0\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\nIn with 2\nExec try, after yield\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "href": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "title": "Python basis related to fastai learner",
+    "section": "4.4 yield value",
+    "text": "4.4 yield value\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield range(3)\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func() as f:\n    print(\"In with 1\")\n    for i in f:\n        print(i)\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\n0\n1\n2\nIn with 2\nExec try, after yield\nExec finally"
+  },
+  {
+    "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "title": "Python中的__getattr__和__getattribute__",
+    "section": "",
+    "text": "1 __getattr__\n如果在类中实现了_getattr__方法，那么当使用对象.属性的时候，如果属性不在对象里，则会调用__getattr__方法。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\nprint(p.x, p.y)\nprint(p.z)\n\n3 4\n\n\nAttributeError: 'Point' object has no attribute 'z'\n\n\n因为Point没有z这个属性，所以报错了。\n下面这个类实现了__getattr__方法，看看会怎么样\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattr__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.z\n\nexec __getattr__ 😀\nname: z\n\n\n42\n\n\n\n\n\n\n\n\nTip\n\n\n\n__getattr__方法接受两个参数，self不用说，name就是属性名称，在上面的例子就是z\n\n\n\n\n2 __getattribute__\n如果在类中实现了__getattribute__方法，那么当使用对象.属性的时候，都会调用__getattr__方法。\n\n\n\n\n\n\nTip\n\n\n\n注意_getattr__是当属性不在对象里的时候在调用\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattribute__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.x, p.y, p.z\n\nexec __getattr__ 😀\nname: x\nexec __getattr__ 😀\nname: y\nexec __getattr__ 😀\nname: z\n\n\n(42, 42, 42)\n\n\np.x, p.y和p.z都调用了__getattribute__方法"
+  },
+  {
     "objectID": "posts/2024-03-02-snakemake-workflow/index.html",
     "href": "posts/2024-03-02-snakemake-workflow/index.html",
     "title": "使用Github的Snakemake流程",
     "section": "",
-    "text": "1 概述\nGitHub有一个snakemake流程的分类，里面有很多生信分析流程，rna-seq-star-deseq2，dna-seq-gatk-variant-calling。\n我测试了rna-seq-star-deseq2这个流程。\n每个流程都有使用说明，如果都看说明可以跑通，那就好了🥹\n下面参考rna-seq-star-deseq2的说明，一步一步做.\n\n\n2 Step 1 安装snamake和snakedeploy\n# 使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧\nmamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy\n\nconda activate snakemake\n\n\n3 Step 2 流程部署\nmkdir proj_240302_test_snakemake\n\ncd proj_240302_test_snakemake\n\nsnakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0\n运行时候的文件结构：\n$ tree\n.\n├── config\n│   ├── README.md\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── workflow\n    └── Snakefile\n其实就下了config和workflow两个文件夹，里面分别是配置文件和流程。workflow里面只有一个Snakefile，Snakefile里把github上 rna-seq-star-deseq2的流程作为模块导入了。\n\n\n4 Step 3 配置流程\n流程配置是最麻烦的，我下载了仓库自带的测试数据。\n测试数据在.test文件夹下面，结构如下，应该很清楚了，config_basic就是简单版的配置文件，config_complex文件夹是复杂版的配置文件，ngs-test-data就是原始数据了。\n$ tree .test\n.\n├── config_basic\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n├── config_complex\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── ngs-test-data\n    └── reads\n        ├── a.chr21.1.fq\n        ├── a.chr21.2.fq\n        ├── a.scerevisiae.1.fq\n        ├── a.scerevisiae.2.fq\n        ├── b.chr21.1.fq\n        ├── b.chr21.2.fq\n        ├── b.scerevisiae.1.fq\n        ├── b.scerevisiae.2.fq\n        ├── c.scerevisiae.1.fq\n        └── c.scerevisiae.2.fq\n\n5 directories, 16 files\n删掉Step 2 流程部署下载的config文件，把.test/config_basic中的配置文件都拷贝proj_240302_test_snakemake/config文件夹下，然后把.test/ngs-test-data文件夹拷贝到proj_240302_test_snakemake文件夹。\n修改proj_240302_test_snakemake/config/config.yaml文件的samples和unit配置路径：\nsamples: config/samples.tsv\nunits: config/units.tsv\n配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。\n请参考配置文件的说明和流程自带的配置说明。当然.test文件夹中的配置文件格式值得参考。\n\n\n5 Step 4 运行流程\n终于可以运行流程了：\nsnakemake --cores all --use-conda\n果然报错了😭：\nNotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).\nGoogle一下，rna-seq-star-deseq2里有一个issues就是这个问题。\n原因是snakemake流程最近（2024年3月3日）日更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。\nmamba deactivate\n\nmamba remove -n snakemake --all\n\nmamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 \n\nmamba activate snakemake7\n重新配置好环境后，再次运行流程：\nsnakemake --cores all --use-conda\n流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。\n结果文件在results文件夹下：\n$ ll -rth results/\ntotal 120\ndrwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed\ndrwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:22 counts\n-rw-r--r--@  1 chenmin  staff    59K Mar  3 00:22 pca.condition.svg\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:22 deseq2\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp\n\n\n6 Step 5 生成报告\nsnakemake --report report.zip\n解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。\n测试完成🎉"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html",
-    "href": "posts/2022-10-31-python_magic_method/index.html",
-    "title": "Python中的几个魔法方法",
-    "section": "",
-    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
-    "href": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
-    "title": "Python中的几个魔法方法",
-    "section": "",
-    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
-    "href": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
-    "title": "Python中的几个魔法方法",
-    "section": "",
-    "text": "Point.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
-    "href": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
-    "title": "Python中的几个魔法方法",
-    "section": "2.1 __repr__方法",
-    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n&lt;__main__.Point at 0x7fee391d2110&gt;\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#str__方法",
-    "href": "posts/2022-10-31-python_magic_method/index.html#str__方法",
-    "title": "Python中的几个魔法方法",
-    "section": "2.2 __str__方法",
-    "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说:\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
+    "text": "概述\nGitHub有一个snakemake流程的分类，里面有很多生信分析流程，rna-seq-star-deseq2，dna-seq-gatk-variant-calling。\n我测试了rna-seq-star-deseq2这个流程。\n每个流程都有使用说明，如果都看说明可以跑通，那就好了🥹\n下面参考rna-seq-star-deseq2的说明，一步一步做.\n\n\nStep 1 安装snamake和snakedeploy\n使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧.\n$ mamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy\n\n$ conda activate snakemake\n\n\nStep 2 流程部署\n$ mkdir proj_240302_test_snakemake\n\n$ cd proj_240302_test_snakemake\n\n$ snakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0\n运行后的文件结构：\n$ tree\n.\n├── config\n│   ├── README.md\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── workflow\n    └── Snakefile\n其实就下了config和workflow两个文件夹，里面分别是配置文件和流程。workflow里面只有一个Snakefile，Snakefile里把github上 rna-seq-star-deseq2的流程作为模块导入了。\n\n\nStep 3 配置流程\n流程配置是最麻烦的，我下载了仓库自带的测试数据。\n测试数据在.test文件夹下面，结构如下，应该很清楚了，config_basic就是简单版的配置文件，config_complex文件夹是复杂版的配置文件，ngs-test-data就是原始数据了。\n$ tree .test\n.\n├── config_basic\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n├── config_complex\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── ngs-test-data\n    └── reads\n        ├── a.chr21.1.fq\n        ├── a.chr21.2.fq\n        ├── a.scerevisiae.1.fq\n        ├── a.scerevisiae.2.fq\n        ├── b.chr21.1.fq\n        ├── b.chr21.2.fq\n        ├── b.scerevisiae.1.fq\n        ├── b.scerevisiae.2.fq\n        ├── c.scerevisiae.1.fq\n        └── c.scerevisiae.2.fq\n\n5 directories, 16 files\n删掉Step 2 流程部署下载的config文件，把.test/config_basic中的配置文件都拷贝proj_240302_test_snakemake/config文件夹下，然后把.test/ngs-test-data文件夹拷贝到proj_240302_test_snakemake文件夹。\n修改proj_240302_test_snakemake/config/config.yaml文件的samples和unit配置路径：\nsamples: config/samples.tsv\nunits: config/units.tsv\n配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。\n请参考配置文件的说明和流程自带的配置说明。当然.test文件夹中的配置文件格式值得参考。\n\n\nStep 4 运行流程\n终于可以运行流程了：\n$ snakemake --cores all --use-conda\n果然报错了😭：\nNotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).\nGoogle一下，rna-seq-star-deseq2里有一个issues就是这个问题。\n原因是snakemake流程最近（2024年3月3日）日更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。\n$ mamba deactivate\n\n$ mamba remove -n snakemake --all\n\n$ mamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 \n\n$ mamba activate snakemake7\n重新配置好环境后，再次运行流程：\n$ snakemake --cores all --use-conda\n流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。\n结果文件在results文件夹下：\n$ ll -rth results/\ntotal 120\ndrwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed\ndrwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:22 counts\n-rw-r--r--@  1 chenmin  staff    59K Mar  3 00:22 pca.condition.svg\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:22 deseq2\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp\n\n\nStep 5 生成报告\n$ snakemake --report report.zip\n解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。\n测试完成🎉"
   },
   {
     "objectID": "posts/2022-11-08-python_enter_exit/index.html",
@@ -140,24 +154,10 @@
     "text": "1 __enter__和__exit__是什么\n当在类中实现__enter__和__exit__方法的使用，这个类就可以用with调用了，调用with的时候，返回__enter__的结果，退出with的时候，执行__exit__的代码。\n平时用with最多的可能是打开一个文件，with返回文件的句柄（file handle），退出with的时候关闭文件。\n如下代码：\n\n# 建一个测试文件\n! echo -e 'line1\\nline2\\nline3' &gt; sample.txt\n! cat sample.txt\n\nline1\nline2\nline3\n\n\n\n# 使用python读取文件\nwith open('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\n# 查看f是否关闭了，返回True，表示f关闭了\nf.closed\n\nTrue\n\n\n如果不用with，需要手动关闭文件。\n\nf = open('sample.txt', 'r')\n\n\n# f还没有关闭\nf.closed\n\nFalse\n\n\n\n# 使用close()方法关闭文件后，文件就关闭了\nf.close()\nf.closed\n\nTrue\n\n\n\n\n2 自已写一个处理文件的类\n\nclass MyOpen():\n    def __init__(self, file, mode):\n        self.file = file\n        self.mode = mode\n    \n    def __enter__(self):\n        self.f = open(self.file, self.mode)\n        return self.f\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.f.close()\n\n\nwith MyOpen('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\nf.closed\n\nTrue\n\n\n\n\n\n\n\n\nTip\n\n\n\n注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？\n\n\n\n\n3 __exit__的参数\n\nclass SafeDivide():\n    def __init__(self, a, b):\n        self.a = a\n        self.b = b\n    \n    def __enter__(self):\n        print('exec __enter__')\n        print(f'{self.a} / {self.b} = ', end='')\n        return self\n    \n    def divide(self):\n        return self.a / self.b\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print('\\n------------')\n        print('exec __exit__')\n        print(f\"exec_type: {exc_type}\")\n        print(f\"exc_val: {exc_val}\")\n        print(f\"exc_tb: {exc_tb}\")\n\n\nwith SafeDivide(1, 2) as d:\n    print(d.divide())\n    print('啦啦啦')\n\nexec __enter__\n1 / 2 = 0.5\n啦啦啦\n\n------------\nexec __exit__\nexec_type: None\nexc_val: None\nexc_tb: None\n\n\n如果执行没有问题，exc_type, exc_val, exc_tb都是None\n\nwith SafeDivide(1, 0) as d:\n    print(d.divide())\n\nexec __enter__\n1 / 0 = \n------------\nexec __exit__\nexec_type: &lt;class 'ZeroDivisionError'&gt;\nexc_val: division by zero\nexc_tb: &lt;traceback object&gt;\n\n\nZeroDivisionError: division by zero\n\n\n如果执行对象的方法出现问题，就会直接执行__exit__方法，exc_type, exc_val, exc_tb包含的就是错误类型，错误值，错误的回溯信息。\n\n\n\n\n\n\nNote\n\n\n\n出错后不会执行后面的语句，比如这里的print('啦啦啦')，而是直接执行__exit__了"
   },
   {
-    "objectID": "posts/2018-07-19-blog_reason/index.html",
-    "href": "posts/2018-07-19-blog_reason/index.html",
-    "title": "博客原因",
-    "section": "",
-    "text": "最开始建这个博客，纯粹想了解怎样在github上，用Jekll搭建博客。搭好后，发现这里可以记录自己的学习过程。因为我很健忘，今天想到学习什么有趣的东西，明天可能就忘了。\n很多人都在说自己是一个终生学习的人，学校也在提倡终生学习。这里有3个问题： 1. 是否真的一直在学习？ 2. 学习什么？ 3. 在“一生”的时间尺度下，学习的规划是否有效？\n第一个问题只有盖棺定论时，才能回答。把我的学习过程记录下来，督促自己保持学习的习惯，不找借口中止了学习。\n第二个问题，当然是学习自己感兴趣的和有用的东西。现在的教育，导致学生没有兴趣，不知道自己喜欢什么。在高考后，不知道报什么专业，应为根本就不知道自己喜欢什么，想从事什么样的职业，过怎样的生活。而且自己喜欢的东西，未必真的了解。我报的专业，高中以为是喜欢的，了解之后发现是另一回事。也许你会说在没有学习那个专业之前，是不会真正了解的。这是惯用的理由，但是在真正学习之前，可以了解这个专业的一些背景，这些知识足够你做一个合理的选择。\n慢慢的，把之前得到的观念重新做了审视，像笛卡尔怀疑一切一样，去怀疑我曾经学到的东西；渐渐我发现自己的兴趣倾向： - 喜欢了解背后的原理、算法，而不仅仅是外表 - 喜欢计算机，应为想到的东西可以马上操作实验\n第三个问题，我也不知道，怎样的学习规划适合长尺度下的学习。 Peter Norvig写了一篇文章《Teach Yourself Programmin in Ten Years》（10年自学编程），讲了现在很多人学习急功近利，如24小时自学Java。文中给有志于自学编程的人一些很好的建议。建议只有在真正被采用，而起到好作用时才是建议。章太炎在《今日青年之弱点》一文中，写到“现在青年第一弱点，就是把事情太看容易，其结果不是侥幸，便是退却。”，“现在青年只有将这个弱点痛改，遇事宜慎重，决机宜敏速，抱志既极坚确，观察又极明了，则无所谓侥幸退却，只有百折千回以达吾人最终之目的而已。”。学习不是一件容易的事，能很容易学会的事也不足以成为你自己。我想在这里记录我的学习过程，实验我的学习计划。至于是否有效，等过后看就知道了。"
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "使用Github的Snakemake流程\n\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nK-means from scratch\n\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n  \n\n\n\n\n博客原因\n\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Hello, I am Min, a bioinformatics engineer🧬.\nI love Python🐍, ML🤖 and Freedom🚀.\nHope you can find something interesting here😀."
+    "text": "使用Github的Snakemake流程\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nK-means from scratch\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n博客原因\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
   }
 ]
