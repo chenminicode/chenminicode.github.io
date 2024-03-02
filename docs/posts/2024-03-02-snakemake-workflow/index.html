@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.290">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="metseq">
+<meta name="dcterms.date" content="2024-03-02">
+
+<title>Blog - 使用Github的Snakemake流程</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/chenminicode" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">使用Github的Snakemake流程</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Bioinformatics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>metseq </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 2, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#概述" id="toc-概述" class="nav-link active" data-scroll-target="#概述"><span class="header-section-number">1</span> 概述</a></li>
+  <li><a href="#step-1-安装snamake和snakedeploy" id="toc-step-1-安装snamake和snakedeploy" class="nav-link" data-scroll-target="#step-1-安装snamake和snakedeploy"><span class="header-section-number">2</span> Step 1 安装snamake和snakedeploy</a></li>
+  <li><a href="#step-2-流程部署" id="toc-step-2-流程部署" class="nav-link" data-scroll-target="#step-2-流程部署"><span class="header-section-number">3</span> Step 2 流程部署</a></li>
+  <li><a href="#step-3-配置流程" id="toc-step-3-配置流程" class="nav-link" data-scroll-target="#step-3-配置流程"><span class="header-section-number">4</span> Step 3 配置流程</a></li>
+  <li><a href="#step-4-运行流程" id="toc-step-4-运行流程" class="nav-link" data-scroll-target="#step-4-运行流程"><span class="header-section-number">5</span> Step 4 运行流程</a></li>
+  <li><a href="#step-5-生成报告" id="toc-step-5-生成报告" class="nav-link" data-scroll-target="#step-5-生成报告"><span class="header-section-number">6</span> Step 5 生成报告</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="概述" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 概述</h1>
+<p>GitHub有一个<a href="https://snakemake.github.io/snakemake-workflow-catalog/">snakemake流程的分类</a>，里面有很多生信分析流程，rna-seq-star-deseq2，dna-seq-gatk-variant-calling。</p>
+<p>我测试了<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2">rna-seq-star-deseq2</a>这个流程。</p>
+<p>每个流程都有使用说明，如果都看说明可以跑通，那就好了🥹</p>
+<p>下面参考<a href="https://snakemake.github.io/snakemake-workflow-catalog/?usage=snakemake-workflows%2Frna-seq-star-deseq2">rna-seq-star-deseq2的说明</a>，一步一步做.</p>
+</section>
+<section id="step-1-安装snamake和snakedeploy" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Step 1 安装snamake和snakedeploy</h1>
+<pre class="shell"><code># 使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧
+mamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy
+
+conda activate snakemake</code></pre>
+</section>
+<section id="step-2-流程部署" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Step 2 流程部署</h1>
+<pre class="shell"><code>mkdir proj_240302_test_snakemake
+
+cd proj_240302_test_snakemake
+
+snakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0</code></pre>
+<p>运行时候的文件结构：</p>
+<pre class="shell"><code>$ tree
+.
+├── config
+│&nbsp;&nbsp; ├── README.md
+│&nbsp;&nbsp; ├── config.yaml
+│&nbsp;&nbsp; ├── samples.tsv
+│&nbsp;&nbsp; └── units.tsv
+└── workflow
+    └── Snakefile</code></pre>
+<p>其实就下了config和workflow两个文件夹，里面分别是配置文件和流程。workflow里面只有一个Snakefile，Snakefile里把github上 rna-seq-star-deseq2的流程作为模块导入了。</p>
+</section>
+<section id="step-3-配置流程" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Step 3 配置流程</h1>
+<p>流程配置是最麻烦的，我下载了<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2.git">仓库</a>自带的测试数据。</p>
+<p>测试数据在<code>.test</code>文件夹下面，结构如下，应该很清楚了，<code>config_basic</code>就是简单版的配置文件，<code>config_complex</code>文件夹是复杂版的配置文件，<code>ngs-test-data</code>就是原始数据了。</p>
+<pre class="shell"><code>$ tree .test
+.
+├── config_basic
+│&nbsp;&nbsp; ├── config.yaml
+│&nbsp;&nbsp; ├── samples.tsv
+│&nbsp;&nbsp; └── units.tsv
+├── config_complex
+│&nbsp;&nbsp; ├── config.yaml
+│&nbsp;&nbsp; ├── samples.tsv
+│&nbsp;&nbsp; └── units.tsv
+└── ngs-test-data
+    └── reads
+        ├── a.chr21.1.fq
+        ├── a.chr21.2.fq
+        ├── a.scerevisiae.1.fq
+        ├── a.scerevisiae.2.fq
+        ├── b.chr21.1.fq
+        ├── b.chr21.2.fq
+        ├── b.scerevisiae.1.fq
+        ├── b.scerevisiae.2.fq
+        ├── c.scerevisiae.1.fq
+        └── c.scerevisiae.2.fq
+
+5 directories, 16 files</code></pre>
+<p>删掉<code>Step 2 流程部署</code>下载的config文件，把<code>.test/config_basic</code>中的配置文件都拷贝<code>proj_240302_test_snakemake/config</code>文件夹下，然后把<code>.test/ngs-test-data</code>文件夹拷贝到<code>proj_240302_test_snakemake</code>文件夹。</p>
+<p>修改<code>proj_240302_test_snakemake/config/config.yaml</code>文件的samples和unit配置路径：</p>
+<pre class="shell"><code>samples: config/samples.tsv
+units: config/units.tsv</code></pre>
+<p>配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。</p>
+<p>请参考配置文件的说明和流程自带的配置说明。当然<code>.test</code>文件夹中的配置文件格式值得参考。</p>
+</section>
+<section id="step-4-运行流程" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Step 4 运行流程</h1>
+<p>终于可以运行流程了：</p>
+<pre class="shell"><code>snakemake --cores all --use-conda</code></pre>
+<p>果然报错了😭：</p>
+<pre><code>NotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).</code></pre>
+<p>Google一下，rna-seq-star-deseq2里有一个<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2/issues/71">issues</a>就是这个问题。</p>
+<p>原因是snakemake流程最近（2024年3月3日）日更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。</p>
+<pre class="shell"><code>mamba deactivate
+
+mamba remove -n snakemake --all
+
+mamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 
+
+mamba activate snakemake7</code></pre>
+<p>重新配置好环境后，再次运行流程：</p>
+<pre class="shell"><code>snakemake --cores all --use-conda</code></pre>
+<p>流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。</p>
+<p>结果文件在<code>results</code>文件夹下：</p>
+<pre><code>$ ll -rth results/
+total 120
+drwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed
+drwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star
+drwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc
+drwxr-xr-x   4 chenmin  staff   128B Mar  3 00:22 counts
+-rw-r--r--@  1 chenmin  staff    59K Mar  3 00:22 pca.condition.svg
+drwxr-xr-x   5 chenmin  staff   160B Mar  3 00:22 deseq2
+drwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp</code></pre>
+</section>
+<section id="step-5-生成报告" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Step 5 生成报告</h1>
+<pre><code>snakemake --report report.zip</code></pre>
+<p>解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。</p>
+<p>测试完成🎉</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="chenminicode/chenminicode.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkxMzkzOTI0Nzc=" data-category="General" data-category-id="DIC_kwDOCE713c4CdqPl" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
