@@ -96,7 +96,7 @@ units: config/units.tsv</code></pre>
 <p>果然报错了😭：</p>
 <pre class="shell"><code>NotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).</code></pre>
 <p>Google一下，rna-seq-star-deseq2里有一个<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2/issues/71">issues</a>就是这个问题。</p>
-<p>原因是snakemake流程最近（2024年3月3日）日更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。</p>
+<p>原因是snakemake流程最近更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。</p>
 <pre class="shell"><code>$ mamba deactivate
 
 $ mamba remove -n snakemake --all
