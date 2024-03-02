@@ -116,7 +116,7 @@ NotImplementedError: Remote providers have been replaced by Snakemake storage pl
 
 Google一下，rna-seq-star-deseq2里有一个[issues](https://github.com/snakemake-workflows/rna-seq-star-deseq2/issues/71)就是这个问题。
 
-原因是snakemake流程最近（2024年3月3日）日更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。
+原因是snakemake流程最近更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。
 
 ```shell
 $ mamba deactivate
