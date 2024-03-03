@@ -31,20 +31,46 @@
 <section id="step-1-安装snamake和snakedeploy" class="level1">
 <h1>Step 1 安装snamake和snakedeploy</h1>
 <p>使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧.</p>
-<pre class="shell"><code>$ mamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy
-
-$ conda activate snakemake</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> create <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> conda-forge <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> bioconda <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--name</span> snakemake snakemake snakedeploy</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">conda</span> activate snakemake</span></code></pre></div>
+</div>
 </section>
 <section id="step-2-流程部署" class="level1">
 <h1>Step 2 流程部署</h1>
-<pre class="shell"><code>$ mkdir proj_240302_test_snakemake
-
-$ cd proj_240302_test_snakemake
-
-$ snakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mkdir</span> proj_240302_test_snakemake</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> proj_240302_test_snakemake</span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">snakedeploy</span> deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--tag</span> v2.1.0</span></code></pre></div>
+</div>
 <p>运行后的文件结构：</p>
-<pre class="shell"><code>$ tree
-.
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tree</span></span></code></pre></div>
+</div>
+<pre><code>.
 ├── config
 │&nbsp;&nbsp; ├── README.md
 │&nbsp;&nbsp; ├── config.yaml
@@ -58,8 +84,12 @@ $ snakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-sta
 <h1>Step 3 配置流程</h1>
 <p>流程配置是最麻烦的，我下载了<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2.git">仓库</a>自带的测试数据。</p>
 <p>测试数据在<code>.test</code>文件夹下面，结构如下，应该很清楚了，<code>config_basic</code>就是简单版的配置文件，<code>config_complex</code>文件夹是复杂版的配置文件，<code>ngs-test-data</code>就是原始数据了。</p>
-<pre class="shell"><code>$ tree .test
-.
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tree</span> .test</span></code></pre></div>
+</div>
+<pre><code>.
 ├── config_basic
 │&nbsp;&nbsp; ├── config.yaml
 │&nbsp;&nbsp; ├── samples.tsv
@@ -84,7 +114,7 @@ $ snakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-sta
 5 directories, 16 files</code></pre>
 <p>删掉<code>Step 2 流程部署</code>下载的config文件，把<code>.test/config_basic</code>中的配置文件都拷贝<code>proj_240302_test_snakemake/config</code>文件夹下，然后把<code>.test/ngs-test-data</code>文件夹拷贝到<code>proj_240302_test_snakemake</code>文件夹。</p>
 <p>修改<code>proj_240302_test_snakemake/config/config.yaml</code>文件的samples和unit配置路径：</p>
-<pre class="shell"><code>samples: config/samples.tsv
+<pre><code>samples: config/samples.tsv
 units: config/units.tsv</code></pre>
 <p>配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。</p>
 <p>请参考配置文件的说明和流程自带的配置说明。当然<code>.test</code>文件夹中的配置文件格式值得参考。</p>
@@ -92,24 +122,66 @@ units: config/units.tsv</code></pre>
 <section id="step-4-运行流程" class="level1">
 <h1>Step 4 运行流程</h1>
 <p>终于可以运行流程了：</p>
-<pre class="shell"><code>$ snakemake --cores all --use-conda</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">snakemake</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--cores</span> all <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--use-conda</span></span></code></pre></div>
+</div>
 <p>果然报错了😭：</p>
-<pre class="shell"><code>NotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).</code></pre>
+<pre><code>NotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).</code></pre>
 <p>Google一下，rna-seq-star-deseq2里有一个<a href="https://github.com/snakemake-workflows/rna-seq-star-deseq2/issues/71">issues</a>就是这个问题。</p>
 <p>原因是snakemake流程最近更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。</p>
-<pre class="shell"><code>$ mamba deactivate
-
-$ mamba remove -n snakemake --all
-
-$ mamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 
-
-$ mamba activate snakemake7</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> deactivate</span>
+<span id="cb10-2"></span>
+<span id="cb10-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> remove <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-n</span> snakemake <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--all</span></span>
+<span id="cb10-4"></span>
+<span id="cb10-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> create <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> conda-forge <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> bioconda <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-n</span> snakemake7 snakemake=7.32.4 </span>
+<span id="cb10-6"></span>
+<span id="cb10-7"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> activate snakemake7</span></code></pre></div>
+</div>
 <p>重新配置好环境后，再次运行流程：</p>
-<pre class="shell"><code>$ snakemake --cores all --use-conda</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">snakemake</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--cores</span> all <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--use-conda</span></span></code></pre></div>
+</div>
 <p>流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。</p>
 <p>结果文件在<code>results</code>文件夹下：</p>
-<pre class="shell"><code>$ ll -rth results/
-total 120
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">ll</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-rth</span> results/</span></code></pre></div>
+</div>
+<pre><code>total 120
 drwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed
 drwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star
 drwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc
@@ -120,7 +192,13 @@ drwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp</code></pre>
 </section>
 <section id="step-5-生成报告" class="level1">
 <h1>Step 5 生成报告</h1>
-<pre class="shell"><code>$ snakemake --report report.zip</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">snakemake</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--report</span> report.zip</span></code></pre></div>
+</div>
 <p>解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。</p>
 <p>测试完成🎉</p>
 
