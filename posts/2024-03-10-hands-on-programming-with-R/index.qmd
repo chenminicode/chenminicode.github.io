@@ -1,0 +1,350 @@
+---
+title: "《R语言入门与实践》摘要"
+author: "metseq"
+date: "2024-03-11"
+categories: [R]
+toc: true
+number-sections: false
+draft: true
+execute:
+  output: true
+---
+
+# 概述
+
+看《R for Data Science》的时候，Hadley Wickham推荐了这本书《Hands-On Programming with R》，中文译名是《R语言入门与实践》。这本书关注的是R语言作为语言的基础，基本不涉及统计，我对R语言的了解基本是调用demo代码的时候，自己感觉的，缺少对R语言作为语言的整体了解，所以这本书是我需要的。
+
+# 第1章 R基础
+
+## 1.2 对象
+
+对象，就是一个名称而已，在R中存储的数据就是一个R对象。
+
+```{r}
+die <- 1:6
+die
+```
+
+元素方式执行（element-wise execution）
+
+```{r}
+die - 1
+die / 2
+die * die
+```
+
+矩阵内乘法
+
+```{r}
+die %*% die
+```
+
+矩阵外乘法
+
+```{r}
+die %o% die
+```
+
+## 1.3 函数
+
+函数调用
+
+```{r}
+sample(x = die, size = 1)
+```
+
+查看函数参数
+
+```{r}
+args(sample)
+```
+
+## 1.4 可放回抽样
+
+```{r}
+sample(die, size = 10, replace = TRUE)
+```
+
+## 1.5 编写自定义函数
+
+```{r}
+roll <- function(){
+  die <- 1:6
+  dice <- sample(die, size = 2, replace = TRUE)
+  sum(dice)
+}
+
+roll()
+```
+
+## 1.6 函数参数
+
+```{r}
+roll2 <- function(bones = 1:6){
+  dice <- sample(bones, size = 2, replace = TRUE)
+  sum(dice)
+}
+
+roll2()
+```
+
+# 第3章 R对象
+
+## 3.1 原子型向量
+
+原子型向量就是最简单的包含数据的向量。
+
+比如之前的\`die\`
+
+```{r}
+die <- 1:6
+die
+
+is.vector(die)
+```
+
+至包含一个值的原子型向量
+
+```{r}
+five <- 5
+five
+
+is.vector(five)
+```
+
+::: callout-tip
+🤔R竟然把一个整数存成了长度为1的向量，理解向量是理解R语言的关键。
+:::
+
+R可以识别6种基本类型的原子型向量：
+
+-   双整型（double）
+
+-   整型（integer）
+
+-   字符型（character）
+
+-   逻辑型（logical）
+
+-   复数类型（complex）
+
+-   原始类型（raw）
+
+### 3.1.1 双整型
+
+```{r}
+die <- c(1, 2, 3, 4, 5, 6)
+die
+
+typeof(die)
+```
+
+### 3.1.2 整型
+
+```{r}
+foo <- c(-1L, 2L, 4L)
+foo
+
+typeof(foo)
+```
+
+浮点误差
+
+```{r}
+sqrt(2)^2 - 2
+```
+
+### 3.1.3 字符型
+
+```{r}
+text <- c("Hello", "World")
+text
+
+typeof(text)
+```
+
+### 3.1.4 逻辑型
+
+```{r}
+3 > 4
+
+logic <- c(TRUE, FALSE, TRUE)
+logic
+
+typeof(logic)
+```
+
+### 3.1.5 附属类型和原始类型
+
+```{r}
+comp <- c(1 + 1i, 1 + 2i, 1 + 3i)
+comp
+
+typeof(comp)
+```
+
+```{r}
+raw(3)
+
+typeof(raw(3))
+```
+
+## 3.2 属性
+
+属性是附加给原始型向量的额外信息，可以将属性赋予一个原子型向量（或者任意一个R对象）。属性并不会影响这个数据的取值，在显示该对象时也不会出现属性信息。你可以把属性理解为对象的元数据（metadata）。
+
+::: callout-important
+通常来说，R会选择忽略这些元数据信息，但某些R函数会检查是否附有某些特定的属性值。这些函数会根据该数据对象的特定属性信息决定是否进行某些特定的操作。
+:::
+
+```{r}
+die <- 1:6
+attributes(die)
+die
+```
+
+::: callout-tip
+R用NULL表示空值，意即没有任何信息。这里就是没有属性的意思。
+:::
+
+可以自己生成一个`NULL`对象
+
+```{r}
+bar <- 1:4
+bar
+
+bar <- NULL
+bar
+```
+
+原子型向量最常见的三种属性时：名称（name），维度（dim）和类（class）。
+
+### 3.2.1 名称属性
+
+```{r}
+die <- 1:6
+
+# 查询名称属性
+names(die)
+
+# 赋予名称属性
+names(die) <- c("one", "two", "three", "four", "five", "six")
+names(die)
+
+attributes(die)
+
+# 删除名称属性
+names(die) <- NULL
+names(die)
+```
+
+### 3.2.2 维度属性
+
+通过赋予原子型向量维度属性，将其转成一个n维数组
+
+```{r}
+die
+
+dim(die) <- c(2, 3)
+die
+```
+
+## 3.3 矩阵
+
+```{r}
+m <- matrix(die, nrow = 2)
+m
+```
+
+## 3.4 数组
+
+```{r}
+# 和dim效果差不多
+ar <- array(1:6, dim = c(2, 3))
+ar
+```
+
+## 3.5 类
+
+更改对象的维度属性不会改变其**类型**，但是会改变这个对象的**class**属性。
+
+```{r}
+die <- 1:6
+typeof(die)
+class(die)
+
+dim(die) <- c(2, 3)
+typeof(die)
+
+class(die)
+
+attributes(die)
+```
+
+### 3.5.1 日期和时间
+
+R用一个特殊的类表示日期和时间数据。
+
+```{r}
+now <- Sys.time()
+now
+
+typeof(now)
+
+class(now)
+
+# 值是1970年1月1日零点（UTC）开始所逝去的秒数
+unclass(now)
+
+```
+
+### 3.5.2 因子
+
+```{r}
+gender <- factor(c("male", "female", "female", "male"))
+
+typeof(gender)
+
+attributes(gender)
+
+# 用整数存储因子，整数对于相应level的标签
+unclass(gender)
+```
+
+## 3.6 强制转换
+
+顺序是：
+
+逻辑型 ——\> 数值型 ——\> 字符型
+
+也就是如果同时存在逻辑型和数值型，会转换成数值型，以此类推。
+
+## 3.7 列表
+
+```{r}
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+list1
+```
+
+## 3.8 数据框
+
+```{r}
+df <- data.frame(
+  face = c("ace", "two", "six"),
+  suit = c("clubs", "clubs", "clubs"),
+  value = c(1, 2, 3)
+)
+df
+```
+
+::: callout-tip
+创建列表或向量时，也可以命名
+:::
+
+```{r}
+list(face = "ace", suit = "hearts", value = 1:6)
+
+c(face = "ace", suit = "hearts", value = "one")
+```
+
+# 第4章 R的记号体系

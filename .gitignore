@@ -5,3 +5,8 @@ _site/
 .DS_Store
 .ipynb_checkpoints
 /.quarto/
+.Rproj.user
+chenminicode.github.io.Rproj
+.Rhistory
+.Rhistory
+.Rhistory
