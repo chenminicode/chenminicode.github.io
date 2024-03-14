@@ -5,7 +5,6 @@ date: "2024-03-11"
 categories: [R]
 toc: true
 number-sections: false
-draft: true
 execute:
   output: true
 ---
@@ -348,3 +347,860 @@ c(face = "ace", suit = "hearts", value = "one")
 ```
 
 # 第4章 R的记号体系
+
+## 4.1 值的选取
+
+要从一个数据框中提取某个值或某一组值，先写出该数据框的名称，在其后紧跟一堆中括号。中括号有两个参数，以逗号分隔。R用第一个索引参数选择行，第二个列。
+
+\`deck\[ 行, 列 \]\`
+
+有6种创建索引参数的方式：
+
+-   正整数
+
+-   负整数
+
+-   零
+
+-   空格
+
+-   逻辑值
+
+-   名称
+
+### 4.1.1 正整数索引
+
+```{r}
+deck <- read.csv('deck.csv')
+head(deck)
+```
+
+```{r}
+deck[1, 1]
+
+deck[1, c(1, 2, 3)]
+```
+
+```{r}
+new <- deck[1, c(1, 2, 3)]
+new
+
+new[1, 3] <- '100'
+new
+
+deck[1, c(1, 2, 3)]
+```
+
+可以看到，new是一个副本，修改new并不会修改deck。
+
+```{r}
+# 重复值
+deck[c(1, 1), c(1, 2, 3)]
+```
+
+::: callout-tip
+如果从一个数据框提取两列或以上，返回一个新的数据框。如果只提取一列，返回一个向量，可以添加drop = FALSE参数，仍返回数据框。
+:::
+
+```{r}
+deck[1:2, 1]
+
+deck[1:2, 1, drop = FALSE]
+```
+
+### 4.1.2 负整数索引
+
+R返回不包含负整数索引对应的元素。注意，和python中切片的负整数不一样。
+
+```{r}
+deck[-(2:52), 1:3]
+
+-(1:6)
+```
+
+### 4.1.3 零索引
+
+没什么用，返回一个空对象
+
+### 4.1.4 空格索引
+
+空格代表选取该维度的所有元素。
+
+```{r}
+deck[1, ]
+```
+
+### 4.1.5 逻辑值索引
+
+```{r}
+deck[1, c(TRUE, TRUE, FALSE)]
+```
+
+### 4.1.6 名称索引
+
+```{r}
+deck[1, c("face", "suit", "value")]
+
+deck[ , "value"]
+```
+
+## 4.4 美元符号与双中括号
+
+使用\$提取一列
+
+```{r}
+deck$value
+```
+
+```{r}
+mean(deck$value)
+
+median(deck$value)
+```
+
+如果列表对象中的元素有名称，也可以用\$提取。
+
+```{r}
+lst <- list(number = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
+
+lst
+
+lst$number
+```
+
+用单中括号和双中括号提取列表元素
+
+```{r}
+lst[1]
+typeof(lst[1])
+```
+
+```{r}
+lst[[1]]
+typeof(lst[[1]])
+```
+
+::: callout-important
+使用单中括号提取一个列表对象的自己，R返回一个列表对象。使用双中括号，R返回元素值。
+:::
+
+忽然想到的一个提取例子：
+
+```{r}
+lst[1:2]
+
+lst[[1]][2]
+```
+
+# 第5章 对象改值
+
+## 5.1 就地改值
+
+```{r}
+vec <- c(0, 0, 0, 0, 0, 0)
+
+vec[1]
+
+vec[1] <- 1000
+
+vec
+
+vec[c(1, 3, 5)] <- c(1, 1, 1)
+
+vec
+```
+
+创建一个原先对象中并不存在的新值。R会自动将对象的长度延伸以适应这个新值。
+
+```{r}
+vec[7] <- 7
+vec
+```
+
+使用\$为数据集添加新变量：
+
+```{r}
+deck2 <- deck
+
+deck2$new <- 1:52
+
+head(deck2)
+```
+
+将NULL赋予一个变量，就可以删除这个变量了。
+
+```{r}
+deck2$new <- NULL
+
+head(deck2)
+```
+
+## 5.2 逻辑值取子集
+
+```{r}
+vec <- 1:4
+vec[c(FALSE, FALSE, TRUE, FALSE)]
+```
+
+逻辑向量和需要取子集的向量等长。
+
+### 5.2.1 逻辑测试
+
+| 运算符 | 语法              | 判别                    |
+|--------|-------------------|-------------------------|
+| \>     | a \> b            | a是否大于b？            |
+| \>=    | a \>= b           | 大于等于                |
+| \<     | a \< b            | 小于                    |
+| \<=    | a \<= b           | 小于等于                |
+| ==     | a == b            | 等于                    |
+| !=     | a != b            | 不等于                  |
+| %in%   | a %in% c(a, b, c) | c(a, b, c)中是否包含a？ |
+
+: R的7种逻辑运算符
+
+向量化的运算符
+
+```{r}
+1 > 2
+
+1 > c(0, 1, 2)
+
+c(1, 2, 3) == c(3, 2, 1)
+```
+
+::: callout-important
+%in%是唯一不进行一一对比的运算符。如果左边提供一个向量，%in%会独立测试左边向量中的元素是否出现在右边向量中。
+:::
+
+```{r}
+1 %in% c(3, 4, 5)
+
+c(1, 2) %in% c(3, 4, 5)
+
+c(1, 2, 3) %in% c(3, 4, 5)
+
+c(1, 2, 3, 4) %in% c(3, 4, 5)
+```
+
+看到这里，发现作者对例子都是精挑细选的，上面的例子，左边向量长度分别从1到4，右边是3，没有变，注意比较输出结果的差异。
+
+### 5.2.2 布尔运算符
+
+布尔运算符可以将多个逻辑测试的结果整合并输出为一个TRUE或FALSE。R有六种布尔运算符。
+
+| 运算符 | 语法                          | 判别                           |
+|--------|-------------------------------|--------------------------------|
+| &      | cond1 & cond2                 | 与                             |
+| ｜     | cond1 \| cond2                | 或                             |
+| !      | ! cond1                       | 非                             |
+| any    | any(cond1, cond2, cond3, ...) | 所有条件，是否至少一个为真？   |
+| all    | all(cond1, cond2, cond3, ...) | 所有条件，是否同时为真？       |
+| xor    | xor(cond1, cond2)             | cond1和cond2是否只有一个为真？ |
+
+: R的布尔运算符
+
+```{r}
+# xor很陌生，看看例子
+
+xor(TRUE, TRUE)
+
+xor(TRUE, FALSE)
+
+xor(FALSE, FALSE)
+
+xor(FALSE, TRUE)
+```
+
+向量化的布尔运算符
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(1, 2, 3)
+c <- c(1, 2, 4)
+
+a == b
+
+b == c
+
+a == b & b == c
+```
+
+## 5.3 缺失信息
+
+R用特殊字符NA代表“不可用”（Not Available），可用于存储缺失信息。NA具有传染性。
+
+```{r}
+1 + NA
+
+NA == NA
+```
+
+### 5.3.1 na.rm
+
+去掉缺失信息
+
+```{r}
+c(NA, 1:50)
+
+mean(c(NA, 1:50))
+
+mean(c(NA, 1:50), na.rm = TRUE)
+```
+
+### 5.3.2 is.na
+
+判断是否是NA
+
+::: callout-tip
+不能用==来判断NA
+:::
+
+```{r}
+NA == NA
+
+c(1,2, 3, NA) == NA
+
+is.na(NA)
+
+vec <- c(1, 2, 3, NA)
+
+is.na(vec)
+```
+
+# 第6章 R的环境系统
+
+这一张作者讲的非常好，用目录树的结构来形象的比喻了R的环境系统。
+
+建议查看原文全文。这里列出几个重要的知识点。
+
+## 6.2 操作R环境
+
+全局环境（R_GlobalEnv），最底层的环境，可以看到我创建的对象基本都在全局环境下。
+
+```{r}
+ls(globalenv())
+```
+
+空环境，空环境没有父环境，相当于根目录了。
+
+```{r}
+ls(emptyenv())
+```
+
+在某个环境中，提取另一环境的变量
+
+```{r}
+head(globalenv()$deck)
+```
+
+在某个环境中，将对象存到另一个环境
+
+```{r}
+assign("new", "Hello Global", envir = globalenv())
+
+globalenv()$new
+```
+
+活动环境
+
+```{r}
+# 当前就在R_GlobalEnv下
+environment()
+```
+
+## 6.3 作用域规则
+
+在搜索对象时，R会遵循一系列的规则。这些规则被称作R的作用域规则（scoping rules）。
+
+1.  R首先在当前的活动环境中搜索对象
+2.  在命令行中工作时，活动环境就是全局环境
+3.  当R在某个环境中没有搜索到对象时，R会进入该环境的父环境。如果还是没有，再进入父环境的父环境，以此类推
+
+## 6.4 函数求值
+
+R在每一次函数求值时，都会创建一个新环境，然后带着运行结果回到调用该函数时的环境。
+
+函数内创建的对象的环境时单独的，所以不会覆盖已经存在的对象。
+
+```{r}
+a <- "I'm in R_GlobalEnv"
+a
+
+show_env <- function(){
+  a <- "I'm in show_env."
+  print('show_env函数内的环境：')
+  print(environment())
+  
+  print('show_env函数的父环境：')
+  print(parent.env(environment()))
+  
+  print('列出show_env环境下的对象')
+  ls(environment())
+  a
+}
+
+show_env()
+
+a
+```
+
+R会将一个函数的运行时环境与第一次创建该函数时所在的环境相连接。该函数的所有运行环境都将其作为父环境。
+
+```{r}
+environment(show_env)
+```
+
+::: callout-note
+R是如何对待函数求值的？
+
+当你调用一个函数之前，R是在活动环境中工作。我们可以将此活动环境称为调用环境（calling environment）。R会从该环境中调用函数。
+
+调用这个函数时，R会创建一个新的运行时环境。这个环境是调用环境的子环境，也就是说调用环境是这个环境的父环境。R会将该函数的所有参数赋值到运行环境中，然后将运行时环境作为当前的活动环境。
+
+接着，R会运行函数主体中的代码。如果代码创建了任何对象，R会将它们存储在活动环境中，也就是运行时环境。如果R调用了某些对象，遵循作用域规则搜索这些对象：首先搜索运行时环境，如果没有搜索父环境，还是没有搜索父环境的父环境，以此类推。
+
+最后，当R完成函数运行时，它会将活动环境切换为调用环境。如果将函数运行的结果用赋值符\<-赋给某个对象，那么这个新对象会存储在调用环境中。
+:::
+
+如果对象是数据框，也是同样对待的。
+
+```{r}
+df <- data.frame(
+  face = c("ace", "two", "six"),
+  suit = c("clubs", "clubs", "clubs"),
+  value = c(1, 2, 3)
+)
+df
+
+test_env <- function(x){
+  x$face = c("ace", "ace", "ace")
+  x
+}
+
+test_env(df)
+
+df
+```
+
+# 第7章 程序
+
+## 7.1 策略
+
+有三个简单的策略可以简化编程任务：
+
+1.  将复杂任务分解为一些简单的字任务
+2.  使用实例
+3.  用通俗的语言描述解决方案，然后将其转换成R代码
+
+## 7.2 if语句
+
+if语法
+
+```         
+if (this) {
+  that
+}
+```
+
+```{r}
+num <- -9
+if (num < 0) {
+  num <- num * -1
+}
+num
+```
+
+### 7.3 else语句
+
+else语法
+
+```{r}
+#| eval: false
+if (this) {
+  Plan A
+} else {
+  Plan B
+}
+```
+
+```{r}
+a <- 3.14
+dec <- a - trunc(a)
+dec
+
+if (dec >= 0.5) {
+  a <- trunc(a) + 1
+} else {
+  a <- trunc(a)
+}
+
+a
+```
+
+else if 语法
+
+```{r}
+#| eval: false
+if (this) {
+  Plan A
+} else if (that) {
+  Plan B
+} else {
+  Plan C
+}
+```
+
+## 7.4 查找表
+
+有点像python里的字典
+
+```{r}
+ages = c("Min" = 22, "King" = 33, "Jeo" = 34)
+
+ages['Min']
+
+unname(ages["Min"])
+
+ages[c("Min", "Min", "Jeo")]
+```
+
+## 7.5 代码注释
+
+```{r}
+# 我就是一行注释，用井号打头
+# 注释的作用是对某些代码进行解释
+# 好的注释不是直白的说代码在做什么
+# 好的注释总结代码的意图，让人看了很明了
+# 好吧，我承认这里注释写的有点多了
+
+# 计算n的阶乘
+fac <- function(n) {
+  f = 1
+  for (i in 1:n){
+    f = f * i
+  }
+  f
+}
+
+fac(5)
+```
+
+# 第8章 S3
+
+## 8.1 S3系统
+
+S3指的是R自带的类系统。这个系统掌管着R如何处理具有不同类的对象。一些函数会首先查询对象的S3类，再根据其类属性作出相应的响应。
+
+print就是这样一个函数。
+
+```{r}
+num <- 1000000000
+print(num)
+
+class(num) <- c("POSIXct", "POSIXt")
+print(num)
+```
+
+::: callout-note
+之前觉得很神奇，原来是这么回事！
+:::
+
+::: callout-important
+R的S3系统有三个组成部分：
+
+1.  属性（attribute），尤其是class属性
+2.  泛型函数（generic function）
+3.  方法（method）
+:::
+
+## 8.2 属性
+
+在3.2节中，讲到了R对象都具有的属性（名称，维度，类），这些属性包含了关于这个对象的某些额外信息并且被赋予了属性名称，附加在该对象上。属性不会影响对象的实际取值，但是作为该对象的某种类型的元数据，可以被R用于控制和管理这个对象。
+
+使用attributes函数查看属性
+
+```{r}
+attributes(deck)
+```
+
+R提供可很多辅助函数，可以帮忙设置和查看一些常见的属性
+
+```{r}
+# 名称属性
+names(deck)
+
+# 维度属性
+dim(deck)
+
+# 类属性
+class(deck)
+
+# 行名属性
+row.names(deck)
+
+# 或者给对象添加一个新属性
+levels(deck) <- c("level 1", "level 2", "level 3")
+
+attributes(deck)
+```
+
+::: callout-important
+在对待属性方面，R持放任主义态度。R允许你为某个对象添加你觉得必要的属性（R会忽略大多数属性）。只有在某个函数需要找到某个属性却又找不到时，R才会抱怨。
+:::
+
+可以利用attr函数个某个对象添加**任何**属性。
+
+```{r}
+a <- 1:3
+
+attributes(a)
+
+attr(a, "symbol") <- c("one", "two", "three")
+
+attr(a, "pinyin") <- c("yi", "er", "san")
+
+a
+
+a + 1
+```
+
+structure函数可以创建带有一组属性的R对象。该函数第一个参数是对象或者对象的取值，其余参数是属性。
+
+```{r}
+structure(1:3, symbol = c("one", "two", "three"))
+
+structure(a, lalala = c("happy", "every", "day"))
+```
+
+## 8.3 泛型函数
+
+重点中的重点来了
+
+刚才提到print函数是泛型函数。每次在控制台显示输出也是调用print函数
+
+```{r}
+head(deck)
+
+print(head(deck))
+
+print(now)
+
+print(1:10)
+```
+
+你可能会觉得print会查找某个对象的类属性，再根据类属性的不同，使用一个if语句分配合理的输出。作者说很好，其实print的实现方式更简单。往下看👀
+
+## 8.4 方法
+
+看看print的代码，它其实调用了一个特别的函数，叫做UseMethod。
+
+```{r}
+print
+```
+
+head函数也是调用了UseMethod。
+
+```{r}
+head
+```
+
+::: callout-important
+UseMethod检查你提供给print函数第一个参数的类属性，然后再将你所提供的待输出的对象交给一个新函数处理。比如提供一个POSIXct对象，就交给print.POSIXct函数；提供一个factor对象，就交给print.factor函数。
+
+print.POSIXct和print.factor被称为print函数的方法（method）。这两个函数是普通函数，特别之处是UseMethod会调用它们处理对应的类。
+:::
+
+```{r}
+print.POSIXct
+```
+
+```{r}
+print.factor
+```
+
+使用methods函数可以查看泛型函数所支持的方法。
+
+```{r}
+# medhods(print)的输出太长了，可以自己试试
+methods(head)
+```
+
+c，+，-和\<等，其工作方式也类似于泛型函数，只是它们不会调用UseMethod函数，而会调用.primitive函数。简直就是魔法。
+
+可以自己写一个S3风格的函数，对于特定对象，做特定的处理。
+
+```{r}
+a <- 1:6
+class(a) <- "life"
+
+print.life <- function(x) {
+  print("I miss you!")
+}
+
+attributes(a)
+
+print(a)
+```
+
+## 8.5 类
+
+可以利用R的S3系统为对象新建一个稳健的类（class）。R会以一致且合理的方式对待同属一类的对象。要想创建一个类，应该执行以下操作：
+
+1.  给类起一个名称
+2.  给属于该类的每个对象赋class属性
+3.  为属于该类的对象编写常用泛型函数的类方法
+
+查看某个类的方法：
+
+```{r}
+methods(class = "factor")
+```
+
+## 8.7 S4和R5
+
+S4和R5是R另外两个可以用来创建类属性行为的系统。使用难度更大，参考 Hadley Wickham 的《Advanced R Programming》。
+
+# 第9章 循环
+
+## 9.2 expand.grid
+
+expand.grid可以方便快捷地写出n个向量元素的所有组合。
+
+```{r}
+a <- c("one", "two", "three")
+b <- c("apple", "bananna")
+
+expand.grid(a, b)
+```
+
+## 9.3 for循环
+
+语法
+
+```{r}
+#| eval: false
+for (value in that) {
+  this
+}
+
+```
+
+```{r}
+for (word in c("Today", "is", "thursday")) {
+  print(word)
+}
+
+for (i in 1:6) {
+  print(i)
+}
+```
+
+## 9.4 while循环
+
+```{r}
+#| eval: false
+while (condition) {
+  code
+}
+```
+
+```{r}
+n <- 3
+while (n > 0) {
+  print(n)
+  n <- n - 1
+}
+```
+
+## 9.5 repeat循环
+
+repeat会一直重复运行某段代码，直到你中止循环（按Esc），或遇到了break命令。
+
+```{r}
+n <- 3
+repeat {
+  print(n)
+  n <- n - 1
+  if (n < 0){
+    break
+  }
+}
+```
+
+## 9.6 replicate函数
+
+replicate函数可以重复运行某段代码多少次。
+
+```{r}
+replicate(10, 'best')
+```
+
+## 第10章 代码提速
+
+## 10.1 向量化代码
+
+快速的R代码经常用到的三大法宝：逻辑测试，取子集和按元素方式执行。
+
+看看下面这个例子，一个是用for循环的非向量化代码，一个是向量化代码。
+
+```{r}
+# for循环
+abs_loop <- function(vec) {
+  for (i in 1:length(vec)) {
+    if (vec[i] < 0) {
+      vec[i] <- -vec[i]
+    }
+  }
+  vec
+}
+
+# 向量化代码
+abs_set <- function(vec) {
+  negs <- vec < 0
+  vec[negs] <- -1 * vec[negs]
+  vec
+}
+
+# 生成一个很长的测试向量
+long <- rep(c(-1, 1), 5000000)
+
+# 统计代码运行的实际
+system.time(abs_loop(long))
+
+system.time(abs_set(long))
+```
+
+向量化代码比for循环快5倍，书中是快30倍，应该是新版的R把for循环优化了。
+
+## 10.2 如何编写向量化代码
+
+1.  对于程序中的有序步骤，使用向量化的函数来完成
+2.  对于同类情况，使用逻辑值取子集的方式来处理
+
+## 10.3 如何在R中编写快速的for循环
+
+做两件事可以改善for循环的效率：
+
+1.  能放在for循环外的代码，不要放在for循环里
+2.  确保用来存储循环输出结果的对象必须具备足够的容量
+
+```{r}
+system.time({
+  # 这句代码是关键，给output预先分配了足够的容量
+  output <- rep(NA, 1000000)
+  for (i in 1:1000000) {
+    output[i] <- i + 1
+  }
+})
+
+system.time({
+  output <-NA
+  for (i in 1:1000000) {
+    output[i] <- i + 1
+  }
+})
+```
+
+为什么第二段慢呢？在第二段代码中，循环每前进一步，都要为output在内存中寻找位置，以存放新的变大的output。第一段代码没有这个问题，直接放。
+
+到这里这本书就结束了，如果你觉得不错，请在下面点赞👍或评论支持吧😄

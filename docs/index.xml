@@ -10,7 +10,3650 @@
 <atom:link href="https://chenminicode.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>metseq&#39;s blog</description>
 <generator>quarto-1.4.550</generator>
-<lastBuildDate>Fri, 01 Mar 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 10 Mar 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>《R语言入门与实践》摘要</title>
+  <dc:creator>metseq </dc:creator>
+  <link>https://chenminicode.github.io/posts/2024-03-10-hands-on-programming-with-R/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="概述" class="level1">
+<h1>概述</h1>
+<p>看《R for Data Science》的时候，Hadley Wickham推荐了这本书《Hands-On Programming with R》，中文译名是《R语言入门与实践》。这本书关注的是R语言作为语言的基础，基本不涉及统计，我对R语言的了解基本是调用demo代码的时候，自己感觉的，缺少对R语言作为语言的整体了解，所以这本书是我需要的。</p>
+</section>
+<section id="第1章-r基础" class="level1">
+<h1>第1章 R基础</h1>
+<section id="对象" class="level2">
+<h2 class="anchored" data-anchor-id="对象">1.2 对象</h2>
+<p>对象，就是一个名称而已，在R中存储的数据就是一个R对象。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb1-2">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+</div>
+<p>元素方式执行（element-wise execution）</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">die <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 1 2 3 4 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">die <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5 1.0 1.5 2.0 2.5 3.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">die <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  4  9 16 25 36</code></pre>
+</div>
+</div>
+<p>矩阵内乘法</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">die <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]
+[1,]   91</code></pre>
+</div>
+</div>
+<p>矩阵外乘法</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">die <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%o%</span> die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    2    3    4    5    6
+[2,]    2    4    6    8   10   12
+[3,]    3    6    9   12   15   18
+[4,]    4    8   12   16   20   24
+[5,]    5   10   15   20   25   30
+[6,]    6   12   18   24   30   36</code></pre>
+</div>
+</div>
+</section>
+<section id="函数" class="level2">
+<h2 class="anchored" data-anchor-id="函数">1.3 函数</h2>
+<p>函数调用</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> die, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>查看函数参数</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">args</span>(sample)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (x, size, replace = FALSE, prob = NULL) 
+NULL</code></pre>
+</div>
+</div>
+</section>
+<section id="可放回抽样" class="level2">
+<h2 class="anchored" data-anchor-id="可放回抽样">1.4 可放回抽样</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(die, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 5 3 2 5 4 2 5 4 3 1</code></pre>
+</div>
+</div>
+</section>
+<section id="编写自定义函数" class="level2">
+<h2 class="anchored" data-anchor-id="编写自定义函数">1.5 编写自定义函数</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">roll <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(){</span>
+<span id="cb19-2">  die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb19-3">  dice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(die, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb19-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(dice)</span>
+<span id="cb19-5">}</span>
+<span id="cb19-6"></span>
+<span id="cb19-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">roll</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</section>
+<section id="函数参数" class="level2">
+<h2 class="anchored" data-anchor-id="函数参数">1.6 函数参数</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">roll2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bones =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>){</span>
+<span id="cb21-2">  dice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(bones, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">replace =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb21-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(dice)</span>
+<span id="cb21-4">}</span>
+<span id="cb21-5"></span>
+<span id="cb21-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">roll2</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第3章-r对象" class="level1">
+<h1>第3章 R对象</h1>
+<section id="原子型向量" class="level2">
+<h2 class="anchored" data-anchor-id="原子型向量">3.1 原子型向量</h2>
+<p>原子型向量就是最简单的包含数据的向量。</p>
+<p>比如之前的`die`</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb23-2">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.vector</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>至包含一个值的原子型向量</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">five <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb27-2">five</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.vector</span>(five)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>🤔R竟然把一个整数存成了长度为1的向量，理解向量是理解R语言的关键。</p>
+</div>
+</div>
+<p>R可以识别6种基本类型的原子型向量：</p>
+<ul>
+<li><p>双整型（double）</p></li>
+<li><p>整型（integer）</p></li>
+<li><p>字符型（character）</p></li>
+<li><p>逻辑型（logical）</p></li>
+<li><p>复数类型（complex）</p></li>
+<li><p>原始类型（raw）</p></li>
+</ul>
+<section id="双整型" class="level3">
+<h3 class="anchored" data-anchor-id="双整型">3.1.1 双整型</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span>
+<span id="cb31-2">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+</div>
+</section>
+<section id="整型" class="level3">
+<h3 class="anchored" data-anchor-id="整型">3.1.2 整型</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1">foo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>L, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>L, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>L)</span>
+<span id="cb35-2">foo</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1  2  4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(foo)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+</div>
+<p>浮点误差</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.440892e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="字符型" class="level3">
+<h3 class="anchored" data-anchor-id="字符型">3.1.3 字符型</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1">text <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"World"</span>)</span>
+<span id="cb41-2">text</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello" "World"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(text)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+</section>
+<section id="逻辑型" class="level3">
+<h3 class="anchored" data-anchor-id="逻辑型">3.1.4 逻辑型</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1">logic <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb47-2">logic</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(logic)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "logical"</code></pre>
+</div>
+</div>
+</section>
+<section id="附属类型和原始类型" class="level3">
+<h3 class="anchored" data-anchor-id="附属类型和原始类型">3.1.5 附属类型和原始类型</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1">comp <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>i, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>i, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>i)</span>
+<span id="cb51-2">comp</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1+1i 1+2i 1+3i</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(comp)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "complex"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">raw</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 00 00 00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">raw</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "raw"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="属性" class="level2">
+<h2 class="anchored" data-anchor-id="属性">3.2 属性</h2>
+<p>属性是附加给原始型向量的额外信息，可以将属性赋予一个原子型向量（或者任意一个R对象）。属性并不会影响这个数据的取值，在显示该对象时也不会出现属性信息。你可以把属性理解为对象的元数据（metadata）。</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>通常来说，R会选择忽略这些元数据信息，但某些R函数会检查是否附有某些特定的属性值。这些函数会根据该数据对象的特定属性信息决定是否进行某些特定的操作。</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb59-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R用NULL表示空值，意即没有任何信息。这里就是没有属性的意思。</p>
+</div>
+</div>
+<p>可以自己生成一个<code>NULL</code>对象</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1">bar <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span>
+<span id="cb63-2">bar</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1">bar <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb65-2">bar</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+<p>原子型向量最常见的三种属性时：名称（name），维度（dim）和类（class）。</p>
+<section id="名称属性" class="level3">
+<h3 class="anchored" data-anchor-id="名称属性">3.2.1 名称属性</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb67-2"></span>
+<span id="cb67-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 查询名称属性</span></span>
+<span id="cb67-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 赋予名称属性</span></span>
+<span id="cb69-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(die) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"one"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"three"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"four"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"five"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"six"</span>)</span>
+<span id="cb69-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "one"   "two"   "three" "four"  "five"  "six"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$names
+[1] "one"   "two"   "three" "four"  "five"  "six"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 删除名称属性</span></span>
+<span id="cb73-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(die) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb73-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+</section>
+<section id="维度属性" class="level3">
+<h3 class="anchored" data-anchor-id="维度属性">3.2.2 维度属性</h3>
+<p>通过赋予原子型向量维度属性，将其转成一个n维数组</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dim</span>(die) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb77-2">die</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="矩阵" class="level2">
+<h2 class="anchored" data-anchor-id="矩阵">3.3 矩阵</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1">m <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(die, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb79-2">m</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6</code></pre>
+</div>
+</div>
+</section>
+<section id="数组" class="level2">
+<h2 class="anchored" data-anchor-id="数组">3.4 数组</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 和dim效果差不多</span></span>
+<span id="cb81-2">ar <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">array</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dim =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))</span>
+<span id="cb81-3">ar</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6</code></pre>
+</div>
+</div>
+</section>
+<section id="类" class="level2">
+<h2 class="anchored" data-anchor-id="类">3.5 类</h2>
+<p>更改对象的维度属性不会改变其<strong>类型</strong>，但是会改变这个对象的<strong>class</strong>属性。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1">die <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb83-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dim</span>(die) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb87-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(die)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$dim
+[1] 2 3</code></pre>
+</div>
+</div>
+<section id="日期和时间" class="level3">
+<h3 class="anchored" data-anchor-id="日期和时间">3.5.1 日期和时间</h3>
+<p>R用一个特殊的类表示日期和时间数据。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1">now <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Sys.time</span>()</span>
+<span id="cb93-2">now</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-03-14 22:57:59 CST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(now)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb97" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(now)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "POSIXct" "POSIXt" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 值是1970年1月1日零点（UTC）开始所逝去的秒数</span></span>
+<span id="cb99-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unclass</span>(now)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1710428280</code></pre>
+</div>
+</div>
+</section>
+<section id="因子" class="level3">
+<h3 class="anchored" data-anchor-id="因子">3.5.2 因子</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1">gender <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"male"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"female"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"female"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"male"</span>))</span>
+<span id="cb101-2"></span>
+<span id="cb101-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(gender)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb103" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(gender)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$levels
+[1] "female" "male"  
+
+$class
+[1] "factor"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb105" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 用整数存储因子，整数对于相应level的标签</span></span>
+<span id="cb105-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unclass</span>(gender)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 1 1 2
+attr(,"levels")
+[1] "female" "male"  </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="强制转换" class="level2">
+<h2 class="anchored" data-anchor-id="强制转换">3.6 强制转换</h2>
+<p>顺序是：</p>
+<p>逻辑型 ——&gt; 数值型 ——&gt; 字符型</p>
+<p>也就是如果同时存在逻辑型和数值型，会转换成数值型，以此类推。</p>
+</section>
+<section id="列表" class="level2">
+<h2 class="anchored" data-anchor-id="列表">3.7 列表</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1">list1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">130</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"R"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>))</span>
+<span id="cb107-2">list1</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ [1] 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118
+[20] 119 120 121 122 123 124 125 126 127 128 129 130
+
+[[2]]
+[1] "R"
+
+[[3]]
+[[3]][[1]]
+[1] TRUE
+
+[[3]][[2]]
+[1] FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="数据框" class="level2">
+<h2 class="anchored" data-anchor-id="数据框">3.8 数据框</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1">df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb109-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"six"</span>),</span>
+<span id="cb109-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">suit =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>),</span>
+<span id="cb109-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">value =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb109-5">)</span>
+<span id="cb109-6">df</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face  suit value
+1  ace clubs     1
+2  two clubs     2
+3  six clubs     3</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>创建列表或向量时，也可以命名</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">suit =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hearts"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">value =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$face
+[1] "ace"
+
+$suit
+[1] "hearts"
+
+$value
+[1] 1 2 3 4 5 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb113" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">suit =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hearts"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">value =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"one"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    face     suit    value 
+   "ace" "hearts"    "one" </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第4章-r的记号体系" class="level1">
+<h1>第4章 R的记号体系</h1>
+<section id="值的选取" class="level2">
+<h2 class="anchored" data-anchor-id="值的选取">4.1 值的选取</h2>
+<p>要从一个数据框中提取某个值或某一组值，先写出该数据框的名称，在其后紧跟一堆中括号。中括号有两个参数，以逗号分隔。R用第一个索引参数选择行，第二个列。</p>
+<p>`deck[ 行, 列 ]`</p>
+<p>有6种创建索引参数的方式：</p>
+<ul>
+<li><p>正整数</p></li>
+<li><p>负整数</p></li>
+<li><p>零</p></li>
+<li><p>空格</p></li>
+<li><p>逻辑值</p></li>
+<li><p>名称</p></li>
+</ul>
+<section id="正整数索引" class="level3">
+<h3 class="anchored" data-anchor-id="正整数索引">4.1.1 正整数索引</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1">deck <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read.csv</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'deck.csv'</span>)</span>
+<span id="cb115-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "king"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb119" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1">new <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)]</span>
+<span id="cb121-2">new</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb123" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1">new[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'100'</span></span>
+<span id="cb123-2">new</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades   100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb125" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+</div>
+<p>可以看到，new是一个副本，修改new并不会修改deck。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 重复值</span></span>
+<span id="cb127-2">deck[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    face   suit value
+1   king spades    13
+1.1 king spades    13</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>如果从一个数据框提取两列或以上，返回一个新的数据框。如果只提取一列，返回一个向量，可以添加drop = FALSE参数，仍返回数据框。</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "king"  "queen"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb131" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, drop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face
+1  king
+2 queen</code></pre>
+</div>
+</div>
+</section>
+<section id="负整数索引" class="level3">
+<h3 class="anchored" data-anchor-id="负整数索引">4.1.2 负整数索引</h3>
+<p>R返回不包含负整数索引对应的元素。注意，和python中切片的负整数不一样。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1">deck[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">52</span>), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb135" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1 -2 -3 -4 -5 -6</code></pre>
+</div>
+</div>
+</section>
+<section id="零索引" class="level3">
+<h3 class="anchored" data-anchor-id="零索引">4.1.3 零索引</h3>
+<p>没什么用，返回一个空对象</p>
+</section>
+<section id="空格索引" class="level3">
+<h3 class="anchored" data-anchor-id="空格索引">4.1.4 空格索引</h3>
+<p>空格代表选取该维度的所有元素。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb137" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, ]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+</div>
+</section>
+<section id="逻辑值索引" class="level3">
+<h3 class="anchored" data-anchor-id="逻辑值索引">4.1.5 逻辑值索引</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb139" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit
+1 king spades</code></pre>
+</div>
+</div>
+</section>
+<section id="名称索引" class="level3">
+<h3 class="anchored" data-anchor-id="名称索引">4.1.6 名称索引</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb141" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1">deck[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"face"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"suit"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"value"</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face   suit value
+1 king spades    13</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb143" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1">deck[ , <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"value"</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3  2
+[26]  1 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3
+[51]  2  1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="美元符号与双中括号" class="level2">
+<h2 class="anchored" data-anchor-id="美元符号与双中括号">4.4 美元符号与双中括号</h2>
+<p>使用$提取一列</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb145" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1">deck<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>value</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3  2
+[26]  1 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3
+[51]  2  1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb147" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(deck<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>value)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb149" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">median</span>(deck<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>value)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<p>如果列表对象中的元素有名称，也可以用$提取。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb151" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1">lst <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">number =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">logical =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">strings =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"a"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"b"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"c"</span>))</span>
+<span id="cb151-2"></span>
+<span id="cb151-3">lst</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$number
+[1] 1 2
+
+$logical
+[1] TRUE
+
+$strings
+[1] "a" "b" "c"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb153" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1">lst<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>number</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2</code></pre>
+</div>
+</div>
+<p>用单中括号和双中括号提取列表元素</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb155" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1">lst[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$number
+[1] 1 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb157" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(lst[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb159" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1">lst[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb161" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb161-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">typeof</span>(lst[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>使用单中括号提取一个列表对象的自己，R返回一个列表对象。使用双中括号，R返回元素值。</p>
+</div>
+</div>
+<p>忽然想到的一个提取例子：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb163" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb163-1">lst[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$number
+[1] 1 2
+
+$logical
+[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb165" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1">lst[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第5章-对象改值" class="level1">
+<h1>第5章 对象改值</h1>
+<section id="就地改值" class="level2">
+<h2 class="anchored" data-anchor-id="就地改值">5.1 就地改值</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb167" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1">vec <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb167-2"></span>
+<span id="cb167-3">vec[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb169" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1">vec[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span></span>
+<span id="cb169-2"></span>
+<span id="cb169-3">vec</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1000    0    0    0    0    0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb171" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb171-1">vec[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb171-2"></span>
+<span id="cb171-3">vec</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 0 1 0 1 0</code></pre>
+</div>
+</div>
+<p>创建一个原先对象中并不存在的新值。R会自动将对象的长度延伸以适应这个新值。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb173" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb173-1">vec[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span></span>
+<span id="cb173-2">vec</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 0 1 0 1 0 7</code></pre>
+</div>
+</div>
+<p>使用$为数据集添加新变量：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb175" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1">deck2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> deck</span>
+<span id="cb175-2"></span>
+<span id="cb175-3">deck2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>new <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">52</span></span>
+<span id="cb175-4"></span>
+<span id="cb175-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(deck2)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value new
+1  king spades    13   1
+2 queen spades    12   2
+3  jack spades    11   3
+4   ten spades    10   4
+5  nine spades     9   5
+6 eight spades     8   6</code></pre>
+</div>
+</div>
+<p>将NULL赋予一个变量，就可以删除这个变量了。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb177" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1">deck2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>new <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb177-2"></span>
+<span id="cb177-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(deck2)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8</code></pre>
+</div>
+</div>
+</section>
+<section id="逻辑值取子集" class="level2">
+<h2 class="anchored" data-anchor-id="逻辑值取子集">5.2 逻辑值取子集</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb179" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb179-1">vec <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span>
+<span id="cb179-2">vec[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<p>逻辑向量和需要取子集的向量等长。</p>
+<section id="逻辑测试" class="level3">
+<h3 class="anchored" data-anchor-id="逻辑测试">5.2.1 逻辑测试</h3>
+<table class="table">
+<caption>R的7种逻辑运算符</caption>
+<thead>
+<tr class="header">
+<th>运算符</th>
+<th>语法</th>
+<th>判别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&gt;</td>
+<td>a &gt; b</td>
+<td>a是否大于b？</td>
+</tr>
+<tr class="even">
+<td>&gt;=</td>
+<td>a &gt;= b</td>
+<td>大于等于</td>
+</tr>
+<tr class="odd">
+<td>&lt;</td>
+<td>a &lt; b</td>
+<td>小于</td>
+</tr>
+<tr class="even">
+<td>&lt;=</td>
+<td>a &lt;= b</td>
+<td>小于等于</td>
+</tr>
+<tr class="odd">
+<td>==</td>
+<td>a == b</td>
+<td>等于</td>
+</tr>
+<tr class="even">
+<td>!=</td>
+<td>a != b</td>
+<td>不等于</td>
+</tr>
+<tr class="odd">
+<td>%in%</td>
+<td>a %in% c(a, b, c)</td>
+<td>c(a, b, c)中是否包含a？</td>
+</tr>
+</tbody>
+</table>
+<p>向量化的运算符</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb181" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb183" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb185" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE FALSE</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>%in%是唯一不进行一一对比的运算符。如果左边提供一个向量，%in%会独立测试左边向量中的元素是否出现在右边向量中。</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb187" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb189" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb191" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb193" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE  TRUE</code></pre>
+</div>
+</div>
+<p>看到这里，发现作者对例子都是精挑细选的，上面的例子，左边向量长度分别从1到4，右边是3，没有变，注意比较输出结果的差异。</p>
+</section>
+<section id="布尔运算符" class="level3">
+<h3 class="anchored" data-anchor-id="布尔运算符">5.2.2 布尔运算符</h3>
+<p>布尔运算符可以将多个逻辑测试的结果整合并输出为一个TRUE或FALSE。R有六种布尔运算符。</p>
+<table class="table">
+<caption>R的布尔运算符</caption>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 43%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>运算符</th>
+<th>语法</th>
+<th>判别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&amp;</td>
+<td>cond1 &amp; cond2</td>
+<td>与</td>
+</tr>
+<tr class="even">
+<td>｜</td>
+<td>cond1 | cond2</td>
+<td>或</td>
+</tr>
+<tr class="odd">
+<td>!</td>
+<td>! cond1</td>
+<td>非</td>
+</tr>
+<tr class="even">
+<td>any</td>
+<td>any(cond1, cond2, cond3, …)</td>
+<td>所有条件，是否至少一个为真？</td>
+</tr>
+<tr class="odd">
+<td>all</td>
+<td>all(cond1, cond2, cond3, …)</td>
+<td>所有条件，是否同时为真？</td>
+</tr>
+<tr class="even">
+<td>xor</td>
+<td>xor(cond1, cond2)</td>
+<td>cond1和cond2是否只有一个为真？</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb195" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># xor很陌生，看看例子</span></span>
+<span id="cb195-2"></span>
+<span id="cb195-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">xor</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb197" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb197-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">xor</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb199" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb199-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">xor</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb201" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">xor</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>向量化的布尔运算符</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb203" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb203-2">b <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb203-3">c <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>)</span>
+<span id="cb203-4"></span>
+<span id="cb203-5">a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> b</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb205" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1">b <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> c</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb207" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1">a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> b <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> b <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> c</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE  TRUE FALSE</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="缺失信息" class="level2">
+<h2 class="anchored" data-anchor-id="缺失信息">5.3 缺失信息</h2>
+<p>R用特殊字符NA代表“不可用”（Not Available），可用于存储缺失信息。NA具有传染性。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb209" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb209-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb211" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb211-1"><span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<section id="na.rm" class="level3">
+<h3 class="anchored" data-anchor-id="na.rm">5.3.1 na.rm</h3>
+<p>去掉缺失信息</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb213" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] NA  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+[26] 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
+[51] 50</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb215" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb215-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb217" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb217-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25.5</code></pre>
+</div>
+</div>
+</section>
+<section id="is.na" class="level3">
+<h3 class="anchored" data-anchor-id="is.na">5.3.2 is.na</h3>
+<p>判断是否是NA</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>不能用==来判断NA</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb219" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb219-1"><span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb221" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb221-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA NA NA NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb223" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb223-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.na</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb225" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb225-1">vec <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>)</span>
+<span id="cb225-2"></span>
+<span id="cb225-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.na</span>(vec)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="第6章-r的环境系统" class="level1">
+<h1>第6章 R的环境系统</h1>
+<p>这一张作者讲的非常好，用目录树的结构来形象的比喻了R的环境系统。</p>
+<p>建议查看原文全文。这里列出几个重要的知识点。</p>
+<section id="操作r环境" class="level2">
+<h2 class="anchored" data-anchor-id="操作r环境">6.2 操作R环境</h2>
+<p>全局环境（R_GlobalEnv），最底层的环境，可以看到我创建的对象基本都在全局环境下。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb227" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb227-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ls</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">globalenv</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "a"      "ar"     "b"      "bar"    "c"      "comp"   "deck"   "deck2" 
+ [9] "df"     "die"    "five"   "foo"    "gender" "list1"  "logic"  "lst"   
+[17] "m"      "new"    "now"    "roll"   "roll2"  "text"   "vec"   </code></pre>
+</div>
+</div>
+<p>空环境，空环境没有父环境，相当于根目录了。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb229" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb229-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ls</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">emptyenv</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>character(0)</code></pre>
+</div>
+</div>
+<p>在某个环境中，提取另一环境的变量</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb231" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb231-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">globalenv</span>()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8</code></pre>
+</div>
+</div>
+<p>在某个环境中，将对象存到另一个环境</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb233" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb233-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assign</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"new"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Hello Global"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">envir =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">globalenv</span>())</span>
+<span id="cb233-2"></span>
+<span id="cb233-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">globalenv</span>()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>new</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Hello Global"</code></pre>
+</div>
+</div>
+<p>活动环境</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb235" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb235-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 当前就在R_GlobalEnv下</span></span>
+<span id="cb235-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">environment</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;environment: R_GlobalEnv&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="作用域规则" class="level2">
+<h2 class="anchored" data-anchor-id="作用域规则">6.3 作用域规则</h2>
+<p>在搜索对象时，R会遵循一系列的规则。这些规则被称作R的作用域规则（scoping rules）。</p>
+<ol type="1">
+<li>R首先在当前的活动环境中搜索对象</li>
+<li>在命令行中工作时，活动环境就是全局环境</li>
+<li>当R在某个环境中没有搜索到对象时，R会进入该环境的父环境。如果还是没有，再进入父环境的父环境，以此类推</li>
+</ol>
+</section>
+<section id="函数求值" class="level2">
+<h2 class="anchored" data-anchor-id="函数求值">6.4 函数求值</h2>
+<p>R在每一次函数求值时，都会创建一个新环境，然后带着运行结果回到调用该函数时的环境。</p>
+<p>函数内创建的对象的环境时单独的，所以不会覆盖已经存在的对象。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb237" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb237-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I'm in R_GlobalEnv"</span></span>
+<span id="cb237-2">a</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "I'm in R_GlobalEnv"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb239" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb239-1">show_env <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(){</span>
+<span id="cb239-2">  a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I'm in show_env."</span></span>
+<span id="cb239-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'show_env函数内的环境：'</span>)</span>
+<span id="cb239-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">environment</span>())</span>
+<span id="cb239-5">  </span>
+<span id="cb239-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'show_env函数的父环境：'</span>)</span>
+<span id="cb239-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">parent.env</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">environment</span>()))</span>
+<span id="cb239-8">  </span>
+<span id="cb239-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'列出show_env环境下的对象'</span>)</span>
+<span id="cb239-10">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ls</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">environment</span>())</span>
+<span id="cb239-11">  a</span>
+<span id="cb239-12">}</span>
+<span id="cb239-13"></span>
+<span id="cb239-14"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">show_env</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "show_env函数内的环境："
+&lt;environment: 0x7fa86738cb90&gt;
+[1] "show_env函数的父环境："
+&lt;environment: R_GlobalEnv&gt;
+[1] "列出show_env环境下的对象"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "I'm in show_env."</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb242" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb242-1">a</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "I'm in R_GlobalEnv"</code></pre>
+</div>
+</div>
+<p>R会将一个函数的运行时环境与第一次创建该函数时所在的环境相连接。该函数的所有运行环境都将其作为父环境。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb244" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb244-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">environment</span>(show_env)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;environment: R_GlobalEnv&gt;</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R是如何对待函数求值的？</p>
+<p>当你调用一个函数之前，R是在活动环境中工作。我们可以将此活动环境称为调用环境（calling environment）。R会从该环境中调用函数。</p>
+<p>调用这个函数时，R会创建一个新的运行时环境。这个环境是调用环境的子环境，也就是说调用环境是这个环境的父环境。R会将该函数的所有参数赋值到运行环境中，然后将运行时环境作为当前的活动环境。</p>
+<p>接着，R会运行函数主体中的代码。如果代码创建了任何对象，R会将它们存储在活动环境中，也就是运行时环境。如果R调用了某些对象，遵循作用域规则搜索这些对象：首先搜索运行时环境，如果没有搜索父环境，还是没有搜索父环境的父环境，以此类推。</p>
+<p>最后，当R完成函数运行时，它会将活动环境切换为调用环境。如果将函数运行的结果用赋值符&lt;-赋给某个对象，那么这个新对象会存储在调用环境中。</p>
+</div>
+</div>
+<p>如果对象是数据框，也是同样对待的。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb246" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb246-1">df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb246-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"six"</span>),</span>
+<span id="cb246-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">suit =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"clubs"</span>),</span>
+<span id="cb246-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">value =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb246-5">)</span>
+<span id="cb246-6">df</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face  suit value
+1  ace clubs     1
+2  two clubs     2
+3  six clubs     3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb248" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb248-1">test_env <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(x){</span>
+<span id="cb248-2">  x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>face <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ace"</span>)</span>
+<span id="cb248-3">  x</span>
+<span id="cb248-4">}</span>
+<span id="cb248-5"></span>
+<span id="cb248-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">test_env</span>(df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face  suit value
+1  ace clubs     1
+2  ace clubs     2
+3  ace clubs     3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb250" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb250-1">df</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  face  suit value
+1  ace clubs     1
+2  two clubs     2
+3  six clubs     3</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第7章-程序" class="level1">
+<h1>第7章 程序</h1>
+<section id="策略" class="level2">
+<h2 class="anchored" data-anchor-id="策略">7.1 策略</h2>
+<p>有三个简单的策略可以简化编程任务：</p>
+<ol type="1">
+<li>将复杂任务分解为一些简单的字任务</li>
+<li>使用实例</li>
+<li>用通俗的语言描述解决方案，然后将其转换成R代码</li>
+</ol>
+</section>
+<section id="if语句" class="level2">
+<h2 class="anchored" data-anchor-id="if语句">7.2 if语句</h2>
+<p>if语法</p>
+<pre><code>if (this) {
+  that
+}</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb253" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb253-1">num <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span></span>
+<span id="cb253-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (num <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) {</span>
+<span id="cb253-3">  num <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> num <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb253-4">}</span>
+<span id="cb253-5">num</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+</div>
+<section id="else语句" class="level3">
+<h3 class="anchored" data-anchor-id="else语句">7.3 else语句</h3>
+<p>else语法</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb255" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb255-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (this) {</span>
+<span id="cb255-2">  Plan A</span>
+<span id="cb255-3">} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span> {</span>
+<span id="cb255-4">  Plan B</span>
+<span id="cb255-5">}</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb256" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb256-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3.14</span></span>
+<span id="cb256-2">dec <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trunc</span>(a)</span>
+<span id="cb256-3">dec</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.14</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb258" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb258-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (dec <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>) {</span>
+<span id="cb258-2">  a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trunc</span>(a) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb258-3">} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span> {</span>
+<span id="cb258-4">  a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trunc</span>(a)</span>
+<span id="cb258-5">}</span>
+<span id="cb258-6"></span>
+<span id="cb258-7">a</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<p>else if 语法</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb260" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb260-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (this) {</span>
+<span id="cb260-2">  Plan A</span>
+<span id="cb260-3">} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (that) {</span>
+<span id="cb260-4">  Plan B</span>
+<span id="cb260-5">} <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span> {</span>
+<span id="cb260-6">  Plan C</span>
+<span id="cb260-7">}</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="查找表" class="level2">
+<h2 class="anchored" data-anchor-id="查找表">7.4 查找表</h2>
+<p>有点像python里的字典</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb261" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb261-1">ages <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Min"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">22</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"King"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">33</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Jeo"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">34</span>)</span>
+<span id="cb261-2"></span>
+<span id="cb261-3">ages[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Min'</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Min 
+ 22 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb263" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb263-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unname</span>(ages[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Min"</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 22</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb265" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb265-1">ages[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Min"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Min"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Jeo"</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Min Min Jeo 
+ 22  22  34 </code></pre>
+</div>
+</div>
+</section>
+<section id="代码注释" class="level2">
+<h2 class="anchored" data-anchor-id="代码注释">7.5 代码注释</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb267" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb267-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 我就是一行注释，用井号打头</span></span>
+<span id="cb267-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 注释的作用是对某些代码进行解释</span></span>
+<span id="cb267-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 好的注释不是直白的说代码在做什么</span></span>
+<span id="cb267-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 好的注释总结代码的意图，让人看了很明了</span></span>
+<span id="cb267-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 好吧，我承认这里注释写的有点多了</span></span>
+<span id="cb267-6"></span>
+<span id="cb267-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 计算n的阶乘</span></span>
+<span id="cb267-8">fac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(n) {</span>
+<span id="cb267-9">  f <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb267-10">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>n){</span>
+<span id="cb267-11">    f <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> f <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> i</span>
+<span id="cb267-12">  }</span>
+<span id="cb267-13">  f</span>
+<span id="cb267-14">}</span>
+<span id="cb267-15"></span>
+<span id="cb267-16"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fac</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 120</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第8章-s3" class="level1">
+<h1>第8章 S3</h1>
+<section id="s3系统" class="level2">
+<h2 class="anchored" data-anchor-id="s3系统">8.1 S3系统</h2>
+<p>S3指的是R自带的类系统。这个系统掌管着R如何处理具有不同类的对象。一些函数会首先查询对象的S3类，再根据其类属性作出相应的响应。</p>
+<p>print就是这样一个函数。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb269" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb269-1">num <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000000000</span></span>
+<span id="cb269-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(num)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1e+09</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb271" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb271-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(num) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"POSIXct"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"POSIXt"</span>)</span>
+<span id="cb271-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(num)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2001-09-09 09:46:40 CST"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>之前觉得很神奇，原来是这么回事！</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R的S3系统有三个组成部分：</p>
+<ol type="1">
+<li>属性（attribute），尤其是class属性</li>
+<li>泛型函数（generic function）</li>
+<li>方法（method）</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="属性-1" class="level2">
+<h2 class="anchored" data-anchor-id="属性-1">8.2 属性</h2>
+<p>在3.2节中，讲到了R对象都具有的属性（名称，维度，类），这些属性包含了关于这个对象的某些额外信息并且被赋予了属性名称，附加在该对象上。属性不会影响对象的实际取值，但是作为该对象的某种类型的元数据，可以被R用于控制和管理这个对象。</p>
+<p>使用attributes函数查看属性</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb273" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb273-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$names
+[1] "face"  "suit"  "value"
+
+$class
+[1] "data.frame"
+
+$row.names
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+[51] 51 52</code></pre>
+</div>
+</div>
+<p>R提供可很多辅助函数，可以帮忙设置和查看一些常见的属性</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb275" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb275-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 名称属性</span></span>
+<span id="cb275-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "face"  "suit"  "value"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb277" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb277-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 维度属性</span></span>
+<span id="cb277-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dim</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 52  3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb279" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb279-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 类属性</span></span>
+<span id="cb279-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb281" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb281-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 行名属性</span></span>
+<span id="cb281-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">row.names</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"
+[16] "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30"
+[31] "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "43" "44" "45"
+[46] "46" "47" "48" "49" "50" "51" "52"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb283" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb283-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 或者给对象添加一个新属性</span></span>
+<span id="cb283-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">levels</span>(deck) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"level 1"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"level 2"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"level 3"</span>)</span>
+<span id="cb283-3"></span>
+<span id="cb283-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$names
+[1] "face"  "suit"  "value"
+
+$class
+[1] "data.frame"
+
+$row.names
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+[51] 51 52
+
+$levels
+[1] "level 1" "level 2" "level 3"</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>在对待属性方面，R持放任主义态度。R允许你为某个对象添加你觉得必要的属性（R会忽略大多数属性）。只有在某个函数需要找到某个属性却又找不到时，R才会抱怨。</p>
+</div>
+</div>
+<p>可以利用attr函数个某个对象添加<strong>任何</strong>属性。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb285" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb285-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb285-2"></span>
+<span id="cb285-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(a)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb287" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb287-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attr</span>(a, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"symbol"</span>) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"one"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"three"</span>)</span>
+<span id="cb287-2"></span>
+<span id="cb287-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attr</span>(a, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pinyin"</span>) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"yi"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"er"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"san"</span>)</span>
+<span id="cb287-4"></span>
+<span id="cb287-5">a</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3
+attr(,"symbol")
+[1] "one"   "two"   "three"
+attr(,"pinyin")
+[1] "yi"  "er"  "san"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb289" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb289-1">a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 3 4
+attr(,"symbol")
+[1] "one"   "two"   "three"
+attr(,"pinyin")
+[1] "yi"  "er"  "san"</code></pre>
+</div>
+</div>
+<p>structure函数可以创建带有一组属性的R对象。该函数第一个参数是对象或者对象的取值，其余参数是属性。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb291" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb291-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">structure</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">symbol =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"one"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"three"</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3
+attr(,"symbol")
+[1] "one"   "two"   "three"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb293" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb293-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">structure</span>(a, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lalala =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"happy"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"every"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"day"</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3
+attr(,"symbol")
+[1] "one"   "two"   "three"
+attr(,"pinyin")
+[1] "yi"  "er"  "san"
+attr(,"lalala")
+[1] "happy" "every" "day"  </code></pre>
+</div>
+</div>
+</section>
+<section id="泛型函数" class="level2">
+<h2 class="anchored" data-anchor-id="泛型函数">8.3 泛型函数</h2>
+<p>重点中的重点来了</p>
+<p>刚才提到print函数是泛型函数。每次在控制台显示输出也是调用print函数</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb295" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb295-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(deck)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb297" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb297-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(deck))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb299" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb299-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(now)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-03-14 22:57:59 CST"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb301" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb301-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+</div>
+<p>你可能会觉得print会查找某个对象的类属性，再根据类属性的不同，使用一个if语句分配合理的输出。作者说很好，其实print的实现方式更简单。往下看👀</p>
+</section>
+<section id="方法" class="level2">
+<h2 class="anchored" data-anchor-id="方法">8.4 方法</h2>
+<p>看看print的代码，它其实调用了一个特别的函数，叫做UseMethod。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb303" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb303-1">print</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (x, ...) 
+UseMethod("print")
+&lt;bytecode: 0x7fa865dea5e8&gt;
+&lt;environment: namespace:base&gt;</code></pre>
+</div>
+</div>
+<p>head函数也是调用了UseMethod。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb305" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb305-1">head</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (x, ...) 
+UseMethod("head")
+&lt;bytecode: 0x7fa8649e6870&gt;
+&lt;environment: namespace:utils&gt;</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>UseMethod检查你提供给print函数第一个参数的类属性，然后再将你所提供的待输出的对象交给一个新函数处理。比如提供一个POSIXct对象，就交给print.POSIXct函数；提供一个factor对象，就交给print.factor函数。</p>
+<p>print.POSIXct和print.factor被称为print函数的方法（method）。这两个函数是普通函数，特别之处是UseMethod会调用它们处理对应的类。</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb307" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb307-1">print.POSIXct</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (x, tz = "", usetz = TRUE, max = NULL, ...) 
+{
+    if (is.null(max)) 
+        max &lt;- getOption("max.print", 9999L)
+    FORM &lt;- if (missing(tz)) 
+        function(z) format(z, usetz = usetz)
+    else function(z) format(z, tz = tz, usetz = usetz)
+    if (max &lt; length(x)) {
+        print(FORM(x[seq_len(max)]), max = max + 1, ...)
+        cat(" [ reached 'max' / getOption(\"max.print\") -- omitted", 
+            length(x) - max, "entries ]\n")
+    }
+    else if (length(x)) 
+        print(FORM(x), max = max, ...)
+    else cat(class(x)[1L], "of length 0\n")
+    invisible(x)
+}
+&lt;bytecode: 0x7fa86922b5f0&gt;
+&lt;environment: namespace:base&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb309" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb309-1">print.factor</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (x, quote = FALSE, max.levels = NULL, width = getOption("width"), 
+    ...) 
+{
+    ord &lt;- is.ordered(x)
+    if (length(x) == 0L) 
+        cat(if (ord) 
+            "ordered"
+        else "factor", "()\n", sep = "")
+    else {
+        xx &lt;- character(length(x))
+        xx[] &lt;- as.character(x)
+        keepAttrs &lt;- setdiff(names(attributes(x)), c("levels", 
+            "class"))
+        attributes(xx)[keepAttrs] &lt;- attributes(x)[keepAttrs]
+        print(xx, quote = quote, ...)
+    }
+    maxl &lt;- if (is.null(max.levels)) 
+        TRUE
+    else max.levels
+    if (maxl) {
+        n &lt;- length(lev &lt;- encodeString(levels(x), quote = ifelse(quote, 
+            "\"", "")))
+        colsep &lt;- if (ord) 
+            " &lt; "
+        else " "
+        T0 &lt;- "Levels: "
+        if (is.logical(maxl)) 
+            maxl &lt;- {
+                width &lt;- width - (nchar(T0, "w") + 3L + 1L + 
+                  3L)
+                lenl &lt;- cumsum(nchar(lev, "w") + nchar(colsep, 
+                  "w"))
+                if (n &lt;= 1L || lenl[n] &lt;= width) 
+                  n
+                else max(1L, which.max(lenl &gt; width) - 1L)
+            }
+        drop &lt;- n &gt; maxl
+        cat(if (drop) 
+            paste(format(n), ""), T0, paste(if (drop) 
+            c(lev[1L:max(1, maxl - 1)], "...", if (maxl &gt; 1) lev[n])
+        else lev, collapse = colsep), "\n", sep = "")
+    }
+    if (!isTRUE(val &lt;- .valid.factor(x))) 
+        warning(val)
+    invisible(x)
+}
+&lt;bytecode: 0x7fa8635f9438&gt;
+&lt;environment: namespace:base&gt;</code></pre>
+</div>
+</div>
+<p>使用methods函数可以查看泛型函数所支持的方法。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb311" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb311-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># medhods(print)的输出太长了，可以自己试试</span></span>
+<span id="cb311-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">methods</span>(head)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] head.array*      head.data.frame* head.default*    head.ftable*    
+[5] head.function*   head.matrix     
+see '?methods' for accessing help and source code</code></pre>
+</div>
+</div>
+<p>c，+，-和&lt;等，其工作方式也类似于泛型函数，只是它们不会调用UseMethod函数，而会调用.primitive函数。简直就是魔法。</p>
+<p>可以自己写一个S3风格的函数，对于特定对象，做特定的处理。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb313" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb313-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span></span>
+<span id="cb313-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(a) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"life"</span></span>
+<span id="cb313-3"></span>
+<span id="cb313-4">print.life <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(x) {</span>
+<span id="cb313-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"I miss you!"</span>)</span>
+<span id="cb313-6">}</span>
+<span id="cb313-7"></span>
+<span id="cb313-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attributes</span>(a)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$class
+[1] "life"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb315" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb315-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(a)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "I miss you!"</code></pre>
+</div>
+</div>
+</section>
+<section id="类-1" class="level2">
+<h2 class="anchored" data-anchor-id="类-1">8.5 类</h2>
+<p>可以利用R的S3系统为对象新建一个稳健的类（class）。R会以一致且合理的方式对待同属一类的对象。要想创建一个类，应该执行以下操作：</p>
+<ol type="1">
+<li>给类起一个名称</li>
+<li>给属于该类的每个对象赋class属性</li>
+<li>为属于该类的对象编写常用泛型函数的类方法</li>
+</ol>
+<p>查看某个类的方法：</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb317" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb317-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">methods</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">class =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"factor"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] [             [[            [[&lt;-          [&lt;-           all.equal    
+ [6] as.character  as.data.frame as.Date       as.list       as.logical   
+[11] as.POSIXlt    as.vector     c             coerce        droplevels   
+[16] format        initialize    is.na&lt;-       length&lt;-      levels&lt;-     
+[21] Math          Ops           plot          print         relevel      
+[26] relist        rep           show          slotsFromS3   summary      
+[31] Summary       xtfrm        
+see '?methods' for accessing help and source code</code></pre>
+</div>
+</div>
+</section>
+<section id="s4和r5" class="level2">
+<h2 class="anchored" data-anchor-id="s4和r5">8.7 S4和R5</h2>
+<p>S4和R5是R另外两个可以用来创建类属性行为的系统。使用难度更大，参考 Hadley Wickham 的《Advanced R Programming》。</p>
+</section>
+</section>
+<section id="第9章-循环" class="level1">
+<h1>第9章 循环</h1>
+<section id="expand.grid" class="level2">
+<h2 class="anchored" data-anchor-id="expand.grid">9.2 expand.grid</h2>
+<p>expand.grid可以方便快捷地写出n个向量元素的所有组合。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb319" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb319-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"one"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"two"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"three"</span>)</span>
+<span id="cb319-2">b <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apple"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bananna"</span>)</span>
+<span id="cb319-3"></span>
+<span id="cb319-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">expand.grid</span>(a, b)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Var1    Var2
+1   one   apple
+2   two   apple
+3 three   apple
+4   one bananna
+5   two bananna
+6 three bananna</code></pre>
+</div>
+</div>
+</section>
+<section id="for循环" class="level2">
+<h2 class="anchored" data-anchor-id="for循环">9.3 for循环</h2>
+<p>语法</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb321" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb321-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (value <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> that) {</span>
+<span id="cb321-2">  this</span>
+<span id="cb321-3">}</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb322" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb322-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (word <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Today"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"is"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"thursday"</span>)) {</span>
+<span id="cb322-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(word)</span>
+<span id="cb322-3">}</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Today"
+[1] "is"
+[1] "thursday"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb324" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb324-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>) {</span>
+<span id="cb324-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(i)</span>
+<span id="cb324-3">}</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6</code></pre>
+</div>
+</div>
+</section>
+<section id="while循环" class="level2">
+<h2 class="anchored" data-anchor-id="while循环">9.4 while循环</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb326" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb326-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">while</span> (condition) {</span>
+<span id="cb326-2">  code</span>
+<span id="cb326-3">}</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb327" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb327-1">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb327-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">while</span> (n <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) {</span>
+<span id="cb327-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(n)</span>
+<span id="cb327-4">  n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> n <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb327-5">}</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3
+[1] 2
+[1] 1</code></pre>
+</div>
+</div>
+</section>
+<section id="repeat循环" class="level2">
+<h2 class="anchored" data-anchor-id="repeat循环">9.5 repeat循环</h2>
+<p>repeat会一直重复运行某段代码，直到你中止循环（按Esc），或遇到了break命令。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb329" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb329-1">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span>
+<span id="cb329-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">repeat</span> {</span>
+<span id="cb329-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(n)</span>
+<span id="cb329-4">  n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> n <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb329-5">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (n <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>){</span>
+<span id="cb329-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb329-7">  }</span>
+<span id="cb329-8">}</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3
+[1] 2
+[1] 1
+[1] 0</code></pre>
+</div>
+</div>
+</section>
+<section id="replicate函数" class="level2">
+<h2 class="anchored" data-anchor-id="replicate函数">9.6 replicate函数</h2>
+<p>replicate函数可以重复运行某段代码多少次。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb331" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb331-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">replicate</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'best'</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "best" "best" "best" "best" "best" "best" "best" "best" "best" "best"</code></pre>
+</div>
+</div>
+</section>
+<section id="第10章-代码提速" class="level2">
+<h2 class="anchored" data-anchor-id="第10章-代码提速">第10章 代码提速</h2>
+</section>
+<section id="向量化代码" class="level2">
+<h2 class="anchored" data-anchor-id="向量化代码">10.1 向量化代码</h2>
+<p>快速的R代码经常用到的三大法宝：逻辑测试，取子集和按元素方式执行。</p>
+<p>看看下面这个例子，一个是用for循环的非向量化代码，一个是向量化代码。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb333" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb333-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for循环</span></span>
+<span id="cb333-2">abs_loop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(vec) {</span>
+<span id="cb333-3">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(vec)) {</span>
+<span id="cb333-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (vec[i] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) {</span>
+<span id="cb333-5">      vec[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>vec[i]</span>
+<span id="cb333-6">    }</span>
+<span id="cb333-7">  }</span>
+<span id="cb333-8">  vec</span>
+<span id="cb333-9">}</span>
+<span id="cb333-10"></span>
+<span id="cb333-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 向量化代码</span></span>
+<span id="cb333-12">abs_set <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(vec) {</span>
+<span id="cb333-13">  negs <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> vec <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb333-14">  vec[negs] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> vec[negs]</span>
+<span id="cb333-15">  vec</span>
+<span id="cb333-16">}</span>
+<span id="cb333-17"></span>
+<span id="cb333-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 生成一个很长的测试向量</span></span>
+<span id="cb333-19">long <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000000</span>)</span>
+<span id="cb333-20"></span>
+<span id="cb333-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 统计代码运行的实际</span></span>
+<span id="cb333-22"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.time</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs_loop</span>(long))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+  0.497   0.031   0.545 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb335" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb335-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.time</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs_set</span>(long))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+  0.196   0.046   0.250 </code></pre>
+</div>
+</div>
+<p>向量化代码比for循环快5倍，书中是快30倍，应该是新版的R把for循环优化了。</p>
+</section>
+<section id="如何编写向量化代码" class="level2">
+<h2 class="anchored" data-anchor-id="如何编写向量化代码">10.2 如何编写向量化代码</h2>
+<ol type="1">
+<li>对于程序中的有序步骤，使用向量化的函数来完成</li>
+<li>对于同类情况，使用逻辑值取子集的方式来处理</li>
+</ol>
+</section>
+<section id="如何在r中编写快速的for循环" class="level2">
+<h2 class="anchored" data-anchor-id="如何在r中编写快速的for循环">10.3 如何在R中编写快速的for循环</h2>
+<p>做两件事可以改善for循环的效率：</p>
+<ol type="1">
+<li>能放在for循环外的代码，不要放在for循环里</li>
+<li>确保用来存储循环输出结果的对象必须具备足够的容量</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb337" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb337-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.time</span>({</span>
+<span id="cb337-2">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 这句代码是关键，给output预先分配了足够的容量</span></span>
+<span id="cb337-3">  output <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000000</span>)</span>
+<span id="cb337-4">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000000</span>) {</span>
+<span id="cb337-5">    output[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb337-6">  }</span>
+<span id="cb337-7">})</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+  0.045   0.004   0.052 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb339" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb339-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.time</span>({</span>
+<span id="cb339-2">  output <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span><span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span></span>
+<span id="cb339-3">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000000</span>) {</span>
+<span id="cb339-4">    output[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb339-5">  }</span>
+<span id="cb339-6">})</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+  0.297   0.114   0.460 </code></pre>
+</div>
+</div>
+<p>为什么第二段慢呢？在第二段代码中，循环每前进一步，都要为output在内存中寻找位置，以存放新的变大的output。第一段代码没有这个问题，直接放。</p>
+<p>到这里这本书就结束了，如果你觉得不错，请在下面点赞👍或评论支持吧😄</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://chenminicode.github.io/posts/2024-03-10-hands-on-programming-with-R/</guid>
+  <pubDate>Sun, 10 Mar 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>使用Github的Snakemake流程</title>
   <dc:creator>metseq </dc:creator>

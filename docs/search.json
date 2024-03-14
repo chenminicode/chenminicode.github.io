@@ -147,6 +147,293 @@
     "text": "3.6 Write k-means function\n\ndef kmeans(X, k, n):\n    # init means\n    perm = torch.randperm(X.size(0))\n    idx = perm[:k]\n    means = X[idx].clone()\n\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n    \n    return means\n\n\nmeans = kmeans(X, 6, 10)\n\n\nplot_data(means, data, 250)"
   },
   {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html",
+    "title": "《R语言入门与实践》摘要",
+    "section": "",
+    "text": "看《R for Data Science》的时候，Hadley Wickham推荐了这本书《Hands-On Programming with R》，中文译名是《R语言入门与实践》。这本书关注的是R语言作为语言的基础，基本不涉及统计，我对R语言的了解基本是调用demo代码的时候，自己感觉的，缺少对R语言作为语言的整体了解，所以这本书是我需要的。"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#对象",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#对象",
+    "title": "《R语言入门与实践》摘要",
+    "section": "1.2 对象",
+    "text": "1.2 对象\n对象，就是一个名称而已，在R中存储的数据就是一个R对象。\n\ndie &lt;- 1:6\ndie\n\n[1] 1 2 3 4 5 6\n\n\n元素方式执行（element-wise execution）\n\ndie - 1\n\n[1] 0 1 2 3 4 5\n\ndie / 2\n\n[1] 0.5 1.0 1.5 2.0 2.5 3.0\n\ndie * die\n\n[1]  1  4  9 16 25 36\n\n\n矩阵内乘法\n\ndie %*% die\n\n     [,1]\n[1,]   91\n\n\n矩阵外乘法\n\ndie %o% die\n\n     [,1] [,2] [,3] [,4] [,5] [,6]\n[1,]    1    2    3    4    5    6\n[2,]    2    4    6    8   10   12\n[3,]    3    6    9   12   15   18\n[4,]    4    8   12   16   20   24\n[5,]    5   10   15   20   25   30\n[6,]    6   12   18   24   30   36"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数",
+    "title": "《R语言入门与实践》摘要",
+    "section": "1.3 函数",
+    "text": "1.3 函数\n函数调用\n\nsample(x = die, size = 1)\n\n[1] 1\n\n\n查看函数参数\n\nargs(sample)\n\nfunction (x, size, replace = FALSE, prob = NULL) \nNULL"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#可放回抽样",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#可放回抽样",
+    "title": "《R语言入门与实践》摘要",
+    "section": "1.4 可放回抽样",
+    "text": "1.4 可放回抽样\n\nsample(die, size = 10, replace = TRUE)\n\n [1] 5 3 2 5 4 2 5 4 3 1"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#编写自定义函数",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#编写自定义函数",
+    "title": "《R语言入门与实践》摘要",
+    "section": "1.5 编写自定义函数",
+    "text": "1.5 编写自定义函数\n\nroll &lt;- function(){\n  die &lt;- 1:6\n  dice &lt;- sample(die, size = 2, replace = TRUE)\n  sum(dice)\n}\n\nroll()\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数参数",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数参数",
+    "title": "《R语言入门与实践》摘要",
+    "section": "1.6 函数参数",
+    "text": "1.6 函数参数\n\nroll2 &lt;- function(bones = 1:6){\n  dice &lt;- sample(bones, size = 2, replace = TRUE)\n  sum(dice)\n}\n\nroll2()\n\n[1] 4"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#原子型向量",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#原子型向量",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.1 原子型向量",
+    "text": "3.1 原子型向量\n原子型向量就是最简单的包含数据的向量。\n比如之前的`die`\n\ndie &lt;- 1:6\ndie\n\n[1] 1 2 3 4 5 6\n\nis.vector(die)\n\n[1] TRUE\n\n\n至包含一个值的原子型向量\n\nfive &lt;- 5\nfive\n\n[1] 5\n\nis.vector(five)\n\n[1] TRUE\n\n\n\n\n\n\n\n\nTip\n\n\n\n🤔R竟然把一个整数存成了长度为1的向量，理解向量是理解R语言的关键。\n\n\nR可以识别6种基本类型的原子型向量：\n\n双整型（double）\n整型（integer）\n字符型（character）\n逻辑型（logical）\n复数类型（complex）\n原始类型（raw）\n\n\n3.1.1 双整型\n\ndie &lt;- c(1, 2, 3, 4, 5, 6)\ndie\n\n[1] 1 2 3 4 5 6\n\ntypeof(die)\n\n[1] \"double\"\n\n\n\n\n3.1.2 整型\n\nfoo &lt;- c(-1L, 2L, 4L)\nfoo\n\n[1] -1  2  4\n\ntypeof(foo)\n\n[1] \"integer\"\n\n\n浮点误差\n\nsqrt(2)^2 - 2\n\n[1] 4.440892e-16\n\n\n\n\n3.1.3 字符型\n\ntext &lt;- c(\"Hello\", \"World\")\ntext\n\n[1] \"Hello\" \"World\"\n\ntypeof(text)\n\n[1] \"character\"\n\n\n\n\n3.1.4 逻辑型\n\n3 &gt; 4\n\n[1] FALSE\n\nlogic &lt;- c(TRUE, FALSE, TRUE)\nlogic\n\n[1]  TRUE FALSE  TRUE\n\ntypeof(logic)\n\n[1] \"logical\"\n\n\n\n\n3.1.5 附属类型和原始类型\n\ncomp &lt;- c(1 + 1i, 1 + 2i, 1 + 3i)\ncomp\n\n[1] 1+1i 1+2i 1+3i\n\ntypeof(comp)\n\n[1] \"complex\"\n\n\n\nraw(3)\n\n[1] 00 00 00\n\ntypeof(raw(3))\n\n[1] \"raw\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#属性",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#属性",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.2 属性",
+    "text": "3.2 属性\n属性是附加给原始型向量的额外信息，可以将属性赋予一个原子型向量（或者任意一个R对象）。属性并不会影响这个数据的取值，在显示该对象时也不会出现属性信息。你可以把属性理解为对象的元数据（metadata）。\n\n\n\n\n\n\nImportant\n\n\n\n通常来说，R会选择忽略这些元数据信息，但某些R函数会检查是否附有某些特定的属性值。这些函数会根据该数据对象的特定属性信息决定是否进行某些特定的操作。\n\n\n\ndie &lt;- 1:6\nattributes(die)\n\nNULL\n\ndie\n\n[1] 1 2 3 4 5 6\n\n\n\n\n\n\n\n\nTip\n\n\n\nR用NULL表示空值，意即没有任何信息。这里就是没有属性的意思。\n\n\n可以自己生成一个NULL对象\n\nbar &lt;- 1:4\nbar\n\n[1] 1 2 3 4\n\nbar &lt;- NULL\nbar\n\nNULL\n\n\n原子型向量最常见的三种属性时：名称（name），维度（dim）和类（class）。\n\n3.2.1 名称属性\n\ndie &lt;- 1:6\n\n# 查询名称属性\nnames(die)\n\nNULL\n\n# 赋予名称属性\nnames(die) &lt;- c(\"one\", \"two\", \"three\", \"four\", \"five\", \"six\")\nnames(die)\n\n[1] \"one\"   \"two\"   \"three\" \"four\"  \"five\"  \"six\"  \n\nattributes(die)\n\n$names\n[1] \"one\"   \"two\"   \"three\" \"four\"  \"five\"  \"six\"  \n\n# 删除名称属性\nnames(die) &lt;- NULL\nnames(die)\n\nNULL\n\n\n\n\n3.2.2 维度属性\n通过赋予原子型向量维度属性，将其转成一个n维数组\n\ndie\n\n[1] 1 2 3 4 5 6\n\ndim(die) &lt;- c(2, 3)\ndie\n\n     [,1] [,2] [,3]\n[1,]    1    3    5\n[2,]    2    4    6"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#矩阵",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#矩阵",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.3 矩阵",
+    "text": "3.3 矩阵\n\nm &lt;- matrix(die, nrow = 2)\nm\n\n     [,1] [,2] [,3]\n[1,]    1    3    5\n[2,]    2    4    6"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#数组",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#数组",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.4 数组",
+    "text": "3.4 数组\n\n# 和dim效果差不多\nar &lt;- array(1:6, dim = c(2, 3))\nar\n\n     [,1] [,2] [,3]\n[1,]    1    3    5\n[2,]    2    4    6"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#类",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#类",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.5 类",
+    "text": "3.5 类\n更改对象的维度属性不会改变其类型，但是会改变这个对象的class属性。\n\ndie &lt;- 1:6\ntypeof(die)\n\n[1] \"integer\"\n\nclass(die)\n\n[1] \"integer\"\n\ndim(die) &lt;- c(2, 3)\ntypeof(die)\n\n[1] \"integer\"\n\nclass(die)\n\n[1] \"matrix\" \"array\" \n\nattributes(die)\n\n$dim\n[1] 2 3\n\n\n\n3.5.1 日期和时间\nR用一个特殊的类表示日期和时间数据。\n\nnow &lt;- Sys.time()\nnow\n\n[1] \"2024-03-14 22:57:59 CST\"\n\ntypeof(now)\n\n[1] \"double\"\n\nclass(now)\n\n[1] \"POSIXct\" \"POSIXt\" \n\n# 值是1970年1月1日零点（UTC）开始所逝去的秒数\nunclass(now)\n\n[1] 1710428280\n\n\n\n\n3.5.2 因子\n\ngender &lt;- factor(c(\"male\", \"female\", \"female\", \"male\"))\n\ntypeof(gender)\n\n[1] \"integer\"\n\nattributes(gender)\n\n$levels\n[1] \"female\" \"male\"  \n\n$class\n[1] \"factor\"\n\n# 用整数存储因子，整数对于相应level的标签\nunclass(gender)\n\n[1] 2 1 1 2\nattr(,\"levels\")\n[1] \"female\" \"male\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#强制转换",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#强制转换",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.6 强制转换",
+    "text": "3.6 强制转换\n顺序是：\n逻辑型 ——&gt; 数值型 ——&gt; 字符型\n也就是如果同时存在逻辑型和数值型，会转换成数值型，以此类推。"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#列表",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#列表",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.7 列表",
+    "text": "3.7 列表\n\nlist1 &lt;- list(100:130, \"R\", list(TRUE, FALSE))\nlist1\n\n[[1]]\n [1] 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118\n[20] 119 120 121 122 123 124 125 126 127 128 129 130\n\n[[2]]\n[1] \"R\"\n\n[[3]]\n[[3]][[1]]\n[1] TRUE\n\n[[3]][[2]]\n[1] FALSE"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#数据框",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#数据框",
+    "title": "《R语言入门与实践》摘要",
+    "section": "3.8 数据框",
+    "text": "3.8 数据框\n\ndf &lt;- data.frame(\n  face = c(\"ace\", \"two\", \"six\"),\n  suit = c(\"clubs\", \"clubs\", \"clubs\"),\n  value = c(1, 2, 3)\n)\ndf\n\n  face  suit value\n1  ace clubs     1\n2  two clubs     2\n3  six clubs     3\n\n\n\n\n\n\n\n\nTip\n\n\n\n创建列表或向量时，也可以命名\n\n\n\nlist(face = \"ace\", suit = \"hearts\", value = 1:6)\n\n$face\n[1] \"ace\"\n\n$suit\n[1] \"hearts\"\n\n$value\n[1] 1 2 3 4 5 6\n\nc(face = \"ace\", suit = \"hearts\", value = \"one\")\n\n    face     suit    value \n   \"ace\" \"hearts\"    \"one\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#值的选取",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#值的选取",
+    "title": "《R语言入门与实践》摘要",
+    "section": "4.1 值的选取",
+    "text": "4.1 值的选取\n要从一个数据框中提取某个值或某一组值，先写出该数据框的名称，在其后紧跟一堆中括号。中括号有两个参数，以逗号分隔。R用第一个索引参数选择行，第二个列。\n`deck[ 行, 列 ]`\n有6种创建索引参数的方式：\n\n正整数\n负整数\n零\n空格\n逻辑值\n名称\n\n\n4.1.1 正整数索引\n\ndeck &lt;- read.csv('deck.csv')\nhead(deck)\n\n   face   suit value\n1  king spades    13\n2 queen spades    12\n3  jack spades    11\n4   ten spades    10\n5  nine spades     9\n6 eight spades     8\n\n\n\ndeck[1, 1]\n\n[1] \"king\"\n\ndeck[1, c(1, 2, 3)]\n\n  face   suit value\n1 king spades    13\n\n\n\nnew &lt;- deck[1, c(1, 2, 3)]\nnew\n\n  face   suit value\n1 king spades    13\n\nnew[1, 3] &lt;- '100'\nnew\n\n  face   suit value\n1 king spades   100\n\ndeck[1, c(1, 2, 3)]\n\n  face   suit value\n1 king spades    13\n\n\n可以看到，new是一个副本，修改new并不会修改deck。\n\n# 重复值\ndeck[c(1, 1), c(1, 2, 3)]\n\n    face   suit value\n1   king spades    13\n1.1 king spades    13\n\n\n\n\n\n\n\n\nTip\n\n\n\n如果从一个数据框提取两列或以上，返回一个新的数据框。如果只提取一列，返回一个向量，可以添加drop = FALSE参数，仍返回数据框。\n\n\n\ndeck[1:2, 1]\n\n[1] \"king\"  \"queen\"\n\ndeck[1:2, 1, drop = FALSE]\n\n   face\n1  king\n2 queen\n\n\n\n\n4.1.2 负整数索引\nR返回不包含负整数索引对应的元素。注意，和python中切片的负整数不一样。\n\ndeck[-(2:52), 1:3]\n\n  face   suit value\n1 king spades    13\n\n-(1:6)\n\n[1] -1 -2 -3 -4 -5 -6\n\n\n\n\n4.1.3 零索引\n没什么用，返回一个空对象\n\n\n4.1.4 空格索引\n空格代表选取该维度的所有元素。\n\ndeck[1, ]\n\n  face   suit value\n1 king spades    13\n\n\n\n\n4.1.5 逻辑值索引\n\ndeck[1, c(TRUE, TRUE, FALSE)]\n\n  face   suit\n1 king spades\n\n\n\n\n4.1.6 名称索引\n\ndeck[1, c(\"face\", \"suit\", \"value\")]\n\n  face   suit value\n1 king spades    13\n\ndeck[ , \"value\"]\n\n [1] 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3  2\n[26]  1 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3\n[51]  2  1"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#美元符号与双中括号",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#美元符号与双中括号",
+    "title": "《R语言入门与实践》摘要",
+    "section": "4.4 美元符号与双中括号",
+    "text": "4.4 美元符号与双中括号\n使用$提取一列\n\ndeck$value\n\n [1] 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3  2\n[26]  1 13 12 11 10  9  8  7  6  5  4  3  2  1 13 12 11 10  9  8  7  6  5  4  3\n[51]  2  1\n\n\n\nmean(deck$value)\n\n[1] 7\n\nmedian(deck$value)\n\n[1] 7\n\n\n如果列表对象中的元素有名称，也可以用$提取。\n\nlst &lt;- list(number = c(1, 2), logical = TRUE, strings = c(\"a\", \"b\", \"c\"))\n\nlst\n\n$number\n[1] 1 2\n\n$logical\n[1] TRUE\n\n$strings\n[1] \"a\" \"b\" \"c\"\n\nlst$number\n\n[1] 1 2\n\n\n用单中括号和双中括号提取列表元素\n\nlst[1]\n\n$number\n[1] 1 2\n\ntypeof(lst[1])\n\n[1] \"list\"\n\n\n\nlst[[1]]\n\n[1] 1 2\n\ntypeof(lst[[1]])\n\n[1] \"double\"\n\n\n\n\n\n\n\n\nImportant\n\n\n\n使用单中括号提取一个列表对象的自己，R返回一个列表对象。使用双中括号，R返回元素值。\n\n\n忽然想到的一个提取例子：\n\nlst[1:2]\n\n$number\n[1] 1 2\n\n$logical\n[1] TRUE\n\nlst[[1]][2]\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#就地改值",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#就地改值",
+    "title": "《R语言入门与实践》摘要",
+    "section": "5.1 就地改值",
+    "text": "5.1 就地改值\n\nvec &lt;- c(0, 0, 0, 0, 0, 0)\n\nvec[1]\n\n[1] 0\n\nvec[1] &lt;- 1000\n\nvec\n\n[1] 1000    0    0    0    0    0\n\nvec[c(1, 3, 5)] &lt;- c(1, 1, 1)\n\nvec\n\n[1] 1 0 1 0 1 0\n\n\n创建一个原先对象中并不存在的新值。R会自动将对象的长度延伸以适应这个新值。\n\nvec[7] &lt;- 7\nvec\n\n[1] 1 0 1 0 1 0 7\n\n\n使用$为数据集添加新变量：\n\ndeck2 &lt;- deck\n\ndeck2$new &lt;- 1:52\n\nhead(deck2)\n\n   face   suit value new\n1  king spades    13   1\n2 queen spades    12   2\n3  jack spades    11   3\n4   ten spades    10   4\n5  nine spades     9   5\n6 eight spades     8   6\n\n\n将NULL赋予一个变量，就可以删除这个变量了。\n\ndeck2$new &lt;- NULL\n\nhead(deck2)\n\n   face   suit value\n1  king spades    13\n2 queen spades    12\n3  jack spades    11\n4   ten spades    10\n5  nine spades     9\n6 eight spades     8"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#逻辑值取子集",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#逻辑值取子集",
+    "title": "《R语言入门与实践》摘要",
+    "section": "5.2 逻辑值取子集",
+    "text": "5.2 逻辑值取子集\n\nvec &lt;- 1:4\nvec[c(FALSE, FALSE, TRUE, FALSE)]\n\n[1] 3\n\n\n逻辑向量和需要取子集的向量等长。\n\n5.2.1 逻辑测试\n\nR的7种逻辑运算符\n\n\n运算符\n语法\n判别\n\n\n\n\n&gt;\na &gt; b\na是否大于b？\n\n\n&gt;=\na &gt;= b\n大于等于\n\n\n&lt;\na &lt; b\n小于\n\n\n&lt;=\na &lt;= b\n小于等于\n\n\n==\na == b\n等于\n\n\n!=\na != b\n不等于\n\n\n%in%\na %in% c(a, b, c)\nc(a, b, c)中是否包含a？\n\n\n\n向量化的运算符\n\n1 &gt; 2\n\n[1] FALSE\n\n1 &gt; c(0, 1, 2)\n\n[1]  TRUE FALSE FALSE\n\nc(1, 2, 3) == c(3, 2, 1)\n\n[1] FALSE  TRUE FALSE\n\n\n\n\n\n\n\n\nImportant\n\n\n\n%in%是唯一不进行一一对比的运算符。如果左边提供一个向量，%in%会独立测试左边向量中的元素是否出现在右边向量中。\n\n\n\n1 %in% c(3, 4, 5)\n\n[1] FALSE\n\nc(1, 2) %in% c(3, 4, 5)\n\n[1] FALSE FALSE\n\nc(1, 2, 3) %in% c(3, 4, 5)\n\n[1] FALSE FALSE  TRUE\n\nc(1, 2, 3, 4) %in% c(3, 4, 5)\n\n[1] FALSE FALSE  TRUE  TRUE\n\n\n看到这里，发现作者对例子都是精挑细选的，上面的例子，左边向量长度分别从1到4，右边是3，没有变，注意比较输出结果的差异。\n\n\n5.2.2 布尔运算符\n布尔运算符可以将多个逻辑测试的结果整合并输出为一个TRUE或FALSE。R有六种布尔运算符。\n\nR的布尔运算符\n\n\n\n\n\n\n\n运算符\n语法\n判别\n\n\n\n\n&\ncond1 & cond2\n与\n\n\n｜\ncond1 | cond2\n或\n\n\n!\n! cond1\n非\n\n\nany\nany(cond1, cond2, cond3, …)\n所有条件，是否至少一个为真？\n\n\nall\nall(cond1, cond2, cond3, …)\n所有条件，是否同时为真？\n\n\nxor\nxor(cond1, cond2)\ncond1和cond2是否只有一个为真？\n\n\n\n\n# xor很陌生，看看例子\n\nxor(TRUE, TRUE)\n\n[1] FALSE\n\nxor(TRUE, FALSE)\n\n[1] TRUE\n\nxor(FALSE, FALSE)\n\n[1] FALSE\n\nxor(FALSE, TRUE)\n\n[1] TRUE\n\n\n向量化的布尔运算符\n\na &lt;- c(1, 2, 3)\nb &lt;- c(1, 2, 3)\nc &lt;- c(1, 2, 4)\n\na == b\n\n[1] TRUE TRUE TRUE\n\nb == c\n\n[1]  TRUE  TRUE FALSE\n\na == b & b == c\n\n[1]  TRUE  TRUE FALSE"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#缺失信息",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#缺失信息",
+    "title": "《R语言入门与实践》摘要",
+    "section": "5.3 缺失信息",
+    "text": "5.3 缺失信息\nR用特殊字符NA代表“不可用”（Not Available），可用于存储缺失信息。NA具有传染性。\n\n1 + NA\n\n[1] NA\n\nNA == NA\n\n[1] NA\n\n\n\n5.3.1 na.rm\n去掉缺失信息\n\nc(NA, 1:50)\n\n [1] NA  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24\n[26] 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49\n[51] 50\n\nmean(c(NA, 1:50))\n\n[1] NA\n\nmean(c(NA, 1:50), na.rm = TRUE)\n\n[1] 25.5\n\n\n\n\n5.3.2 is.na\n判断是否是NA\n\n\n\n\n\n\nTip\n\n\n\n不能用==来判断NA\n\n\n\nNA == NA\n\n[1] NA\n\nc(1,2, 3, NA) == NA\n\n[1] NA NA NA NA\n\nis.na(NA)\n\n[1] TRUE\n\nvec &lt;- c(1, 2, 3, NA)\n\nis.na(vec)\n\n[1] FALSE FALSE FALSE  TRUE"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#操作r环境",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#操作r环境",
+    "title": "《R语言入门与实践》摘要",
+    "section": "6.2 操作R环境",
+    "text": "6.2 操作R环境\n全局环境（R_GlobalEnv），最底层的环境，可以看到我创建的对象基本都在全局环境下。\n\nls(globalenv())\n\n [1] \"a\"      \"ar\"     \"b\"      \"bar\"    \"c\"      \"comp\"   \"deck\"   \"deck2\" \n [9] \"df\"     \"die\"    \"five\"   \"foo\"    \"gender\" \"list1\"  \"logic\"  \"lst\"   \n[17] \"m\"      \"new\"    \"now\"    \"roll\"   \"roll2\"  \"text\"   \"vec\"   \n\n\n空环境，空环境没有父环境，相当于根目录了。\n\nls(emptyenv())\n\ncharacter(0)\n\n\n在某个环境中，提取另一环境的变量\n\nhead(globalenv()$deck)\n\n   face   suit value\n1  king spades    13\n2 queen spades    12\n3  jack spades    11\n4   ten spades    10\n5  nine spades     9\n6 eight spades     8\n\n\n在某个环境中，将对象存到另一个环境\n\nassign(\"new\", \"Hello Global\", envir = globalenv())\n\nglobalenv()$new\n\n[1] \"Hello Global\"\n\n\n活动环境\n\n# 当前就在R_GlobalEnv下\nenvironment()\n\n&lt;environment: R_GlobalEnv&gt;"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#作用域规则",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#作用域规则",
+    "title": "《R语言入门与实践》摘要",
+    "section": "6.3 作用域规则",
+    "text": "6.3 作用域规则\n在搜索对象时，R会遵循一系列的规则。这些规则被称作R的作用域规则（scoping rules）。\n\nR首先在当前的活动环境中搜索对象\n在命令行中工作时，活动环境就是全局环境\n当R在某个环境中没有搜索到对象时，R会进入该环境的父环境。如果还是没有，再进入父环境的父环境，以此类推"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数求值",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#函数求值",
+    "title": "《R语言入门与实践》摘要",
+    "section": "6.4 函数求值",
+    "text": "6.4 函数求值\nR在每一次函数求值时，都会创建一个新环境，然后带着运行结果回到调用该函数时的环境。\n函数内创建的对象的环境时单独的，所以不会覆盖已经存在的对象。\n\na &lt;- \"I'm in R_GlobalEnv\"\na\n\n[1] \"I'm in R_GlobalEnv\"\n\nshow_env &lt;- function(){\n  a &lt;- \"I'm in show_env.\"\n  print('show_env函数内的环境：')\n  print(environment())\n  \n  print('show_env函数的父环境：')\n  print(parent.env(environment()))\n  \n  print('列出show_env环境下的对象')\n  ls(environment())\n  a\n}\n\nshow_env()\n\n[1] \"show_env函数内的环境：\"\n&lt;environment: 0x7fa86738cb90&gt;\n[1] \"show_env函数的父环境：\"\n&lt;environment: R_GlobalEnv&gt;\n[1] \"列出show_env环境下的对象\"\n\n\n[1] \"I'm in show_env.\"\n\na\n\n[1] \"I'm in R_GlobalEnv\"\n\n\nR会将一个函数的运行时环境与第一次创建该函数时所在的环境相连接。该函数的所有运行环境都将其作为父环境。\n\nenvironment(show_env)\n\n&lt;environment: R_GlobalEnv&gt;\n\n\n\n\n\n\n\n\nNote\n\n\n\nR是如何对待函数求值的？\n当你调用一个函数之前，R是在活动环境中工作。我们可以将此活动环境称为调用环境（calling environment）。R会从该环境中调用函数。\n调用这个函数时，R会创建一个新的运行时环境。这个环境是调用环境的子环境，也就是说调用环境是这个环境的父环境。R会将该函数的所有参数赋值到运行环境中，然后将运行时环境作为当前的活动环境。\n接着，R会运行函数主体中的代码。如果代码创建了任何对象，R会将它们存储在活动环境中，也就是运行时环境。如果R调用了某些对象，遵循作用域规则搜索这些对象：首先搜索运行时环境，如果没有搜索父环境，还是没有搜索父环境的父环境，以此类推。\n最后，当R完成函数运行时，它会将活动环境切换为调用环境。如果将函数运行的结果用赋值符&lt;-赋给某个对象，那么这个新对象会存储在调用环境中。\n\n\n如果对象是数据框，也是同样对待的。\n\ndf &lt;- data.frame(\n  face = c(\"ace\", \"two\", \"six\"),\n  suit = c(\"clubs\", \"clubs\", \"clubs\"),\n  value = c(1, 2, 3)\n)\ndf\n\n  face  suit value\n1  ace clubs     1\n2  two clubs     2\n3  six clubs     3\n\ntest_env &lt;- function(x){\n  x$face = c(\"ace\", \"ace\", \"ace\")\n  x\n}\n\ntest_env(df)\n\n  face  suit value\n1  ace clubs     1\n2  ace clubs     2\n3  ace clubs     3\n\ndf\n\n  face  suit value\n1  ace clubs     1\n2  two clubs     2\n3  six clubs     3"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#策略",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#策略",
+    "title": "《R语言入门与实践》摘要",
+    "section": "7.1 策略",
+    "text": "7.1 策略\n有三个简单的策略可以简化编程任务：\n\n将复杂任务分解为一些简单的字任务\n使用实例\n用通俗的语言描述解决方案，然后将其转换成R代码"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#if语句",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#if语句",
+    "title": "《R语言入门与实践》摘要",
+    "section": "7.2 if语句",
+    "text": "7.2 if语句\nif语法\nif (this) {\n  that\n}\n\nnum &lt;- -9\nif (num &lt; 0) {\n  num &lt;- num * -1\n}\nnum\n\n[1] 9\n\n\n\n7.3 else语句\nelse语法\n\nif (this) {\n  Plan A\n} else {\n  Plan B\n}\n\n\na &lt;- 3.14\ndec &lt;- a - trunc(a)\ndec\n\n[1] 0.14\n\nif (dec &gt;= 0.5) {\n  a &lt;- trunc(a) + 1\n} else {\n  a &lt;- trunc(a)\n}\n\na\n\n[1] 3\n\n\nelse if 语法\n\nif (this) {\n  Plan A\n} else if (that) {\n  Plan B\n} else {\n  Plan C\n}"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#查找表",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#查找表",
+    "title": "《R语言入门与实践》摘要",
+    "section": "7.4 查找表",
+    "text": "7.4 查找表\n有点像python里的字典\n\nages = c(\"Min\" = 22, \"King\" = 33, \"Jeo\" = 34)\n\nages['Min']\n\nMin \n 22 \n\nunname(ages[\"Min\"])\n\n[1] 22\n\nages[c(\"Min\", \"Min\", \"Jeo\")]\n\nMin Min Jeo \n 22  22  34"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#代码注释",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#代码注释",
+    "title": "《R语言入门与实践》摘要",
+    "section": "7.5 代码注释",
+    "text": "7.5 代码注释\n\n# 我就是一行注释，用井号打头\n# 注释的作用是对某些代码进行解释\n# 好的注释不是直白的说代码在做什么\n# 好的注释总结代码的意图，让人看了很明了\n# 好吧，我承认这里注释写的有点多了\n\n# 计算n的阶乘\nfac &lt;- function(n) {\n  f = 1\n  for (i in 1:n){\n    f = f * i\n  }\n  f\n}\n\nfac(5)\n\n[1] 120"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#s3系统",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#s3系统",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.1 S3系统",
+    "text": "8.1 S3系统\nS3指的是R自带的类系统。这个系统掌管着R如何处理具有不同类的对象。一些函数会首先查询对象的S3类，再根据其类属性作出相应的响应。\nprint就是这样一个函数。\n\nnum &lt;- 1000000000\nprint(num)\n\n[1] 1e+09\n\nclass(num) &lt;- c(\"POSIXct\", \"POSIXt\")\nprint(num)\n\n[1] \"2001-09-09 09:46:40 CST\"\n\n\n\n\n\n\n\n\nNote\n\n\n\n之前觉得很神奇，原来是这么回事！\n\n\n\n\n\n\n\n\nImportant\n\n\n\nR的S3系统有三个组成部分：\n\n属性（attribute），尤其是class属性\n泛型函数（generic function）\n方法（method）"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#属性-1",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#属性-1",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.2 属性",
+    "text": "8.2 属性\n在3.2节中，讲到了R对象都具有的属性（名称，维度，类），这些属性包含了关于这个对象的某些额外信息并且被赋予了属性名称，附加在该对象上。属性不会影响对象的实际取值，但是作为该对象的某种类型的元数据，可以被R用于控制和管理这个对象。\n使用attributes函数查看属性\n\nattributes(deck)\n\n$names\n[1] \"face\"  \"suit\"  \"value\"\n\n$class\n[1] \"data.frame\"\n\n$row.names\n [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25\n[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50\n[51] 51 52\n\n\nR提供可很多辅助函数，可以帮忙设置和查看一些常见的属性\n\n# 名称属性\nnames(deck)\n\n[1] \"face\"  \"suit\"  \"value\"\n\n# 维度属性\ndim(deck)\n\n[1] 52  3\n\n# 类属性\nclass(deck)\n\n[1] \"data.frame\"\n\n# 行名属性\nrow.names(deck)\n\n [1] \"1\"  \"2\"  \"3\"  \"4\"  \"5\"  \"6\"  \"7\"  \"8\"  \"9\"  \"10\" \"11\" \"12\" \"13\" \"14\" \"15\"\n[16] \"16\" \"17\" \"18\" \"19\" \"20\" \"21\" \"22\" \"23\" \"24\" \"25\" \"26\" \"27\" \"28\" \"29\" \"30\"\n[31] \"31\" \"32\" \"33\" \"34\" \"35\" \"36\" \"37\" \"38\" \"39\" \"40\" \"41\" \"42\" \"43\" \"44\" \"45\"\n[46] \"46\" \"47\" \"48\" \"49\" \"50\" \"51\" \"52\"\n\n# 或者给对象添加一个新属性\nlevels(deck) &lt;- c(\"level 1\", \"level 2\", \"level 3\")\n\nattributes(deck)\n\n$names\n[1] \"face\"  \"suit\"  \"value\"\n\n$class\n[1] \"data.frame\"\n\n$row.names\n [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25\n[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50\n[51] 51 52\n\n$levels\n[1] \"level 1\" \"level 2\" \"level 3\"\n\n\n\n\n\n\n\n\nImportant\n\n\n\n在对待属性方面，R持放任主义态度。R允许你为某个对象添加你觉得必要的属性（R会忽略大多数属性）。只有在某个函数需要找到某个属性却又找不到时，R才会抱怨。\n\n\n可以利用attr函数个某个对象添加任何属性。\n\na &lt;- 1:3\n\nattributes(a)\n\nNULL\n\nattr(a, \"symbol\") &lt;- c(\"one\", \"two\", \"three\")\n\nattr(a, \"pinyin\") &lt;- c(\"yi\", \"er\", \"san\")\n\na\n\n[1] 1 2 3\nattr(,\"symbol\")\n[1] \"one\"   \"two\"   \"three\"\nattr(,\"pinyin\")\n[1] \"yi\"  \"er\"  \"san\"\n\na + 1\n\n[1] 2 3 4\nattr(,\"symbol\")\n[1] \"one\"   \"two\"   \"three\"\nattr(,\"pinyin\")\n[1] \"yi\"  \"er\"  \"san\"\n\n\nstructure函数可以创建带有一组属性的R对象。该函数第一个参数是对象或者对象的取值，其余参数是属性。\n\nstructure(1:3, symbol = c(\"one\", \"two\", \"three\"))\n\n[1] 1 2 3\nattr(,\"symbol\")\n[1] \"one\"   \"two\"   \"three\"\n\nstructure(a, lalala = c(\"happy\", \"every\", \"day\"))\n\n[1] 1 2 3\nattr(,\"symbol\")\n[1] \"one\"   \"two\"   \"three\"\nattr(,\"pinyin\")\n[1] \"yi\"  \"er\"  \"san\"\nattr(,\"lalala\")\n[1] \"happy\" \"every\" \"day\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#泛型函数",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#泛型函数",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.3 泛型函数",
+    "text": "8.3 泛型函数\n重点中的重点来了\n刚才提到print函数是泛型函数。每次在控制台显示输出也是调用print函数\n\nhead(deck)\n\n   face   suit value\n1  king spades    13\n2 queen spades    12\n3  jack spades    11\n4   ten spades    10\n5  nine spades     9\n6 eight spades     8\n\nprint(head(deck))\n\n   face   suit value\n1  king spades    13\n2 queen spades    12\n3  jack spades    11\n4   ten spades    10\n5  nine spades     9\n6 eight spades     8\n\nprint(now)\n\n[1] \"2024-03-14 22:57:59 CST\"\n\nprint(1:10)\n\n [1]  1  2  3  4  5  6  7  8  9 10\n\n\n你可能会觉得print会查找某个对象的类属性，再根据类属性的不同，使用一个if语句分配合理的输出。作者说很好，其实print的实现方式更简单。往下看👀"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#方法",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#方法",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.4 方法",
+    "text": "8.4 方法\n看看print的代码，它其实调用了一个特别的函数，叫做UseMethod。\n\nprint\n\nfunction (x, ...) \nUseMethod(\"print\")\n&lt;bytecode: 0x7fa865dea5e8&gt;\n&lt;environment: namespace:base&gt;\n\n\nhead函数也是调用了UseMethod。\n\nhead\n\nfunction (x, ...) \nUseMethod(\"head\")\n&lt;bytecode: 0x7fa8649e6870&gt;\n&lt;environment: namespace:utils&gt;\n\n\n\n\n\n\n\n\nImportant\n\n\n\nUseMethod检查你提供给print函数第一个参数的类属性，然后再将你所提供的待输出的对象交给一个新函数处理。比如提供一个POSIXct对象，就交给print.POSIXct函数；提供一个factor对象，就交给print.factor函数。\nprint.POSIXct和print.factor被称为print函数的方法（method）。这两个函数是普通函数，特别之处是UseMethod会调用它们处理对应的类。\n\n\n\nprint.POSIXct\n\nfunction (x, tz = \"\", usetz = TRUE, max = NULL, ...) \n{\n    if (is.null(max)) \n        max &lt;- getOption(\"max.print\", 9999L)\n    FORM &lt;- if (missing(tz)) \n        function(z) format(z, usetz = usetz)\n    else function(z) format(z, tz = tz, usetz = usetz)\n    if (max &lt; length(x)) {\n        print(FORM(x[seq_len(max)]), max = max + 1, ...)\n        cat(\" [ reached 'max' / getOption(\\\"max.print\\\") -- omitted\", \n            length(x) - max, \"entries ]\\n\")\n    }\n    else if (length(x)) \n        print(FORM(x), max = max, ...)\n    else cat(class(x)[1L], \"of length 0\\n\")\n    invisible(x)\n}\n&lt;bytecode: 0x7fa86922b5f0&gt;\n&lt;environment: namespace:base&gt;\n\n\n\nprint.factor\n\nfunction (x, quote = FALSE, max.levels = NULL, width = getOption(\"width\"), \n    ...) \n{\n    ord &lt;- is.ordered(x)\n    if (length(x) == 0L) \n        cat(if (ord) \n            \"ordered\"\n        else \"factor\", \"()\\n\", sep = \"\")\n    else {\n        xx &lt;- character(length(x))\n        xx[] &lt;- as.character(x)\n        keepAttrs &lt;- setdiff(names(attributes(x)), c(\"levels\", \n            \"class\"))\n        attributes(xx)[keepAttrs] &lt;- attributes(x)[keepAttrs]\n        print(xx, quote = quote, ...)\n    }\n    maxl &lt;- if (is.null(max.levels)) \n        TRUE\n    else max.levels\n    if (maxl) {\n        n &lt;- length(lev &lt;- encodeString(levels(x), quote = ifelse(quote, \n            \"\\\"\", \"\")))\n        colsep &lt;- if (ord) \n            \" &lt; \"\n        else \" \"\n        T0 &lt;- \"Levels: \"\n        if (is.logical(maxl)) \n            maxl &lt;- {\n                width &lt;- width - (nchar(T0, \"w\") + 3L + 1L + \n                  3L)\n                lenl &lt;- cumsum(nchar(lev, \"w\") + nchar(colsep, \n                  \"w\"))\n                if (n &lt;= 1L || lenl[n] &lt;= width) \n                  n\n                else max(1L, which.max(lenl &gt; width) - 1L)\n            }\n        drop &lt;- n &gt; maxl\n        cat(if (drop) \n            paste(format(n), \"\"), T0, paste(if (drop) \n            c(lev[1L:max(1, maxl - 1)], \"...\", if (maxl &gt; 1) lev[n])\n        else lev, collapse = colsep), \"\\n\", sep = \"\")\n    }\n    if (!isTRUE(val &lt;- .valid.factor(x))) \n        warning(val)\n    invisible(x)\n}\n&lt;bytecode: 0x7fa8635f9438&gt;\n&lt;environment: namespace:base&gt;\n\n\n使用methods函数可以查看泛型函数所支持的方法。\n\n# medhods(print)的输出太长了，可以自己试试\nmethods(head)\n\n[1] head.array*      head.data.frame* head.default*    head.ftable*    \n[5] head.function*   head.matrix     \nsee '?methods' for accessing help and source code\n\n\nc，+，-和&lt;等，其工作方式也类似于泛型函数，只是它们不会调用UseMethod函数，而会调用.primitive函数。简直就是魔法。\n可以自己写一个S3风格的函数，对于特定对象，做特定的处理。\n\na &lt;- 1:6\nclass(a) &lt;- \"life\"\n\nprint.life &lt;- function(x) {\n  print(\"I miss you!\")\n}\n\nattributes(a)\n\n$class\n[1] \"life\"\n\nprint(a)\n\n[1] \"I miss you!\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#类-1",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#类-1",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.5 类",
+    "text": "8.5 类\n可以利用R的S3系统为对象新建一个稳健的类（class）。R会以一致且合理的方式对待同属一类的对象。要想创建一个类，应该执行以下操作：\n\n给类起一个名称\n给属于该类的每个对象赋class属性\n为属于该类的对象编写常用泛型函数的类方法\n\n查看某个类的方法：\n\nmethods(class = \"factor\")\n\n [1] [             [[            [[&lt;-          [&lt;-           all.equal    \n [6] as.character  as.data.frame as.Date       as.list       as.logical   \n[11] as.POSIXlt    as.vector     c             coerce        droplevels   \n[16] format        initialize    is.na&lt;-       length&lt;-      levels&lt;-     \n[21] Math          Ops           plot          print         relevel      \n[26] relist        rep           show          slotsFromS3   summary      \n[31] Summary       xtfrm        \nsee '?methods' for accessing help and source code"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#s4和r5",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#s4和r5",
+    "title": "《R语言入门与实践》摘要",
+    "section": "8.7 S4和R5",
+    "text": "8.7 S4和R5\nS4和R5是R另外两个可以用来创建类属性行为的系统。使用难度更大，参考 Hadley Wickham 的《Advanced R Programming》。"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#expand.grid",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#expand.grid",
+    "title": "《R语言入门与实践》摘要",
+    "section": "9.2 expand.grid",
+    "text": "9.2 expand.grid\nexpand.grid可以方便快捷地写出n个向量元素的所有组合。\n\na &lt;- c(\"one\", \"two\", \"three\")\nb &lt;- c(\"apple\", \"bananna\")\n\nexpand.grid(a, b)\n\n   Var1    Var2\n1   one   apple\n2   two   apple\n3 three   apple\n4   one bananna\n5   two bananna\n6 three bananna"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#for循环",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#for循环",
+    "title": "《R语言入门与实践》摘要",
+    "section": "9.3 for循环",
+    "text": "9.3 for循环\n语法\n\nfor (value in that) {\n  this\n}\n\n\nfor (word in c(\"Today\", \"is\", \"thursday\")) {\n  print(word)\n}\n\n[1] \"Today\"\n[1] \"is\"\n[1] \"thursday\"\n\nfor (i in 1:6) {\n  print(i)\n}\n\n[1] 1\n[1] 2\n[1] 3\n[1] 4\n[1] 5\n[1] 6"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#while循环",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#while循环",
+    "title": "《R语言入门与实践》摘要",
+    "section": "9.4 while循环",
+    "text": "9.4 while循环\n\nwhile (condition) {\n  code\n}\n\n\nn &lt;- 3\nwhile (n &gt; 0) {\n  print(n)\n  n &lt;- n - 1\n}\n\n[1] 3\n[1] 2\n[1] 1"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#repeat循环",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#repeat循环",
+    "title": "《R语言入门与实践》摘要",
+    "section": "9.5 repeat循环",
+    "text": "9.5 repeat循环\nrepeat会一直重复运行某段代码，直到你中止循环（按Esc），或遇到了break命令。\n\nn &lt;- 3\nrepeat {\n  print(n)\n  n &lt;- n - 1\n  if (n &lt; 0){\n    break\n  }\n}\n\n[1] 3\n[1] 2\n[1] 1\n[1] 0"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#replicate函数",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#replicate函数",
+    "title": "《R语言入门与实践》摘要",
+    "section": "9.6 replicate函数",
+    "text": "9.6 replicate函数\nreplicate函数可以重复运行某段代码多少次。\n\nreplicate(10, 'best')\n\n [1] \"best\" \"best\" \"best\" \"best\" \"best\" \"best\" \"best\" \"best\" \"best\" \"best\""
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#第10章-代码提速",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#第10章-代码提速",
+    "title": "《R语言入门与实践》摘要",
+    "section": "第10章 代码提速",
+    "text": "第10章 代码提速"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#向量化代码",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#向量化代码",
+    "title": "《R语言入门与实践》摘要",
+    "section": "10.1 向量化代码",
+    "text": "10.1 向量化代码\n快速的R代码经常用到的三大法宝：逻辑测试，取子集和按元素方式执行。\n看看下面这个例子，一个是用for循环的非向量化代码，一个是向量化代码。\n\n# for循环\nabs_loop &lt;- function(vec) {\n  for (i in 1:length(vec)) {\n    if (vec[i] &lt; 0) {\n      vec[i] &lt;- -vec[i]\n    }\n  }\n  vec\n}\n\n# 向量化代码\nabs_set &lt;- function(vec) {\n  negs &lt;- vec &lt; 0\n  vec[negs] &lt;- -1 * vec[negs]\n  vec\n}\n\n# 生成一个很长的测试向量\nlong &lt;- rep(c(-1, 1), 5000000)\n\n# 统计代码运行的实际\nsystem.time(abs_loop(long))\n\n   user  system elapsed \n  0.497   0.031   0.545 \n\nsystem.time(abs_set(long))\n\n   user  system elapsed \n  0.196   0.046   0.250 \n\n\n向量化代码比for循环快5倍，书中是快30倍，应该是新版的R把for循环优化了。"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#如何编写向量化代码",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#如何编写向量化代码",
+    "title": "《R语言入门与实践》摘要",
+    "section": "10.2 如何编写向量化代码",
+    "text": "10.2 如何编写向量化代码\n\n对于程序中的有序步骤，使用向量化的函数来完成\n对于同类情况，使用逻辑值取子集的方式来处理"
+  },
+  {
+    "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html#如何在r中编写快速的for循环",
+    "href": "posts/2024-03-10-hands-on-programming-with-R/index.html#如何在r中编写快速的for循环",
+    "title": "《R语言入门与实践》摘要",
+    "section": "10.3 如何在R中编写快速的for循环",
+    "text": "10.3 如何在R中编写快速的for循环\n做两件事可以改善for循环的效率：\n\n能放在for循环外的代码，不要放在for循环里\n确保用来存储循环输出结果的对象必须具备足够的容量\n\n\nsystem.time({\n  # 这句代码是关键，给output预先分配了足够的容量\n  output &lt;- rep(NA, 1000000)\n  for (i in 1:1000000) {\n    output[i] &lt;- i + 1\n  }\n})\n\n   user  system elapsed \n  0.045   0.004   0.052 \n\nsystem.time({\n  output &lt;-NA\n  for (i in 1:1000000) {\n    output[i] &lt;- i + 1\n  }\n})\n\n   user  system elapsed \n  0.297   0.114   0.460 \n\n\n为什么第二段慢呢？在第二段代码中，循环每前进一步，都要为output在内存中寻找位置，以存放新的变大的output。第一段代码没有这个问题，直接放。\n到这里这本书就结束了，如果你觉得不错，请在下面点赞👍或评论支持吧😄"
+  },
+  {
     "objectID": "posts/2022-11-08-python_enter_exit/index.html",
     "href": "posts/2022-11-08-python_enter_exit/index.html",
     "title": "Python中的__enter__和__exit__",
@@ -158,6 +445,6 @@
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "使用Github的Snakemake流程\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nK-means from scratch\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n博客原因\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+    "text": "《R语言入门与实践》摘要\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\nMar 11, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n使用Github的Snakemake流程\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nK-means from scratch\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n博客原因\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
   }
 ]
