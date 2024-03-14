@@ -9,7 +9,7 @@ execute:
   output: true
 ---
 
-# 概述
+# 我为什么看这本书
 
 看《R for Data Science》的时候，Hadley Wickham推荐了这本书《Hands-On Programming with R》，中文译名是《R语言入门与实践》。这本书关注的是R语言作为语言的基础，基本不涉及统计，我对R语言的了解基本是调用demo代码的时候，自己感觉的，缺少对R语言作为语言的整体了解，所以这本书是我需要的。
 
@@ -1135,7 +1135,7 @@ replicate函数可以重复运行某段代码多少次。
 replicate(10, 'best')
 ```
 
-## 第10章 代码提速
+# 第10章 代码提速
 
 ## 10.1 向量化代码
 
