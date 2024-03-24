@@ -158,3 +158,9 @@ rhyper(0:5, 14, 6, 5)
 ```{r}
 barplot(dhyper(0:5, 14, 6, 5), names.arg = 0:5, col = "red")
 ```
+
+# 参考资料
+
+<https://web.stanford.edu/class/bios221/book/01-chap.html>
+
+<https://medium.com/analytics-vidhya/7-types-of-discrete-probability-distributions-and-their-applications-in-r-ba5e2e263bd5>
