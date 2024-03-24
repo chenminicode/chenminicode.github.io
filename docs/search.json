@@ -7,144 +7,18 @@
     "text": "Hello, I am Min, a bioinformatics engineer🧬.\nI love Python🐍, ML🤖 and Freedom🚀.\nHope you can find something interesting here😀."
   },
   {
-    "objectID": "posts/2018-07-19-blog_reason/index.html",
-    "href": "posts/2018-07-19-blog_reason/index.html",
-    "title": "博客原因",
+    "objectID": "posts/2024-03-24-r-discrete-distributions/index.html",
+    "href": "posts/2024-03-24-r-discrete-distributions/index.html",
+    "title": "R语言里的离散型随机变量分布函数",
     "section": "",
-    "text": "最开始建这个博客，纯粹想了解怎样在github上，用Jekll搭建博客。搭好后，发现这里可以记录自己的学习过程。因为我很健忘，今天想到学习什么有趣的东西，明天可能就忘了。\n很多人都在说自己是一个终生学习的人，学校也在提倡终生学习。这里有3个问题： 1. 是否真的一直在学习？ 2. 学习什么？ 3. 在“一生”的时间尺度下，学习的规划是否有效？\n第一个问题只有盖棺定论时，才能回答。把我的学习过程记录下来，督促自己保持学习的习惯，不找借口中止了学习。\n第二个问题，当然是学习自己感兴趣的和有用的东西。现在的教育，导致学生没有兴趣，不知道自己喜欢什么。在高考后，不知道报什么专业，应为根本就不知道自己喜欢什么，想从事什么样的职业，过怎样的生活。而且自己喜欢的东西，未必真的了解。我报的专业，高中以为是喜欢的，了解之后发现是另一回事。也许你会说在没有学习那个专业之前，是不会真正了解的。这是惯用的理由，但是在真正学习之前，可以了解这个专业的一些背景，这些知识足够你做一个合理的选择。\n慢慢的，把之前得到的观念重新做了审视，像笛卡尔怀疑一切一样，去怀疑我曾经学到的东西；渐渐我发现自己的兴趣倾向： - 喜欢了解背后的原理、算法，而不仅仅是外表 - 喜欢计算机，应为想到的东西可以马上操作实验\n第三个问题，我也不知道，怎样的学习规划适合长尺度下的学习。 Peter Norvig写了一篇文章《Teach Yourself Programmin in Ten Years》（10年自学编程），讲了现在很多人学习急功近利，如24小时自学Java。文中给有志于自学编程的人一些很好的建议。建议只有在真正被采用，而起到好作用时才是建议。章太炎在《今日青年之弱点》一文中，写到“现在青年第一弱点，就是把事情太看容易，其结果不是侥幸，便是退却。”，“现在青年只有将这个弱点痛改，遇事宜慎重，决机宜敏速，抱志既极坚确，观察又极明了，则无所谓侥幸退却，只有百折千回以达吾人最终之目的而已。”。学习不是一件容易的事，能很容易学会的事也不足以成为你自己。我想在这里记录我的学习过程，实验我的学习计划。至于是否有效，等过后看就知道了。"
+    "text": "随机变量分为离散型随机变量和连续性随机变量两种。这里仅讨论离散型随机变量，他们的定义，例子和在R里怎么调用。\n\n1 伯努利分布\n伯努利随机变量是最简单的了，就是投掷一枚硬币，是正面朝上还是反面朝上。比如记正面朝上为1，反面朝上为0。\n在R里，生成伯努旅随机变量的函数如下：\n\n# 这里相当于投了15次硬币\nrbinom(n = 15, prob = 0.5, size = 1)\n\n [1] 1 1 0 1 1 0 1 1 1 0 0 1 0 1 1\n\n\n查看rbionm函数的帮助，帮助里有4个函数：\n\ndbinom：概率密度函数\npbinom：概率质量函数\nqbinom：分位函数\nrbinom：随机变量生成函数（上面见过了）\n\n\ndbinom(0:1, size = 1, prob = 0.5)\n\n[1] 0.5 0.5\n\n\n就是取0，1的概率都是0.5。\n\npbinom(0:1, size = 1, prob = 0.5)\n\n[1] 0.5 1.0\n\n\n取小于等于0的概率是0.5，小于等于1的概率是1。\n\nqbinom(c(0.5, 1), size = 1, prob = 0.5)\n\n[1] 0 1\n\n\n相当于pbionm的逆函数了，提供概率质量函数的概率，给出对应概率的取值。\n其他函数也有这4个函数组合，同样的前缀。类似的用法，只是需要提供对应分布的参数。\n\n\n2 二项分布\n二项分布是伯努利分布的扩展，伯努旅分布是投掷1次硬币，二项分布是投掷多次硬币，看正面朝上的次数。\n\n# 每一个值表示投掷10次硬币，有多少次正面朝上。有20个值时这个实验重复了20次\nrbinom(20, size = 10, prob = 0.5)\n\n [1] 6 2 5 6 2 3 6 7 6 5 8 6 2 3 2 4 4 5 2 5\n\n\n\ndbinom(0:10, size = 10, prob = 0.5)\n\n [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250\n [6] 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250\n[11] 0.0009765625\n\nbarplot(dbinom(0:10, size = 10, prob = 0.5), names.arg = 0:10, col = \"red\")\n\n\n\n\n\n\n\n\n果然5次正面朝上的概率是最高的。\n\n\n3 多项分布\n多项分布是二项分布的扩展，二项分布是重复伯努利实验，伯努利实验每次只有2个结果。多项分布相当于伯努利实验每次有多个结果。\n比如每次投掷一个6面的骰子🎲，重复10次，统计1：6出现次数的分布就是服从多项分布的。\n\npvec = rep(1/6, 6)\nrmultinom(5, size = 10, prob = pvec)\n\n     [,1] [,2] [,3] [,4] [,5]\n[1,]    1    2    1    1    2\n[2,]    3    1    2    3    1\n[3,]    2    1    0    3    3\n[4,]    1    1    5    0    1\n[5,]    3    5    1    1    1\n[6,]    0    0    1    2    2\n\n\n每一列是一次实验（投掷10次骰子）的结果统计\n\ndmultinom(c(2, 2, 2, 2, 2, 0), size = 10, prob = pvec)\n\n[1] 0.001875429\n\n\n\n\n4 泊松分布\n我开始认识泊松分布是的时候是它的公式，有点晕，不知所云。后来知道泊松分布其实就是特殊情况下的二项分布的近似，泊松分布的公式也是这么推导出来的。我们看看是什么情况。\n《Modern Statistics for Modern Biology》里有一个很好的例子。HIV病毒每复制一次，每个碱基突变的概率是0.0005，HIV基因组大约是10000bp，那么HIV复制一次，有多少个碱基发生突变呢？这个就是符合速率为0.0005 x 10000 = 5泊松分布。\n\nrpois(20, 5)\n\n [1] 6 4 6 8 6 6 6 9 4 5 6 5 5 7 4 5 5 6 6 8\n\n\n\nbarplot(dpois(0:10, 5), names.arg = 0:10, col = \"red\")\n\n\n\n\n\n\n\n\nHIV复制一次，相当于10000个碱基每个复制一次，每个碱基突变的概率是0.0005。相当于投掷10000次硬币，正面朝上的概率是0.0005，最后有多少次正面朝上！\n\nbarplot(dbinom(0:10, size = 10000, prob = 0.0005), names.arg = 0:10, col = \"red\")\n\n\n\n\n\n\n\n\n上面两个图是一致的，不信，再看看具体概率：\n\ndpois(0:10, 5)\n\n [1] 0.006737947 0.033689735 0.084224337 0.140373896 0.175467370 0.175467370\n [7] 0.146222808 0.104444863 0.065278039 0.036265577 0.018132789\n\ndbinom(0:10, size = 10000, prob = 0.0005)\n\n [1] 0.006729527 0.033664467 0.084194850 0.140366868 0.175493694 0.175511252\n [7] 0.146259377 0.104460531 0.065274768 0.036252875 0.018119183\n\n\n\n\n\n\n\n\nImportant\n\n\n\n当二项分布实验次数n很大，p很小时，可以近似为速率参数为np的泊松分布。\n\n\n\n\n5 负二项分布\n我们先看一个例子，有一罐鱼皮花生，其中吃到发霉花生的概率1/10，如果我想吃5个好花生，总共吃的发霉花生个数就是符合负二项分布（其实我不会吃的，会吐掉，然后漱口）。\n\nrnbinom(10, size = 5, prob = 9/10)\n\n [1] 0 1 0 0 3 0 0 1 0 0\n\n\n这里我做了10次实验，看来大概率是吃到1-2个发霉花生。\n\nbarplot(dnbinom(0:5, size = 5, prob = 9/10), names.arg = 0:5, col = \"red\")\n\n\n\n\n\n\n\n\n\n\n6 几何分布\n几何分布也是二项分布的延伸。还是举花生的例子，吃到发霉发生的概率是1/10，那么我第一次吃到发霉花生时，总共吃了几个好花生，就是符合几何分布的。\n\nrgeom(10, prob = 1/10)\n\n [1] 14  1  1  3  2  1  1  3 31 20\n\n\n\ndgeom(0:3,  prob = 1/10)\n\n[1] 0.1000 0.0900 0.0810 0.0729\n\n\n吃到0个好花生的概率是0.1，1个好花生的概率是0.9 x 0.1 = 0.09，2个好花生的概率是0.9 x 0.9 x 0.1 = 0.081。\n\n\n7 超几何分布\n超几何分布应该在基因富集分析的应用而鼎鼎有名。\n其实大家高中就学过了。有20个球，其中14个是红球，6个是黑球，随机取5个球不放回，取到的红球的数目就是符合超几何分布。\n\nrhyper(0:5, 14, 6, 5)\n\n[1] 3 2 3 5 4 4\n\n\n\nbarplot(dhyper(0:5, 14, 6, 5), names.arg = 0:5, col = \"red\")"
   },
   {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html",
-    "href": "posts/2022-10-31-python_magic_method/index.html",
-    "title": "Python中的几个魔法方法",
+    "objectID": "posts/2022-11-08-python_enter_exit/index.html",
+    "href": "posts/2022-11-08-python_enter_exit/index.html",
+    "title": "Python中的__enter__和__exit__",
     "section": "",
-    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
-    "href": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
-    "title": "Python中的几个魔法方法",
-    "section": "",
-    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
-    "href": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
-    "title": "Python中的几个魔法方法",
-    "section": "",
-    "text": "Point.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
-    "href": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
-    "title": "Python中的几个魔法方法",
-    "section": "2.1 __repr__方法",
-    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n&lt;__main__.Point at 0x10d4f4eb0&gt;\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
-  },
-  {
-    "objectID": "posts/2022-10-31-python_magic_method/index.html#str__方法",
-    "href": "posts/2022-10-31-python_magic_method/index.html#str__方法",
-    "title": "Python中的几个魔法方法",
-    "section": "2.2 __str__方法",
-    "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说:\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
-  },
-  {
-    "objectID": "posts/2024-03-02-snakemake-workflow/index.html",
-    "href": "posts/2024-03-02-snakemake-workflow/index.html",
-    "title": "使用Github的Snakemake流程",
-    "section": "",
-    "text": "概述\nGitHub有一个snakemake流程的分类，里面有很多生信分析流程，rna-seq-star-deseq2，dna-seq-gatk-variant-calling。\n我测试了rna-seq-star-deseq2这个流程。\n每个流程都有使用说明，如果都看说明可以跑通，那就好了🥹\n下面参考rna-seq-star-deseq2的说明，一步一步做.\n\n\nStep 1 安装snamake和snakedeploy\n使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧.\n\nmamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy\n\nconda activate snakemake\n\n\n\nStep 2 流程部署\n\nmkdir proj_240302_test_snakemake\n\ncd proj_240302_test_snakemake\n\nsnakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0\n\n运行后的文件结构：\n\ntree\n\n.\n├── config\n│   ├── README.md\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── workflow\n    └── Snakefile\n其实就下了config和workflow两个文件夹，里面分别是配置文件和流程。workflow里面只有一个Snakefile，Snakefile里把github上 rna-seq-star-deseq2的流程作为模块导入了。\n\n\nStep 3 配置流程\n流程配置是最麻烦的，我下载了仓库自带的测试数据。\n测试数据在.test文件夹下面，结构如下，应该很清楚了，config_basic就是简单版的配置文件，config_complex文件夹是复杂版的配置文件，ngs-test-data就是原始数据了。\n\ntree .test\n\n.\n├── config_basic\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n├── config_complex\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── ngs-test-data\n    └── reads\n        ├── a.chr21.1.fq\n        ├── a.chr21.2.fq\n        ├── a.scerevisiae.1.fq\n        ├── a.scerevisiae.2.fq\n        ├── b.chr21.1.fq\n        ├── b.chr21.2.fq\n        ├── b.scerevisiae.1.fq\n        ├── b.scerevisiae.2.fq\n        ├── c.scerevisiae.1.fq\n        └── c.scerevisiae.2.fq\n\n5 directories, 16 files\n删掉Step 2 流程部署下载的config文件，把.test/config_basic中的配置文件都拷贝proj_240302_test_snakemake/config文件夹下，然后把.test/ngs-test-data文件夹拷贝到proj_240302_test_snakemake文件夹。\n修改proj_240302_test_snakemake/config/config.yaml文件的samples和unit配置路径：\nsamples: config/samples.tsv\nunits: config/units.tsv\n配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。\n请参考配置文件的说明和流程自带的配置说明。当然.test文件夹中的配置文件格式值得参考。\n\n\nStep 4 运行流程\n终于可以运行流程了：\n\nsnakemake --cores all --use-conda\n\n果然报错了😭：\nNotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).\nGoogle一下，rna-seq-star-deseq2里有一个issues就是这个问题。\n原因是snakemake流程最近更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。\n\nmamba deactivate\n\nmamba remove -n snakemake --all\n\nmamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 \n\nmamba activate snakemake7\n\n重新配置好环境后，再次运行流程：\n\nsnakemake --cores all --use-conda\n\n流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。\n结果文件在results文件夹下：\n\nll -rth results/\n\ntotal 120\ndrwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed\ndrwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:22 counts\n-rw-r--r--@  1 chenmin  staff    59K Mar  3 00:22 pca.condition.svg\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:22 deseq2\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp\n\n\nStep 5 生成报告\n\nsnakemake --report report.zip\n\n解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。\n测试完成🎉"
-  },
-  {
-    "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
-    "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
-    "title": "Python中的__getattr__和__getattribute__",
-    "section": "",
-    "text": "1 __getattr__\n如果在类中实现了_getattr__方法，那么当使用对象.属性的时候，如果属性不在对象里，则会调用__getattr__方法。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\nprint(p.x, p.y)\nprint(p.z)\n\n3 4\n\n\nAttributeError: 'Point' object has no attribute 'z'\n\n\n因为Point没有z这个属性，所以报错了。\n下面这个类实现了__getattr__方法，看看会怎么样\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattr__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.z\n\nexec __getattr__ 😀\nname: z\n\n\n42\n\n\n\n\n\n\n\n\nTip\n\n\n\n__getattr__方法接受两个参数，self不用说，name就是属性名称，在上面的例子就是z\n\n\n\n\n2 __getattribute__\n如果在类中实现了__getattribute__方法，那么当使用对象.属性的时候，都会调用__getattr__方法。\n\n\n\n\n\n\nTip\n\n\n\n注意_getattr__是当属性不在对象里的时候在调用\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattribute__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.x, p.y, p.z\n\nexec __getattr__ 😀\nname: x\nexec __getattr__ 😀\nname: y\nexec __getattr__ 😀\nname: z\n\n\n(42, 42, 42)\n\n\np.x, p.y和p.z都调用了__getattribute__方法"
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html",
-    "href": "posts/2023-05-01-learner-python/index.html",
-    "title": "Python basis related to fastai learner",
-    "section": "",
-    "text": "I have been studying fastai course part2.\nIn lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.\nJeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features."
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
-    "title": "Python basis related to fastai learner",
-    "section": "4.1 Raise error in with statement?",
-    "text": "4.1 Raise error in with statement?\n\nwith test_func():\n    print(\"In with\")\n    a = 1 / 0\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with\nexcept: Divided by zero\nExec finally"
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
-    "title": "Python basis related to fastai learner",
-    "section": "4.2 Raise error before yield?",
-    "text": "4.2 Raise error before yield?\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        a = 1 / 0\n        yield\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nexcept: Divided by zero\nExec finally\n\n\nRuntimeError: generator didn't yield\n\n\n\n\n\n\n\n\nTip\n\n\n\nSo contextmanager can’t handle error before yield, as Jeremy have tested in the class."
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
-    "href": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
-    "title": "Python basis related to fastai learner",
-    "section": "4.3 Raise error after yield",
-    "text": "4.3 Raise error after yield\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield\n        print(\"Exec try, after yield\")\n        a = 1 / 0\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\nIn with 2\nExec try, after yield\nexcept: Divided by zero\nExec finally"
-  },
-  {
-    "objectID": "posts/2023-05-01-learner-python/index.html#yield-value",
-    "href": "posts/2023-05-01-learner-python/index.html#yield-value",
-    "title": "Python basis related to fastai learner",
-    "section": "4.4 yield value",
-    "text": "4.4 yield value\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield range(3)\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func() as f:\n    print(\"In with 1\")\n    for i in f:\n        print(i)\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\n0\n1\n2\nIn with 2\nExec try, after yield\nExec finally"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html",
-    "href": "posts/2023-04-26-k-means/index.html",
-    "title": "K-means from scratch",
-    "section": "",
-    "text": "import torch\nimport math\nimport matplotlib.pyplot as plt\nfrom functools import partial\ntorch.set_printoptions(precision=3, linewidth=140, sci_mode=False)"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#init-mean",
-    "href": "posts/2023-04-26-k-means/index.html#init-mean",
-    "title": "K-means from scratch",
-    "section": "3.1 Init mean",
-    "text": "3.1 Init mean\n\nk = 6\n\n\nperm = torch.randperm(X.size(0))\n\n\nidx = perm[:k]\nmeans = X[idx].clone()\nmeans\n\ntensor([[ 13.227,  -8.303],\n        [ 11.784,  11.362],\n        [ 15.491,  -4.326],\n        [ 12.847, -19.425],\n        [ 15.780,  17.934],\n        [ -2.511,  -3.635]])\n\n\n\nplot_data(means, X, 250)"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#calculate-distance",
-    "href": "posts/2023-04-26-k-means/index.html#calculate-distance",
-    "title": "K-means from scratch",
-    "section": "3.2 Calculate distance",
-    "text": "3.2 Calculate distance\n\nmeans.shape, X.shape\n\n(torch.Size([6, 2]), torch.Size([1500, 2]))\n\n\n\nmeans[:, None].shape, X[None].shape\n\n(torch.Size([6, 1, 2]), torch.Size([1, 1500, 2]))\n\n\n\n(means[:, None] - X[None]).shape\n\ntorch.Size([6, 1500, 2])\n\n\n\nmm = means[:, None] - X[None]\n\n\nl2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n\n\nl2\n\ntensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],\n        [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],\n        [ 684.036,  643.628,  618.255,  ...,  380.736, 1172.179, 1018.224],\n        [1281.019, 1277.346, 1310.853,  ..., 1213.889, 2434.660, 2157.942],\n        [ 494.725,  412.703,  316.399,  ...,   17.422,  144.967,  130.433],\n        [ 232.653,  253.557,  305.201,  ...,  793.216, 1409.568, 1052.514]])\n\n\n\nl2.shape\n\ntorch.Size([6, 1500])\n\n\n\n(mm * mm).sum(2)\n\ntensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],\n        [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],\n        [ 684.036,  643.628,  618.255,  ...,  380.736, 1172.179, 1018.224],\n        [1281.019, 1277.346, 1310.853,  ..., 1213.889, 2434.660, 2157.942],\n        [ 494.725,  412.703,  316.399,  ...,   17.422,  144.967,  130.433],\n        [ 232.653,  253.557,  305.201,  ...,  793.216, 1409.568, 1052.514]])\n\n\n\n(mm * mm).sum(2).shape\n\ntorch.Size([6, 1500])"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#select-nearest-group",
-    "href": "posts/2023-04-26-k-means/index.html#select-nearest-group",
-    "title": "K-means from scratch",
-    "section": "3.3 Select nearest group",
-    "text": "3.3 Select nearest group\n\ngroup = torch.argmin(l2, dim=0)\n\n\ngroup.shape\n\ntorch.Size([1500])"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#update-mean",
-    "href": "posts/2023-04-26-k-means/index.html#update-mean",
-    "title": "K-means from scratch",
-    "section": "3.4 Update mean",
-    "text": "3.4 Update mean\n\nX[group == 0].shape\n\ntorch.Size([47, 2])\n\n\n\ntorch.mean(X, 0)\n\ntensor([2.815, 6.901])\n\n\n\nfor i in range(k):\n    means[i] = torch.mean(X[group == i], 0)\n\n\nmeans\n\ntensor([[ 15.741, -10.534],\n        [  0.595,  16.672],\n        [ 18.710,  -2.103],\n        [ 22.234, -19.903],\n        [  2.595,  25.472],\n        [-11.656,   2.780]])\n\n\n\nplot_data(means, data, 250)"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#write-update-loop",
-    "href": "posts/2023-04-26-k-means/index.html#write-update-loop",
-    "title": "K-means from scratch",
-    "section": "3.5 Write update loop",
-    "text": "3.5 Write update loop\n\ndef update(means, X, n):\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n\n\nupdate(means, X, 10)\n\n\nplot_data(means, data, 250)"
-  },
-  {
-    "objectID": "posts/2023-04-26-k-means/index.html#write-k-means-function",
-    "href": "posts/2023-04-26-k-means/index.html#write-k-means-function",
-    "title": "K-means from scratch",
-    "section": "3.6 Write k-means function",
-    "text": "3.6 Write k-means function\n\ndef kmeans(X, k, n):\n    # init means\n    perm = torch.randperm(X.size(0))\n    idx = perm[:k]\n    means = X[idx].clone()\n\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n    \n    return means\n\n\nmeans = kmeans(X, 6, 10)\n\n\nplot_data(means, data, 250)"
+    "text": "1 __enter__和__exit__是什么\n当在类中实现__enter__和__exit__方法的使用，这个类就可以用with调用了，调用with的时候，返回__enter__的结果，退出with的时候，执行__exit__的代码。\n平时用with最多的可能是打开一个文件，with返回文件的句柄（file handle），退出with的时候关闭文件。\n如下代码：\n\n# 建一个测试文件\n! echo -e 'line1\\nline2\\nline3' &gt; sample.txt\n! cat sample.txt\n\nline1\nline2\nline3\n\n\n\n# 使用python读取文件\nwith open('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\n# 查看f是否关闭了，返回True，表示f关闭了\nf.closed\n\nTrue\n\n\n如果不用with，需要手动关闭文件。\n\nf = open('sample.txt', 'r')\n\n\n# f还没有关闭\nf.closed\n\nFalse\n\n\n\n# 使用close()方法关闭文件后，文件就关闭了\nf.close()\nf.closed\n\nTrue\n\n\n\n\n2 自已写一个处理文件的类\n\nclass MyOpen():\n    def __init__(self, file, mode):\n        self.file = file\n        self.mode = mode\n    \n    def __enter__(self):\n        self.f = open(self.file, self.mode)\n        return self.f\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.f.close()\n\n\nwith MyOpen('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\nf.closed\n\nTrue\n\n\n\n\n\n\n\n\nTip\n\n\n\n注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？\n\n\n\n\n3 __exit__的参数\n\nclass SafeDivide():\n    def __init__(self, a, b):\n        self.a = a\n        self.b = b\n    \n    def __enter__(self):\n        print('exec __enter__')\n        print(f'{self.a} / {self.b} = ', end='')\n        return self\n    \n    def divide(self):\n        return self.a / self.b\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print('\\n------------')\n        print('exec __exit__')\n        print(f\"exec_type: {exc_type}\")\n        print(f\"exc_val: {exc_val}\")\n        print(f\"exc_tb: {exc_tb}\")\n\n\nwith SafeDivide(1, 2) as d:\n    print(d.divide())\n    print('啦啦啦')\n\nexec __enter__\n1 / 2 = 0.5\n啦啦啦\n\n------------\nexec __exit__\nexec_type: None\nexc_val: None\nexc_tb: None\n\n\n如果执行没有问题，exc_type, exc_val, exc_tb都是None\n\nwith SafeDivide(1, 0) as d:\n    print(d.divide())\n\nexec __enter__\n1 / 0 = \n------------\nexec __exit__\nexec_type: &lt;class 'ZeroDivisionError'&gt;\nexc_val: division by zero\nexc_tb: &lt;traceback object&gt;\n\n\nZeroDivisionError: division by zero\n\n\n如果执行对象的方法出现问题，就会直接执行__exit__方法，exc_type, exc_val, exc_tb包含的就是错误类型，错误值，错误的回溯信息。\n\n\n\n\n\n\nNote\n\n\n\n出错后不会执行后面的语句，比如这里的print('啦啦啦')，而是直接执行__exit__了"
   },
   {
     "objectID": "posts/2024-03-10-hands-on-programming-with-R/index.html",
@@ -427,17 +301,150 @@
     "text": "10.3 如何在R中编写快速的for循环\n做两件事可以改善for循环的效率：\n\n能放在for循环外的代码，不要放在for循环里\n确保用来存储循环输出结果的对象必须具备足够的容量\n\n\nsystem.time({\n  # 这句代码是关键，给output预先分配了足够的容量\n  output &lt;- rep(NA, 1000000)\n  for (i in 1:1000000) {\n    output[i] &lt;- i + 1\n  }\n})\n\n   user  system elapsed \n  0.043   0.002   0.045 \n\nsystem.time({\n  output &lt;-NA\n  for (i in 1:1000000) {\n    output[i] &lt;- i + 1\n  }\n})\n\n   user  system elapsed \n  0.230   0.061   0.291 \n\n\n为什么第二段慢呢？在第二段代码中，循环每前进一步，都要为output在内存中寻找位置，以存放新的变大的output。第一段代码没有这个问题，直接放。\n到这里这本书就结束了，如果你觉得不错，请在下面点赞👍或评论支持吧😄"
   },
   {
-    "objectID": "posts/2022-11-08-python_enter_exit/index.html",
-    "href": "posts/2022-11-08-python_enter_exit/index.html",
-    "title": "Python中的__enter__和__exit__",
+    "objectID": "posts/2023-04-26-k-means/index.html",
+    "href": "posts/2023-04-26-k-means/index.html",
+    "title": "K-means from scratch",
     "section": "",
-    "text": "1 __enter__和__exit__是什么\n当在类中实现__enter__和__exit__方法的使用，这个类就可以用with调用了，调用with的时候，返回__enter__的结果，退出with的时候，执行__exit__的代码。\n平时用with最多的可能是打开一个文件，with返回文件的句柄（file handle），退出with的时候关闭文件。\n如下代码：\n\n# 建一个测试文件\n! echo -e 'line1\\nline2\\nline3' &gt; sample.txt\n! cat sample.txt\n\nline1\nline2\nline3\n\n\n\n# 使用python读取文件\nwith open('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\n# 查看f是否关闭了，返回True，表示f关闭了\nf.closed\n\nTrue\n\n\n如果不用with，需要手动关闭文件。\n\nf = open('sample.txt', 'r')\n\n\n# f还没有关闭\nf.closed\n\nFalse\n\n\n\n# 使用close()方法关闭文件后，文件就关闭了\nf.close()\nf.closed\n\nTrue\n\n\n\n\n2 自已写一个处理文件的类\n\nclass MyOpen():\n    def __init__(self, file, mode):\n        self.file = file\n        self.mode = mode\n    \n    def __enter__(self):\n        self.f = open(self.file, self.mode)\n        return self.f\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.f.close()\n\n\nwith MyOpen('sample.txt', 'r') as f:\n    for line in f:\n        print(line, end='')        \n\nline1\nline2\nline3\n\n\n\nf.closed\n\nTrue\n\n\n\n\n\n\n\n\nTip\n\n\n\n注意上面的MyOpen类中的__exit__方法有4个参数，self不必说，后面三个参数是什么呢？\n\n\n\n\n3 __exit__的参数\n\nclass SafeDivide():\n    def __init__(self, a, b):\n        self.a = a\n        self.b = b\n    \n    def __enter__(self):\n        print('exec __enter__')\n        print(f'{self.a} / {self.b} = ', end='')\n        return self\n    \n    def divide(self):\n        return self.a / self.b\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print('\\n------------')\n        print('exec __exit__')\n        print(f\"exec_type: {exc_type}\")\n        print(f\"exc_val: {exc_val}\")\n        print(f\"exc_tb: {exc_tb}\")\n\n\nwith SafeDivide(1, 2) as d:\n    print(d.divide())\n    print('啦啦啦')\n\nexec __enter__\n1 / 2 = 0.5\n啦啦啦\n\n------------\nexec __exit__\nexec_type: None\nexc_val: None\nexc_tb: None\n\n\n如果执行没有问题，exc_type, exc_val, exc_tb都是None\n\nwith SafeDivide(1, 0) as d:\n    print(d.divide())\n\nexec __enter__\n1 / 0 = \n------------\nexec __exit__\nexec_type: &lt;class 'ZeroDivisionError'&gt;\nexc_val: division by zero\nexc_tb: &lt;traceback object&gt;\n\n\nZeroDivisionError: division by zero\n\n\n如果执行对象的方法出现问题，就会直接执行__exit__方法，exc_type, exc_val, exc_tb包含的就是错误类型，错误值，错误的回溯信息。\n\n\n\n\n\n\nNote\n\n\n\n出错后不会执行后面的语句，比如这里的print('啦啦啦')，而是直接执行__exit__了"
+    "text": "import torch\nimport math\nimport matplotlib.pyplot as plt\nfrom functools import partial\ntorch.set_printoptions(precision=3, linewidth=140, sci_mode=False)"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#init-mean",
+    "href": "posts/2023-04-26-k-means/index.html#init-mean",
+    "title": "K-means from scratch",
+    "section": "3.1 Init mean",
+    "text": "3.1 Init mean\n\nk = 6\n\n\nperm = torch.randperm(X.size(0))\n\n\nidx = perm[:k]\nmeans = X[idx].clone()\nmeans\n\ntensor([[ 13.227,  -8.303],\n        [ 11.784,  11.362],\n        [ 15.491,  -4.326],\n        [ 12.847, -19.425],\n        [ 15.780,  17.934],\n        [ -2.511,  -3.635]])\n\n\n\nplot_data(means, X, 250)"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#calculate-distance",
+    "href": "posts/2023-04-26-k-means/index.html#calculate-distance",
+    "title": "K-means from scratch",
+    "section": "3.2 Calculate distance",
+    "text": "3.2 Calculate distance\n\nmeans.shape, X.shape\n\n(torch.Size([6, 2]), torch.Size([1500, 2]))\n\n\n\nmeans[:, None].shape, X[None].shape\n\n(torch.Size([6, 1, 2]), torch.Size([1, 1500, 2]))\n\n\n\n(means[:, None] - X[None]).shape\n\ntorch.Size([6, 1500, 2])\n\n\n\nmm = means[:, None] - X[None]\n\n\nl2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n\n\nl2\n\ntensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],\n        [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],\n        [ 684.036,  643.628,  618.255,  ...,  380.736, 1172.179, 1018.224],\n        [1281.019, 1277.346, 1310.853,  ..., 1213.889, 2434.660, 2157.942],\n        [ 494.725,  412.703,  316.399,  ...,   17.422,  144.967,  130.433],\n        [ 232.653,  253.557,  305.201,  ...,  793.216, 1409.568, 1052.514]])\n\n\n\nl2.shape\n\ntorch.Size([6, 1500])\n\n\n\n(mm * mm).sum(2)\n\ntensor([[ 734.640,  709.354,  706.383,  ...,  569.188, 1460.258, 1255.919],\n        [ 297.342,  241.198,  183.035,  ...,   60.147,  350.148,  249.417],\n        [ 684.036,  643.628,  618.255,  ...,  380.736, 1172.179, 1018.224],\n        [1281.019, 1277.346, 1310.853,  ..., 1213.889, 2434.660, 2157.942],\n        [ 494.725,  412.703,  316.399,  ...,   17.422,  144.967,  130.433],\n        [ 232.653,  253.557,  305.201,  ...,  793.216, 1409.568, 1052.514]])\n\n\n\n(mm * mm).sum(2).shape\n\ntorch.Size([6, 1500])"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#select-nearest-group",
+    "href": "posts/2023-04-26-k-means/index.html#select-nearest-group",
+    "title": "K-means from scratch",
+    "section": "3.3 Select nearest group",
+    "text": "3.3 Select nearest group\n\ngroup = torch.argmin(l2, dim=0)\n\n\ngroup.shape\n\ntorch.Size([1500])"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#update-mean",
+    "href": "posts/2023-04-26-k-means/index.html#update-mean",
+    "title": "K-means from scratch",
+    "section": "3.4 Update mean",
+    "text": "3.4 Update mean\n\nX[group == 0].shape\n\ntorch.Size([47, 2])\n\n\n\ntorch.mean(X, 0)\n\ntensor([2.815, 6.901])\n\n\n\nfor i in range(k):\n    means[i] = torch.mean(X[group == i], 0)\n\n\nmeans\n\ntensor([[ 15.741, -10.534],\n        [  0.595,  16.672],\n        [ 18.710,  -2.103],\n        [ 22.234, -19.903],\n        [  2.595,  25.472],\n        [-11.656,   2.780]])\n\n\n\nplot_data(means, data, 250)"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#write-update-loop",
+    "href": "posts/2023-04-26-k-means/index.html#write-update-loop",
+    "title": "K-means from scratch",
+    "section": "3.5 Write update loop",
+    "text": "3.5 Write update loop\n\ndef update(means, X, n):\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n\n\nupdate(means, X, 10)\n\n\nplot_data(means, data, 250)"
+  },
+  {
+    "objectID": "posts/2023-04-26-k-means/index.html#write-k-means-function",
+    "href": "posts/2023-04-26-k-means/index.html#write-k-means-function",
+    "title": "K-means from scratch",
+    "section": "3.6 Write k-means function",
+    "text": "3.6 Write k-means function\n\ndef kmeans(X, k, n):\n    # init means\n    perm = torch.randperm(X.size(0))\n    idx = perm[:k]\n    means = X[idx].clone()\n\n    for t in range(n):\n        mm = means[:, None] - X[None]\n        l2 = torch.einsum('ijk, ijk-&gt;ij', mm, mm)\n        group = torch.argmin(l2, dim=0)\n        for i in range(k):\n            means[i] = torch.mean(X[group == i], 0)\n    \n    return means\n\n\nmeans = kmeans(X, 6, 10)\n\n\nplot_data(means, data, 250)"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html",
+    "href": "posts/2023-05-01-learner-python/index.html",
+    "title": "Python basis related to fastai learner",
+    "section": "",
+    "text": "I have been studying fastai course part2.\nIn lesson 15 and lesson 16 Jeremy introduced Learner, a class that include model, dataloaders, loss function, optimizer.\nJeremy used some advanced python features that I can’t understand well, here is the experiment that I used to help me understand those python features."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-in-with-statement",
+    "title": "Python basis related to fastai learner",
+    "section": "4.1 Raise error in with statement?",
+    "text": "4.1 Raise error in with statement?\n\nwith test_func():\n    print(\"In with\")\n    a = 1 / 0\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-before-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.2 Raise error before yield?",
+    "text": "4.2 Raise error before yield?\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        a = 1 / 0\n        yield\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nexcept: Divided by zero\nExec finally\n\n\nRuntimeError: generator didn't yield\n\n\n\n\n\n\n\n\nTip\n\n\n\nSo contextmanager can’t handle error before yield, as Jeremy have tested in the class."
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "href": "posts/2023-05-01-learner-python/index.html#raise-error-after-yield",
+    "title": "Python basis related to fastai learner",
+    "section": "4.3 Raise error after yield",
+    "text": "4.3 Raise error after yield\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield\n        print(\"Exec try, after yield\")\n        a = 1 / 0\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func():\n    print(\"In with 1\")\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\nIn with 2\nExec try, after yield\nexcept: Divided by zero\nExec finally"
+  },
+  {
+    "objectID": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "href": "posts/2023-05-01-learner-python/index.html#yield-value",
+    "title": "Python basis related to fastai learner",
+    "section": "4.4 yield value",
+    "text": "4.4 yield value\n\n@contextmanager\ndef test_func(*args, **kargs):\n    print(\"Before try\")\n    try:\n        print(\"Exec try, before yield\")\n        yield range(3)\n        print(\"Exec try, after yield\")\n    except ZeroDivisionError:\n        print(\"except: Divided by zero\")\n    finally:\n        print(\"Exec finally\")\n\n\nwith test_func() as f:\n    print(\"In with 1\")\n    for i in f:\n        print(i)\n    print(\"In with 2\")\n\nBefore try\nExec try, before yield\nIn with 1\n0\n1\n2\nIn with 2\nExec try, after yield\nExec finally"
+  },
+  {
+    "objectID": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "href": "posts/2022-11-09-python_getattr_getattribute/index.html",
+    "title": "Python中的__getattr__和__getattribute__",
+    "section": "",
+    "text": "1 __getattr__\n如果在类中实现了_getattr__方法，那么当使用对象.属性的时候，如果属性不在对象里，则会调用__getattr__方法。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\nprint(p.x, p.y)\nprint(p.z)\n\n3 4\n\n\nAttributeError: 'Point' object has no attribute 'z'\n\n\n因为Point没有z这个属性，所以报错了。\n下面这个类实现了__getattr__方法，看看会怎么样\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattr__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.z\n\nexec __getattr__ 😀\nname: z\n\n\n42\n\n\n\n\n\n\n\n\nTip\n\n\n\n__getattr__方法接受两个参数，self不用说，name就是属性名称，在上面的例子就是z\n\n\n\n\n2 __getattribute__\n如果在类中实现了__getattribute__方法，那么当使用对象.属性的时候，都会调用__getattr__方法。\n\n\n\n\n\n\nTip\n\n\n\n注意_getattr__是当属性不在对象里的时候在调用\n\n\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __getattribute__(self, name):\n        print('exec __getattr__ 😀')\n        print(f'name: {name}')\n        return 42\n\n\np = Point(3, 4)\np.x, p.y, p.z\n\nexec __getattr__ 😀\nname: x\nexec __getattr__ 😀\nname: y\nexec __getattr__ 😀\nname: z\n\n\n(42, 42, 42)\n\n\np.x, p.y和p.z都调用了__getattribute__方法"
+  },
+  {
+    "objectID": "posts/2024-03-02-snakemake-workflow/index.html",
+    "href": "posts/2024-03-02-snakemake-workflow/index.html",
+    "title": "使用Github的Snakemake流程",
+    "section": "",
+    "text": "概述\nGitHub有一个snakemake流程的分类，里面有很多生信分析流程，rna-seq-star-deseq2，dna-seq-gatk-variant-calling。\n我测试了rna-seq-star-deseq2这个流程。\n每个流程都有使用说明，如果都看说明可以跑通，那就好了🥹\n下面参考rna-seq-star-deseq2的说明，一步一步做.\n\n\nStep 1 安装snamake和snakedeploy\n使用mamba安装snakeme和snakedeploy，如果没有mamba，自行搜索安装吧.\n\nmamba create -c conda-forge -c bioconda --name snakemake snakemake snakedeploy\n\nconda activate snakemake\n\n\n\nStep 2 流程部署\n\nmkdir proj_240302_test_snakemake\n\ncd proj_240302_test_snakemake\n\nsnakedeploy deploy-workflow https://github.com/snakemake-workflows/rna-seq-star-deseq2 . --tag v2.1.0\n\n运行后的文件结构：\n\ntree\n\n.\n├── config\n│   ├── README.md\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── workflow\n    └── Snakefile\n其实就下了config和workflow两个文件夹，里面分别是配置文件和流程。workflow里面只有一个Snakefile，Snakefile里把github上 rna-seq-star-deseq2的流程作为模块导入了。\n\n\nStep 3 配置流程\n流程配置是最麻烦的，我下载了仓库自带的测试数据。\n测试数据在.test文件夹下面，结构如下，应该很清楚了，config_basic就是简单版的配置文件，config_complex文件夹是复杂版的配置文件，ngs-test-data就是原始数据了。\n\ntree .test\n\n.\n├── config_basic\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n├── config_complex\n│   ├── config.yaml\n│   ├── samples.tsv\n│   └── units.tsv\n└── ngs-test-data\n    └── reads\n        ├── a.chr21.1.fq\n        ├── a.chr21.2.fq\n        ├── a.scerevisiae.1.fq\n        ├── a.scerevisiae.2.fq\n        ├── b.chr21.1.fq\n        ├── b.chr21.2.fq\n        ├── b.scerevisiae.1.fq\n        ├── b.scerevisiae.2.fq\n        ├── c.scerevisiae.1.fq\n        └── c.scerevisiae.2.fq\n\n5 directories, 16 files\n删掉Step 2 流程部署下载的config文件，把.test/config_basic中的配置文件都拷贝proj_240302_test_snakemake/config文件夹下，然后把.test/ngs-test-data文件夹拷贝到proj_240302_test_snakemake文件夹。\n修改proj_240302_test_snakemake/config/config.yaml文件的samples和unit配置路径：\nsamples: config/samples.tsv\nunits: config/units.tsv\n配置有很多细节，比如原始数据的接头序列，差异表达分组信息，是否是链特异文库等等。\n请参考配置文件的说明和流程自带的配置说明。当然.test文件夹中的配置文件格式值得参考。\n\n\nStep 4 运行流程\n终于可以运行流程了：\n\nsnakemake --cores all --use-conda\n\n果然报错了😭：\nNotImplementedError: Remote providers have been replaced by Snakemake storage plugins. Please use the corresponding storage plugin instead (snakemake-storage-plugin-*).\nGoogle一下，rna-seq-star-deseq2里有一个issues就是这个问题。\n原因是snakemake流程最近更新到版本8了，版本8引入了plugin功能，rna-seq-star-deseq2流程还不支持。issues里也给出了解决办法，删除已经装好的snakemake的conda环境，然后安装7.32.4版本的snakemake。\n\nmamba deactivate\n\nmamba remove -n snakemake --all\n\nmamba create -c conda-forge -c bioconda -n snakemake7 snakemake=7.32.4 \n\nmamba activate snakemake7\n\n重新配置好环境后，再次运行流程：\n\nsnakemake --cores all --use-conda\n\n流程会先下载依赖的环境，参考基因组（我用了大约20分钟），然后运行里面定义的步骤。\n结果文件在results文件夹下：\n\nll -rth results/\n\ntotal 120\ndrwxr-xr-x  14 chenmin  staff   448B Mar  3 00:17 trimmed\ndrwxr-xr-x   6 chenmin  staff   192B Mar  3 00:20 star\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:21 qc\ndrwxr-xr-x   4 chenmin  staff   128B Mar  3 00:22 counts\n-rw-r--r--@  1 chenmin  staff    59K Mar  3 00:22 pca.condition.svg\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:22 deseq2\ndrwxr-xr-x   5 chenmin  staff   160B Mar  3 00:23 diffexp\n\n\nStep 5 生成报告\n\nsnakemake --report report.zip\n\n解压report.zip，打开report.html，网页左侧有4个选项，Workflow是流程运行的步骤，说明；Statistics统计了每一步运行的时间；About是流程用到软件的使用权限说明；Results是最关心的结果了。\n测试完成🎉"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html",
+    "href": "posts/2022-10-31-python_magic_method/index.html",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。\n\n\n\n\nPoint.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
+    "href": "posts/2022-10-31-python_magic_method/index.html#对象的__dict__属性",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "class Point():\n    '''Create a Point'''\n    my_name = 'A Point'\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n\np = Point(3, 4)\np.__dict__\n\n{'x': 3, 'y': 4}\n\n\n对象的__dict__属性就是一个字典，这个字典的键是对象的属性，值就是对应属性的值。\n当给对象属性复制的时候，就是修改__dict__字典。"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
+    "href": "posts/2022-10-31-python_magic_method/index.html#类的__dict__属性",
+    "title": "Python中的几个魔法方法",
+    "section": "",
+    "text": "Point.__dict__\n\nmappingproxy({'__module__': '__main__',\n              '__doc__': 'Create a Point',\n              'my_name': 'A Point',\n              '__init__': &lt;function __main__.Point.__init__(self, x, y)&gt;,\n              '__dict__': &lt;attribute '__dict__' of 'Point' objects&gt;,\n              '__weakref__': &lt;attribute '__weakref__' of 'Point' objects&gt;})\n\n\n可以看到，Point类的__dict__属性包括了:\n\n类的文档__doc__\n类中定义变量，比如这里的my_name\n类的方法\n其他一些不知道什么的东西😓"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#repr__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "2.1 __repr__方法",
+    "text": "2.1 __repr__方法\n直接输出p时，会显示一堆没用的东西\n\np\n\n&lt;__main__.Point at 0x10d4f4eb0&gt;\n\n\n我们想显示关于Point的有用信息，这时__repr__方法就派上用场了\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n\n\np = Point(3, 4)\np\n\nPoint(x=3, y=4)"
+  },
+  {
+    "objectID": "posts/2022-10-31-python_magic_method/index.html#str__方法",
+    "href": "posts/2022-10-31-python_magic_method/index.html#str__方法",
+    "title": "Python中的几个魔法方法",
+    "section": "2.2 __str__方法",
+    "text": "2.2 __str__方法\n__str__方法和__repr__方法好像都是用字符表示对象的，有什么区别呢？\nstackoverflow有一个回答说:\n\n__repr__显示的信息需要避免歧义\n__str__显示的信息注重可读性，方便理解\n__str__使用了__repr\n\n\nstr(p)\n\n'Point(x=3, y=4)'\n\n\n在Point中如果没有重写__str__方法，会调用__repr__输出的结果\n如果在Point中重写了__str__方法，就会输出__str__调用的结果。\n\nclass Point():\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return \"Point(x=%r, y=%r)\" % (self.x, self.y)\n    \n    def __str__(self):\n        return f'Just a normal 2d point({self.x}, {self.y})'\n\n\np = Point(3, 4)\n\n\np\n\nPoint(x=3, y=4)\n\n\n\nrepr(p)\n\n'Point(x=3, y=4)'\n\n\n\nprint(p)\n\nJust a normal 2d point(3, 4)\n\n\n\nstr(p)\n\n'Just a normal 2d point(3, 4)'"
+  },
+  {
+    "objectID": "posts/2018-07-19-blog_reason/index.html",
+    "href": "posts/2018-07-19-blog_reason/index.html",
+    "title": "博客原因",
+    "section": "",
+    "text": "最开始建这个博客，纯粹想了解怎样在github上，用Jekll搭建博客。搭好后，发现这里可以记录自己的学习过程。因为我很健忘，今天想到学习什么有趣的东西，明天可能就忘了。\n很多人都在说自己是一个终生学习的人，学校也在提倡终生学习。这里有3个问题： 1. 是否真的一直在学习？ 2. 学习什么？ 3. 在“一生”的时间尺度下，学习的规划是否有效？\n第一个问题只有盖棺定论时，才能回答。把我的学习过程记录下来，督促自己保持学习的习惯，不找借口中止了学习。\n第二个问题，当然是学习自己感兴趣的和有用的东西。现在的教育，导致学生没有兴趣，不知道自己喜欢什么。在高考后，不知道报什么专业，应为根本就不知道自己喜欢什么，想从事什么样的职业，过怎样的生活。而且自己喜欢的东西，未必真的了解。我报的专业，高中以为是喜欢的，了解之后发现是另一回事。也许你会说在没有学习那个专业之前，是不会真正了解的。这是惯用的理由，但是在真正学习之前，可以了解这个专业的一些背景，这些知识足够你做一个合理的选择。\n慢慢的，把之前得到的观念重新做了审视，像笛卡尔怀疑一切一样，去怀疑我曾经学到的东西；渐渐我发现自己的兴趣倾向： - 喜欢了解背后的原理、算法，而不仅仅是外表 - 喜欢计算机，应为想到的东西可以马上操作实验\n第三个问题，我也不知道，怎样的学习规划适合长尺度下的学习。 Peter Norvig写了一篇文章《Teach Yourself Programmin in Ten Years》（10年自学编程），讲了现在很多人学习急功近利，如24小时自学Java。文中给有志于自学编程的人一些很好的建议。建议只有在真正被采用，而起到好作用时才是建议。章太炎在《今日青年之弱点》一文中，写到“现在青年第一弱点，就是把事情太看容易，其结果不是侥幸，便是退却。”，“现在青年只有将这个弱点痛改，遇事宜慎重，决机宜敏速，抱志既极坚确，观察又极明了，则无所谓侥幸退却，只有百折千回以达吾人最终之目的而已。”。学习不是一件容易的事，能很容易学会的事也不足以成为你自己。我想在这里记录我的学习过程，实验我的学习计划。至于是否有效，等过后看就知道了。"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "《R语言入门与实践》摘要\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\nMar 11, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n使用Github的Snakemake流程\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nK-means from scratch\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n博客原因\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
+    "text": "R语言里的离散型随机变量分布函数\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\nMar 24, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n《R语言入门与实践》摘要\n\n\n\n\n\n\nR\n\n\n\n\n\n\n\n\n\nMar 11, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n使用Github的Snakemake流程\n\n\n\n\n\n\nBioinformatics\n\n\n\n\n\n\n\n\n\nMar 2, 2024\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython basis related to fastai learner\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nMay 1, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nK-means from scratch\n\n\n\n\n\n\nPython\n\n\nML\n\n\n\n\n\n\n\n\n\nApr 25, 2023\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__getattr__和__getattribute__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 9, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的__enter__和__exit__\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nNov 8, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\nPython中的几个魔法方法\n\n\n\n\n\n\nPython\n\n\n\n\n\n\n\n\n\nOct 31, 2022\n\n\nmetseq\n\n\n\n\n\n\n\n\n\n\n\n\n博客原因\n\n\n\n\n\n\nessay\n\n\n\n\n\n\n\n\n\nJul 19, 2018\n\n\nmetseq\n\n\n\n\n\n\nNo matching items"
   }
 ]
